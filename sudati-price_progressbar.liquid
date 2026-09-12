@@ -1,0 +1,110 @@
+
+<!-- Sudati cart milestone rewards: tote bag at ₹999 and Gold Box at ₹1,999. -->
+<div class="sudati-milestone-progress" data-sudati-milestone-progress>
+  <p class="sudati-milestone-progress__message" data-progress-message aria-live="polite"></p>
+  <div class="sudati-milestone-progress__track-wrap">
+    <div class="sudati-milestone-progress__track" aria-hidden="true"><span class="sudati-milestone-progress__fill" data-progress-fill></span></div>
+    <div class="sudati-milestone-progress__steps">
+      <div class="sudati-milestone-progress__step" data-milestone="99900">
+        <span class="sudati-milestone-progress__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16l-1 13H5L4 7Z"/><path d="M8 7a4 4 0 0 1 8 0"/><path d="M9 11h6"/></svg></span>
+        <span class="sudati-milestone-progress__label">₹999<small>Free Tote Bag</small></span>
+      </div>
+      <div class="sudati-milestone-progress__step" data-milestone="199900">
+        <span class="sudati-milestone-progress__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M12 8v13M3 12h18"/><path d="M12 8H7.5a2.5 2.5 0 1 1 2.5-3.5L12 8Z"/><path d="M12 8h4.5A2.5 2.5 0 1 0 14 4.5L12 8Z"/></svg></span>
+        <span class="sudati-milestone-progress__label">₹1,999<small>Free Gold Box</small></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sudati-milestone-progress { padding: 16px; color: #fff; background: #530057; font-family: inherit; }
+  .sudati-milestone-progress__message { margin: 0 0 12px; text-align: center; font-size: 14px; line-height: 1.35; }
+  .sudati-milestone-progress__track-wrap { position: relative; }
+  .sudati-milestone-progress__track { position: absolute; z-index: 0; top: 15px; left: 15%; right: 15%; height: 5px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.35); }
+  .sudati-milestone-progress__fill { display: block; width: 0; height: 100%; border-radius: inherit; background: #fff; transition: width .35s ease; }
+  .sudati-milestone-progress__steps { position: relative; z-index: 1; display: flex; justify-content: space-between; }
+  .sudati-milestone-progress__step { display: flex; flex: 1 1 50%; flex-direction: column; align-items: center; color: rgba(255,255,255,.6); text-align: center; }
+  .sudati-milestone-progress__icon { position: relative; display: grid; width: 30px; height: 30px; place-items: center; border: 2px solid rgba(255,255,255,.6); border-radius: 50%; background: #530057; transition: .25s ease; }
+  .sudati-milestone-progress__icon svg { width: 19px; height: 19px; }
+  .sudati-milestone-progress__label { margin-top: 8px; font-size: 13px; font-weight: 700; line-height: 1.2; }
+  .sudati-milestone-progress__label small { display: block; margin-top: 3px; font-size: 12px; font-weight: 400; }
+  .sudati-milestone-progress__step.is-active, .sudati-milestone-progress__step.is-complete { color: #fff; }
+  .sudati-milestone-progress__step.is-active .sudati-milestone-progress__icon { border-color: #fff; }
+  .sudati-milestone-progress__step.is-complete .sudati-milestone-progress__icon { border-color: #fff; background: #fff; color: #530057; }
+  .sudati-milestone-progress__step.is-complete .sudati-milestone-progress__icon::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; font-size: 17px; font-weight: 700; }
+  .sudati-milestone-progress__step.is-complete .sudati-milestone-progress__icon svg { visibility: hidden; }
+  .sudati-milestone-progress.has-gold-reward .sudati-milestone-progress__fill { background: #d4af37; }
+  .sudati-milestone-progress__step[data-milestone="199900"].is-complete { color: #f5d66b; }
+  .sudati-milestone-progress__step[data-milestone="199900"].is-complete .sudati-milestone-progress__icon { border-color: #d4af37; background: #d4af37; color: #530057; }
+</style>
+
+<script>
+  (function () {
+    var milestones = [{ amount: 99900, label: 'Free tote bag' }, { amount: 199900, label: 'Free Gold Box' }];
+    function formatMoney(cents) { return '₹' + Math.round(cents / 100).toLocaleString('en-IN'); }
+    function updateProgress(totalPrice) {
+      document.querySelectorAll('[data-sudati-milestone-progress]').forEach(function (root) {
+        var fill = root.querySelector('[data-progress-fill]');
+        var message = root.querySelector('[data-progress-message]');
+        root.classList.toggle('has-gold-reward', totalPrice >= 199900);
+        fill.style.width = Math.min((totalPrice / milestones[milestones.length - 1].amount) * 100, 100) + '%';
+        root.querySelectorAll('[data-milestone]').forEach(function (step, index) {
+          var amount = Number(step.getAttribute('data-milestone'));
+          step.classList.toggle('is-complete', totalPrice >= amount);
+          step.classList.toggle('is-active', totalPrice < amount && (index === 0 || totalPrice >= milestones[index - 1].amount));
+        });
+        var next = milestones.find(function (milestone) { return totalPrice < milestone.amount; });
+        message.innerHTML = next ? 'Spend <strong>' + formatMoney(next.amount - totalPrice) + ' more</strong> to unlock <strong>' + next.label + '</strong>.' : 'You have unlocked <strong>both free gifts</strong>.';
+      });
+    }
+    function refreshProgress() {
+      fetch('/cart.js', { headers: { Accept: 'application/json' } }).then(function (response) { return response.json(); }).then(function (cart) { updateProgress(Number(cart.total_price) || 0); }).catch(function () { updateProgress(0); });
+    }
+    var refreshTimer;
+    function scheduleRefresh() {
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(refreshProgress, 100);
+      setTimeout(refreshProgress, 500);
+    }
+    function getRequestUrl(request) {
+      return typeof request === 'string' ? request : (request && request.url) || '';
+    }
+    function isCartMutation(url) {
+      return /\/cart\/(add|change|update|clear)(\.js)?(?:\?|$)/.test(url);
+    }
+    function initialise() {
+      refreshProgress();
+      ['cart:updated', 'cart:change', 'cart:refresh', 'cart:updated:progress'].forEach(function (eventName) {
+        document.addEventListener(eventName, scheduleRefresh);
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialise);
+    else initialise();
+    if (!window.__sudatiMilestoneProgressListener) {
+      window.__sudatiMilestoneProgressListener = true;
+      var originalFetch = window.fetch;
+      window.fetch = function () {
+        var request = arguments[0];
+        var url = getRequestUrl(request);
+        return originalFetch.apply(this, arguments).then(function (response) {
+          if (response.ok && isCartMutation(url)) scheduleRefresh();
+          return response;
+        });
+      };
+      var originalOpen = XMLHttpRequest.prototype.open;
+      var originalSend = XMLHttpRequest.prototype.send;
+      XMLHttpRequest.prototype.open = function (method, url) {
+        this.__sudatiMilestoneCartUrl = url;
+        return originalOpen.apply(this, arguments);
+      };
+      XMLHttpRequest.prototype.send = function () {
+        this.addEventListener('load', function () {
+          if (this.status >= 200 && this.status < 300 && isCartMutation(this.__sudatiMilestoneCartUrl || '')) scheduleRefresh();
+        });
+        return originalSend.apply(this, arguments);
+      };
+    }
+  })();
+</script>
+

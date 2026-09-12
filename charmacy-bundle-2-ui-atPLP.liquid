@@ -1,0 +1,177 @@
+﻿{%- liquid
+  assign bundle_is_60ml = false
+  if product.id == 9322990436609 or product.handle == 'cmc-matte-foundation-60ml'
+    assign bundle_is_60ml = true
+  endif
+  assign bundle_foundation_name = 'CMC MATTE FOUNDATION'
+  assign bundle_foundation_size = '30 ML'
+  assign bundle_foundation_price = 107900
+  assign bundle_foundation_compare_price = 117900
+  assign bundle_pair_price = '1,999'
+  assign bundle_foundation_image = 'https://cdn.shopify.com/s/files/1/0558/4584/7231/files/1_c5ded15d-3127-448a-94ca-4d85af7ee363.png?v=1788515439'
+  if bundle_is_60ml
+    assign bundle_foundation_name = 'CMC MATTE FOUNDATION 60ML'
+    assign bundle_foundation_size = '60 ML'
+    assign bundle_foundation_price = 189900
+    assign bundle_foundation_compare_price = 0
+    assign bundle_pair_price = '2,499'
+    assign bundle_foundation_image = 'https://cdn.shopify.com/s/files/1/0558/4584/7231/files/2_1877afe7-5ea4-43c7-847e-8b4d21a7045b.png?v=1788515438'
+  endif
+  if product.id == 7746405564673 or product.handle == 'cmc-matte-foundation' or bundle_is_60ml
+    assign bundle_foundation_variant = product.selected_or_first_available_variant
+    if bundle_foundation_variant != blank
+      assign bundle_foundation_price = bundle_foundation_variant.price
+      assign bundle_foundation_compare_price = bundle_foundation_variant.compare_at_price | default: 0
+    endif
+    if product.featured_image != blank
+      assign bundle_foundation_image = product.featured_image | image_url: width: 320
+    endif
+  endif
+-%}
+
+<section class="charmacy-pair" aria-label="Foundation and setting spray bundle">
+  <div class="charmacy-pair__header">
+    <h2>Complete your base</h2>
+    <span class="charmacy-pair__badge">Bundle offer</span>
+  </div>
+
+  <nav class="charmacy-pair__sizes" aria-label="Choose your foundation size">
+    <span class="charmacy-pair__size-label">Foundation size</span>
+    <a href="https://charmacyworld.com/products/cmc-matte-foundation"
+      class="charmacy-pair__size{% unless bundle_is_60ml %} charmacy-pair__size--active{% endunless %}"
+      {% unless bundle_is_60ml %}aria-current="page"{% endunless %}>30 ML</a>
+    <a href="https://charmacyworld.com/products/cmc-matte-foundation-60ml"
+      class="charmacy-pair__size{% if bundle_is_60ml %} charmacy-pair__size--active{% endif %}"
+      {% if bundle_is_60ml %}aria-current="page"{% endif %}>60 ML</a>
+  </nav>
+
+  <div class="charmacy-pair__products">
+    <div class="charmacy-pair__product">
+      <img class="charmacy-pair__image" src="{{ bundle_foundation_image | escape }}"
+        alt="{{ bundle_foundation_name | escape }} - {{ bundle_foundation_size }}"
+        width="120" height="120" loading="lazy">
+      <h3>{{ bundle_foundation_name }}</h3>
+      <div class="charmacy-pair__prices">
+        <strong>{{ bundle_foundation_price | money }}</strong>
+        {%- if bundle_foundation_compare_price > bundle_foundation_price -%}
+          <del>{{ bundle_foundation_compare_price | money }}</del>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <span class="charmacy-pair__plus" role="img" aria-label="plus">+</span>
+
+    <div class="charmacy-pair__product">
+      <img class="charmacy-pair__image"
+        src="https://charmacyworld.com/cdn/shop/files/Setting_Spray_listing_1.jpg?v=1773904795&amp;width=320"
+        alt="CMC S3 Setting and Fixing Spray" width="120" height="120" loading="lazy">
+      <h3>CMC S3 Setting and Fixing Spray</h3>
+      <div class="charmacy-pair__prices">
+        <strong>&#8377;1,187</strong>
+        <del>&#8377;1,250</del>
+      </div>
+    </div>
+  </div>
+
+  <div class="charmacy-pair__offer">
+    <div class="charmacy-pair__offer-price">
+      <span>Both products for</span>
+      <strong>&#8377;{{ bundle_pair_price }}</strong>
+    </div>
+    <a class="charmacy-pair__bundle-link"
+      href="https://charmacyworld.com/collections/setting-and-fixing-spray-matte-foundation">Build your bundle <span aria-hidden="true">&rarr;</span></a>
+  </div>
+</section>
+
+<style>
+  .charmacy-pair,
+  .charmacy-pair * { box-sizing: border-box; }
+  .charmacy-pair {
+    width: 100%; max-width: 420px; margin: 10px 0; overflow: hidden;
+    border: 1px solid #e8d8df; border-radius: 10px;
+    background: #fff; color: #292124; font-family: inherit;
+  }
+  .charmacy-pair .charmacy-pair__header {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 6px; padding: 10px 12px 0;
+  }
+  .charmacy-pair .charmacy-pair__header h2 {
+    margin: 0; color: inherit; font: inherit; font-size: 15px; font-weight: 700;
+    line-height: 1.3; letter-spacing: normal; text-transform: none;
+  }
+  .charmacy-pair__badge {
+    border-radius: 4px; padding: 4px 6px; background: #f9eef3; color: #68112f;
+    font-size: 10px; font-weight: 600; line-height: 1.2;
+  }
+  .charmacy-pair__sizes {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    padding: 7px 12px; font-size: 11px; line-height: 1.3;
+  }
+  .charmacy-pair__size-label { margin-right: auto; color: #71646a; }
+  .charmacy-pair .charmacy-pair__size {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 32px; min-width: 56px; padding: 6px 10px;
+    border: 1px solid #e8d8df; border-radius: 6px; color: #5c4a52; background: #fff;
+    font-size: 11px; font-weight: 600; text-decoration: none;
+  }
+  .charmacy-pair .charmacy-pair__size--active { border-color: #68112f; background: #68112f; color: #fff; }
+  .charmacy-pair__size:hover { border-color: #68112f; }
+  .charmacy-pair__size:focus-visible { outline: 2px solid #68112f; outline-offset: 3px; }
+  .charmacy-pair__products {
+    display: grid; grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1fr);
+    align-items: stretch; gap: 6px; padding: 0 12px 9px;
+  }
+  .charmacy-pair__product {
+    display: flex; flex-direction: column; align-items: center;
+    min-width: 0; text-align: center;
+  }
+  .charmacy-pair .charmacy-pair__image {
+    display: block; width: 100%; height: 76px; margin: 0 0 5px;
+    object-fit: contain; object-position: center; border-radius: 6px;
+  }
+  .charmacy-pair .charmacy-pair__product h3 {
+    margin: 0 0 4px; color: inherit; font: inherit; font-size: 12px; font-weight: 600;
+    line-height: 1.4; letter-spacing: normal; text-transform: none;
+    white-space: normal; overflow-wrap: anywhere;
+  }
+  .charmacy-pair__plus {
+    display: flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; margin-top: 25px; border-radius: 50%;
+    background: #f9eef3; color: #68112f; font-size: 22px; font-weight: 500; line-height: 1;
+  }
+  .charmacy-pair__prices {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center;
+    gap: 3px 6px; margin-top: auto; line-height: 1.4;
+  }
+  .charmacy-pair__prices strong { font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .charmacy-pair__prices del { color: #84767d; font-size: 11px; white-space: nowrap; }
+  .charmacy-pair__offer {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 8px 10px; padding: 8px 12px; border-top: 1px solid #e8d8df;
+    background: #f9eef3; color: #68112f; line-height: 1.3;
+  }
+  .charmacy-pair__offer-price { display: flex; flex-direction: column; gap: 1px; }
+  .charmacy-pair__offer-price span { font-size: 11px; font-weight: 600; }
+  .charmacy-pair__offer-price strong { font-size: 21px; font-weight: 700; white-space: nowrap; }
+  .charmacy-pair .charmacy-pair__bundle-link {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 40px; max-width: 100%; padding: 9px 12px;
+    border: 1px solid #68112f; border-radius: 6px;
+    background: #68112f; color: #fff; font-size: 12px; font-weight: 600;
+    line-height: 1.3; text-align: center; text-decoration: none;
+  }
+  .charmacy-pair .charmacy-pair__bundle-link:hover { background: #4e0d23; }
+  .charmacy-pair__bundle-link:focus-visible { outline: 2px solid #68112f; outline-offset: 3px; }
+  @media (max-width: 480px) {
+    .charmacy-pair .charmacy-pair__header { padding: 10px 10px 0; }
+    .charmacy-pair .charmacy-pair__header h2 { font-size: 15px; }
+    .charmacy-pair__sizes { padding: 6px 10px; }
+    .charmacy-pair__products { gap: 5px; padding: 0 10px 8px; }
+    .charmacy-pair .charmacy-pair__image { height: 64px; }
+    .charmacy-pair__plus { margin-top: 19px; }
+    .charmacy-pair__offer { padding: 8px 10px; }
+    .charmacy-pair__offer-price strong { font-size: 20px; }
+    .charmacy-pair .charmacy-pair__bundle-link { min-height: 44px; padding: 8px 10px; }
+  }
+</style>
+

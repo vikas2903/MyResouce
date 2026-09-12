@@ -1,0 +1,125 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+  #birthday-party-burst {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99999;
+    overflow: hidden;
+  }
+
+  .birthday-party-piece {
+    position: absolute;
+    top: -140px;
+    animation-name: birthdayFall;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+    will-change: transform, opacity;
+  }
+
+  .birthday-party-piece--balloon {
+    width: 34px;
+    height: 46px;
+    border-radius: 50% 50% 46% 46%;
+    box-shadow: inset -6px -8px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .birthday-party-piece--balloon::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 2px;
+    height: 34px;
+    background: rgba(90, 90, 90, 0.35);
+    transform: translateX(-50%);
+  }
+
+  .birthday-party-piece--confetti {
+    width: 10px;
+    height: 18px;
+    border-radius: 999px;
+  }
+
+  @keyframes birthdayFall {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(120vh) rotate(520deg);
+      opacity: 0;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <div id="birthday-party-burst" aria-hidden="true"></div>
+  
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wrapper = document.getElementById('birthday-party-burst');
+    if (!wrapper) return;
+
+    const colors = ['#ff4f87', '#ffd44d', '#5bc0ff', '#8f67ff', '#54d38c', '#ff9a3d'];
+
+    function createPiece(type, left, delay, duration, color, size) {
+      const el = document.createElement('span');
+      el.className = 'birthday-party-piece birthday-party-piece--' + type;
+      el.style.left = left + '%';
+      el.style.animationDelay = delay + 's';
+      el.style.animationDuration = duration + 's';
+      el.style.background = color;
+
+      if (type === 'balloon') {
+        el.style.width = size + 'px';
+        el.style.height = Math.round(size * 1.35) + 'px';
+      } else {
+        el.style.width = Math.max(6, Math.round(size * 0.28)) + 'px';
+        el.style.height = Math.max(12, Math.round(size * 0.52)) + 'px';
+      }
+
+      wrapper.appendChild(el);
+    }
+
+    for (let i = 0; i < 14; i++) {
+      createPiece(
+        'balloon',
+        3 + Math.random() * 94,
+        Math.random() * 0.7,
+        3.8 + Math.random() * 1.5,
+        colors[Math.floor(Math.random() * colors.length)],
+        24 + Math.random() * 18
+      );
+    }
+
+    for (let i = 0; i < 40; i++) {
+      createPiece(
+        'confetti',
+        Math.random() * 100,
+        Math.random() * 0.8,
+        2.8 + Math.random() * 1.8,
+        colors[Math.floor(Math.random() * colors.length)],
+        18 + Math.random() * 10
+      );
+    }
+
+    setTimeout(function () {
+      wrapper.remove();
+    }, 6500);
+  });
+</script>
+</body>
+</html>

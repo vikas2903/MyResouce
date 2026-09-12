@@ -1,0 +1,327 @@
+<section class="vs-usp-section">
+
+  <div class="usp-marquee">
+    <div class="vs-usp-track">
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>🎉 Birthday Sale is LIVE!</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>📚 New Learning Combo Packs Launched</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>🎁 FLAT 20% OFF on Every Order</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>⏳ Limited Time Offer</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>Shop Now!</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+    </div>
+
+    <div class="vs-usp-track" aria-hidden="true">
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>🎉 Birthday Sale is LIVE!</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>📚 New Learning Combo Packs Launched</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>🎁 FLAT 20% OFF on Every Order</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>⏳ Limited Time Offer</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+
+      <div class="vs-usp-item">
+        <div class="usp-copy">
+          <strong>Shop Now!</strong>
+        </div>
+      </div>
+      <span class="usp-divider">|</span>
+    </div>
+  </div>
+</section>
+<style>
+    :root {
+      --bg: #802778;
+      --surface: #0f0f0f;
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.7);
+      --line: rgba(255, 255, 255, 0.18);
+    }
+
+
+    .vs-usp-section {
+      margin: 0;
+      background: #111111;
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      padding: 10px 0;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 42%),
+        var(--bg);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .usp-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 26s linear infinite;
+    }
+
+    .vs-usp-track {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 8px;
+    }
+
+    .vs-usp-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      white-space: nowrap;
+    }
+
+    .vs-usp-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .vs-usp-icon svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--text);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .usp-copy strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .usp-divider {
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 16px;
+      line-height: 1;
+      margin: 0 2px;
+    }
+
+    .offer-section {
+      padding: 18px 16px;
+      overflow: visible;
+    }
+
+    .offer-shell {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .offer-header {
+      display: grid;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .offer-header h2 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .offer-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .offer-type-switch,
+    .offer-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .offer-toggle,
+    .offer-choice {
+      position: relative;
+    }
+
+    .offer-toggle input,
+    .offer-choice input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .offer-toggle span,
+    .offer-choice span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .offer-choice span {
+      border-radius: 16px;
+      min-height: 58px;
+      padding: 14px 18px;
+      white-space: normal;
+      line-height: 1.35;
+    }
+
+    .offer-toggle input:checked + span,
+    .offer-choice input:checked + span {
+      background: #ffffff;
+      color: #111111;
+      border-color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .offer-summary {
+      display: grid;
+      gap: 10px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      text-align: center;
+    }
+
+    .offer-summary small {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .offer-summary strong {
+      font-size: 26px;
+      line-height: 1.2;
+    }
+
+    .offer-summary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .offer-group {
+      display: none;
+    }
+
+    .offer-group.is-active {
+      display: flex;
+    }
+
+    @keyframes marquee-scroll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .vs-usp-section {
+        padding: 8px 0;
+      }
+
+      .vs-usp-item {
+        padding: 0 10px;
+        gap: 6px;
+      }
+
+      .vs-usp-icon {
+        width: 30px;
+        height: 30px;
+      }
+
+      .usp-copy strong {
+        font-size: 12px;
+      }
+
+      .offer-header h2 {
+        font-size: 18px;
+      }
+
+      .offer-toggle span,
+      .offer-choice span {
+        width: 100%;
+      }
+
+      .offer-type-switch,
+      .offer-options {
+        flex-direction: column;
+      }
+
+      .offer-summary strong {
+        font-size: 22px;
+      }
+    }
+  </style>

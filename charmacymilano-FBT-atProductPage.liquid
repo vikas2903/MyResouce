@@ -1,0 +1,2048 @@
+{%- comment -%}
+  Frequently Bought Together Bundle
+
+  Fixes included:
+  - Initial product images display correctly
+  - Uses modern image_url syntax
+  - Variant images update when dropdown changes
+  - Falls back to product featured image
+  - Selects first available variant
+  - Fixes bundlePrice JavaScript conflict
+  - Hides optional rows and connectors correctly
+  - Supports Dawn cart drawer and cart notification
+{%- endcomment -%}
+
+{%- assign foundation_product = nil -%}
+
+{%- if product.handle == 'cmc-skin-tint' -%}
+  {%- assign foundation_product = product -%}
+{%- endif -%}
+
+{%- comment -%} Compact two-option FBT picker for the current product page. {%- endcomment -%}
+{%- if product.handle == 'cmc-skin-tint' or product.handle == 'p-skin-tint' -%}
+  {%- assign atplp_main = product -%}
+  {%- assign atplp_one = all_products['cmc-kiss-drip-lip-gloss'] -%}
+  {%- assign atplp_two = all_products['cmc-flattering-nude-lipstick'] -%}
+  {%- if atplp_one != blank and atplp_two != blank -%}
+    {%- assign atplp_id = 'atplp-fbt-' | append: section.id | append: '-' | append: product.id -%}
+    {%- assign atplp_palette = '#f3d9be,#efc99f,#dda66f,#b88350,#9d6a36,#70461f,#3e2816' | split: ',' -%}
+    <style>
+      #{{ atplp_id }} { max-width:526px; margin:20px auto; border:1px solid #e5e2df; border-radius:0 0 22px 22px; overflow:hidden; background:#fff; color:#222; font-family:inherit; }
+      #{{ atplp_id }} * { box-sizing:border-box; }
+      #{{ atplp_id }} .atplp-choice { position:relative; display:block; min-height:86px; margin:18px 24px 0; padding:17px 76px 16px 55px; border:1px solid #d5d5d5; border-radius:14px; cursor:pointer; }
+      #{{ atplp_id }} .atplp-choice.is-active { border-color:#a66b38; background:#fffdfa; }
+      #{{ atplp_id }} .atplp-choice input { position:absolute; opacity:0; pointer-events:none; }
+      #{{ atplp_id }} .atplp-choice:before { position:absolute; top:31px; left:18px; width:18px; height:18px; border:2px solid #b4b4b4; border-radius:50%; content:''; }
+      #{{ atplp_id }} .atplp-choice.is-active:after { position:absolute; top:36px; left:23px; width:9px; height:9px; border-radius:50%; background:#a66b38; content:''; }
+      #{{ atplp_id }} .atplp-choice strong { display:block; font-size:16px; line-height:20px; }
+      #{{ atplp_id }} .atplp-choice small { display:block; margin-top:3px; color:#858585; font-size:14px; }
+      #{{ atplp_id }} .atplp-badge { display:inline-block; margin-left:7px; padding:2px 9px; border-radius:12px; background:#a66b38; color:#fff; font-size:11px; letter-spacing:.04em; vertical-align:2px; }
+      #{{ atplp_id }} .atplp-discount { position:absolute; top:31px; right:17px; color:#a66b38; font-size:18px; font-weight:700; }
+      #{{ atplp_id }} .atplp-picker { margin:14px 24px 0; padding:20px 16px; border:1px dashed #dfbd9e; border-radius:14px; }
+      #{{ atplp_id }} .atplp-picker[hidden] { display:none; }
+      #{{ atplp_id }} .atplp-picker h4 { margin:0 0 12px; font-size:16px; }
+      #{{ atplp_id }} .atplp-product-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+      #{{ atplp_id }} .atplp-product { position:relative; padding:10px; border:1px solid #dfdfdf; border-radius:13px; background:#fff; }
+      #{{ atplp_id }} .atplp-product.is-picked { border-color:#a66b38; box-shadow:0 0 0 1px #a66b38 inset; }
+      #{{ atplp_id }} .atplp-product img { display:block; width:100%; aspect-ratio:1; object-fit:contain; border-radius:8px; background:#f7f4f1; }
+      #{{ atplp_id }} .atplp-product b { display:block; min-height:36px; margin-top:8px; font-size:13px; line-height:17px; }
+      #{{ atplp_id }} .atplp-product span { display:block; margin-top:3px; color:#777; font-size:13px; }
+      #{{ atplp_id }} .atplp-product select { display:none; }
+      #{{ atplp_id }} .atplp-shade-title { display:block; margin-top:10px; color:#7c6f66; font-size:11px; font-weight:700; letter-spacing:.12em; }
+      #{{ atplp_id }} .atplp-swatches { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+      #{{ atplp_id }} .atplp-swatch { width:32px; height:32px; padding:0; border:1px solid #ddd; border-radius:50%; background:var(--atplp-swatch); cursor:pointer; text-indent:-9999px; overflow:hidden; }
+      #{{ atplp_id }} .atplp-swatch.is-selected { outline:2px solid #a66b38; outline-offset:2px; }
+      #{{ atplp_id }} .atplp-swatch:disabled { opacity:.35; cursor:not-allowed; }
+      #{{ atplp_id }} .atplp-summary { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:22px; padding:17px 24px; border-top:1px solid #e7e7e7; }
+      #{{ atplp_id }} .atplp-price strong { display:block; font-size:24px; }
+      #{{ atplp_id }} .atplp-price small { display:block; margin-top:3px; color:#177246; font-weight:700; }
+      #{{ atplp_id }} .atplp-add { min-width:190px; border:0; border-radius:13px; padding:17px 14px; background:#c8c7c5; color:#fff; font:inherit; font-size:16px; font-weight:700; cursor:pointer; }
+      #{{ atplp_id }} .atplp-add:disabled { cursor:wait; opacity:.7; }
+      #{{ atplp_id }} .atplp-status { min-height:20px; padding:0 24px 16px; color:#a33; font-size:13px; }
+      @media(max-width:540px) { #{{ atplp_id }} .atplp-choice, #{{ atplp_id }} .atplp-picker { margin-left:14px; margin-right:14px; } #{{ atplp_id }} .atplp-summary { padding:15px 14px; } #{{ atplp_id }} .atplp-add { min-width:150px; } }
+    </style>
+    <div id="{{ atplp_id }}" data-atplp-fbt data-main-variant="{{ atplp_main.selected_or_first_available_variant.id }}" data-main-price="{{ atplp_main.selected_or_first_available_variant.price }}">
+      <script type="application/json" data-atplp-main-variants>{{ atplp_main.variants | json }}</script>
+      <label class="atplp-choice is-active" data-atplp-choice="one"><input type="radio" name="{{ atplp_id }}-mode" value="one" checked><strong>Pair it with any 2nd product <em class="atplp-badge">BEST VALUE</em></strong><small>Extra 5% off everything</small><span class="atplp-discount">-5%</span></label>
+      <div class="atplp-picker" data-atplp-picker="one">
+        <h4>Pick your pair</h4>
+        {%- assign add_product = atplp_one -%}
+        {%- assign av = add_product.selected_or_first_available_variant -%}
+        <article class="atplp-product is-picked" data-atplp-product data-product-key="1" data-selected-variant-id="{{ av.id }}" data-selected-price="{{ av.price }}">
+          <img src="{{ add_product.featured_image | image_url: width: 260 }}" alt="{{ add_product.title | escape }}">
+          <b>{{ add_product.title }}</b>
+          <span data-atplp-product-price>{{ av.price | money }}</span>
+          <span class="atplp-shade-title">SHADE</span>
+          <div class="atplp-swatches" role="group" aria-label="Select shade for {{ add_product.title | escape }}">
+            {%- for v in add_product.variants -%}
+              {%- assign palette_index = forloop.index0 | modulo: atplp_palette.size -%}
+              {%- assign swatch_color = atplp_palette[palette_index] -%}
+              <button type="button" class="atplp-swatch{% if v.id == av.id %} is-selected{% endif %}" data-atplp-variant data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-title="{{ v.title }}" style="--atplp-swatch: {{ swatch_color }};" aria-pressed="{% if v.id == av.id %}true{% else %}false{% endif %}" title="{{ v.title | escape }}"{% unless v.available %} disabled{% endunless %}>{{ v.title }}</button>
+            {%- endfor -%}
+          </div>
+        </article>
+      </div>
+      <label class="atplp-choice" data-atplp-choice="two"><input type="radio" name="{{ atplp_id }}-mode" value="two"><strong>Complete trio - add any 2</strong><small>Extra 10% off everything</small><span class="atplp-discount">-10%</span></label>
+      <div class="atplp-picker" data-atplp-picker="two" hidden>
+        <h4>Pick 2</h4>
+        <div class="atplp-product-grid">
+          {%- assign trio_products = 'cmc-kiss-drip-lip-gloss,cmc-flattering-nude-lipstick' | split: ',' -%}
+          {%- for product_handle in trio_products -%}
+            {%- if product_handle == 'cmc-kiss-drip-lip-gloss' -%}
+              {%- assign add_product = atplp_one -%}
+            {%- else -%}
+              {%- assign add_product = atplp_two -%}
+            {%- endif -%}
+            {%- assign av = add_product.selected_or_first_available_variant -%}
+            <article class="atplp-product is-picked" data-atplp-product data-product-key="{{ forloop.index }}" data-selected-variant-id="{{ av.id }}" data-selected-price="{{ av.price }}">
+              <img src="{{ add_product.featured_image | image_url: width: 260 }}" alt="{{ add_product.title | escape }}">
+              <b>{{ add_product.title }}</b>
+              <span data-atplp-product-price>{{ av.price | money }}</span>
+              <span class="atplp-shade-title">SHADE</span>
+              <div class="atplp-swatches" role="group" aria-label="Select shade for {{ add_product.title | escape }}">
+                {%- for v in add_product.variants -%}
+                  {%- assign palette_index = forloop.index0 | modulo: atplp_palette.size -%}
+                  {%- assign swatch_color = atplp_palette[palette_index] -%}
+                  <button type="button" class="atplp-swatch{% if v.id == av.id %} is-selected{% endif %}" data-atplp-variant data-variant-id="{{ v.id }}" data-price="{{ v.price }}" data-title="{{ v.title }}" style="--atplp-swatch: {{ swatch_color }};" aria-pressed="{% if v.id == av.id %}true{% else %}false{% endif %}" title="{{ v.title | escape }}"{% unless v.available %} disabled{% endunless %}>{{ v.title }}</button>
+                {%- endfor -%}
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="atplp-summary"><div class="atplp-price"><strong data-atplp-total>-</strong><small data-atplp-saving></small></div><button type="button" class="atplp-add" data-atplp-add>Add to cart</button></div><div class="atplp-status" data-atplp-status aria-live="polite"></div>
+    </div>
+    <script>
+      (() => {
+        document.querySelectorAll('[data-atplp-fbt]').forEach((box) => {
+          if (box.dataset.ready) return;
+          box.dataset.ready = '1';
+
+          const money = (n) => new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency: (window.Shopify && Shopify.currency && Shopify.currency.active) || 'INR',
+            maximumFractionDigits: 0,
+          }).format(n / 100);
+
+          const choices = box.querySelectorAll('[data-atplp-choice]');
+          const pickers = box.querySelectorAll('[data-atplp-picker]');
+          const add = box.querySelector('[data-atplp-add]');
+          const status = box.querySelector('[data-atplp-status]');
+          const mainVariantsEl = box.querySelector('[data-atplp-main-variants]');
+          const mainVariants = mainVariantsEl ? JSON.parse(mainVariantsEl.textContent || '[]') : [];
+
+          const mode = () => box.querySelector('[data-atplp-choice].is-active input').value;
+          const visible = () => box.querySelector('[data-atplp-picker="' + mode() + '"]');
+
+          const readMainVariantId = () => {
+            const form = document.querySelector('form[action*="/cart/add"]');
+            const input = form && form.querySelector('select[name="id"], input[name="id"]:checked, input[name="id"]');
+            return (input && input.value) || box.dataset.mainVariant;
+          };
+
+          const syncMainVariant = () => {
+            const currentId = String(readMainVariantId() || '');
+            const currentVariant = mainVariants.find((variant) => String(variant.id) === currentId);
+
+            if (currentVariant) {
+              box.dataset.mainVariant = currentVariant.id;
+              box.dataset.mainPrice = currentVariant.price;
+            }
+
+            return currentVariant || null;
+          };
+
+          const setVariant = (card, button) => {
+            card.dataset.selectedVariantId = button.dataset.variantId;
+            card.dataset.selectedPrice = button.dataset.price;
+            card.querySelector('[data-atplp-product-price]').textContent = money(Number(button.dataset.price || 0));
+            card.querySelectorAll('[data-atplp-variant]').forEach((item) => {
+              item.classList.toggle('is-selected', item === button);
+              item.setAttribute('aria-pressed', item === button ? 'true' : 'false');
+            });
+          };
+
+          const selected = () => Array.from(visible().querySelectorAll('[data-atplp-product]'))
+            .map((card) => ({
+              variantId: card.dataset.selectedVariantId,
+              price: Number(card.dataset.selectedPrice || 0),
+            }))
+            .filter((item) => item.variantId);
+
+          const refresh = () => {
+            syncMainVariant();
+            const variants = selected();
+            const total = Number(box.dataset.mainPrice || 0) + variants.reduce((sum, item) => sum + item.price, 0);
+            const rate = mode() === 'one' ? 5 : 10;
+            const discounted = Math.round(total * (100 - rate) / 100);
+
+            box.querySelector('[data-atplp-total]').textContent = money(discounted);
+            box.querySelector('[data-atplp-saving]').textContent = 'You save ' + money(total - discounted) + ' (' + rate + '% off)';
+          };
+
+          choices.forEach((choice) => {
+            choice.addEventListener('click', () => {
+              choices.forEach((item) => item.classList.toggle('is-active', item === choice));
+              pickers.forEach((picker) => {
+                picker.hidden = picker.dataset.atplpPicker !== choice.querySelector('input').value;
+              });
+              refresh();
+            });
+          });
+
+          box.querySelectorAll('[data-atplp-product]').forEach((card) => {
+            card.querySelectorAll('[data-atplp-variant]').forEach((button) => {
+              button.addEventListener('click', () => {
+                setVariant(card, button);
+                refresh();
+              });
+            });
+          });
+
+          add.addEventListener('click', async () => {
+            const variants = selected();
+            if (!readMainVariantId() || variants.length === 0) {
+              status.textContent = 'Please select available variants.';
+              return;
+            }
+
+            add.disabled = true;
+            add.textContent = 'Adding...';
+            status.textContent = '';
+
+            try {
+              const items = [{ id: Number(readMainVariantId()), quantity: 1 }].concat(
+                variants.map((item) => ({ id: Number(item.variantId), quantity: 1 }))
+              );
+              const res = await fetch(((window.Shopify && Shopify.routes && Shopify.routes.root) || '/') + 'cart/add.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ items }),
+              });
+              const data = await res.json();
+              if (!res.ok) throw new Error(data.description || 'Unable to add products.');
+
+              ['cart:refresh', 'cart:updated', 'cart:build', 'cart-drawer:updated', 'cart:open'].forEach((name) => {
+                document.dispatchEvent(new CustomEvent(name, { detail: data }));
+              });
+
+              const trigger = document.querySelector('.js-drawer-open-cart,#cart-icon-bubble,.header__icon--cart,[data-cart-drawer-trigger],[data-fastrr-cart]');
+              if (trigger) trigger.click();
+
+              status.style.color = '#177246';
+              status.textContent = 'Added to cart.';
+            } catch (e) {
+              status.style.color = '#a33';
+              status.textContent = e.message;
+            } finally {
+              add.disabled = false;
+              add.textContent = 'Add to cart';
+            }
+          });
+
+          box.querySelectorAll('[data-atplp-product]').forEach((card) => {
+            const initial = card.querySelector('[data-atplp-variant].is-selected') || card.querySelector('[data-atplp-variant]');
+            if (initial) setVariant(card, initial);
+          });
+
+          document.addEventListener('change', (event) => {
+            if (event.target.closest('form[action*="/cart/add"]')) {
+              refresh();
+            }
+          });
+
+          document.addEventListener('variant:change', refresh);
+
+          refresh();
+        });
+      })();
+    </script>
+  {%- endif -%}
+{%- endif -%}
+
+
+
+{%- assign hydrating_product = nil -%}
+
+{%- if all_products['cmc-kiss-drip-lip-gloss'] != nil -%}
+  {%- assign hydrating_product = all_products['cmc-kiss-drip-lip-gloss'] -%}
+{%- endif -%}
+
+
+{%- assign setting_spray_product = nil -%}
+
+{%- if all_products['cmc-bestseller-liquid-lipstick-trio-mood-mix'] != nil -%}
+  {%- assign setting_spray_product = all_products['cmc-bestseller-liquid-lipstick-trio-mood-mix'] -%}
+{%- endif -%}
+
+
+{%- assign free_gift_product = nil -%}
+
+{%- if product.metafields.custom.free_gift_product.value != blank -%}
+  {%- assign free_gift_product = product.metafields.custom.free_gift_product.value -%}
+{%- elsif all_products['cmc-free-gift'] != nil -%}
+  {%- assign free_gift_product = all_products['cmc-free-gift'] -%}
+{%- endif -%}
+
+
+{%- if product.handle == '__legacy-fbt-disabled__' and foundation_product != nil -%}
+{%- endif -%}
+
+
+  {%- assign foundation_selected_variant = foundation_product.selected_or_first_available_variant -%}
+
+  {%- assign foundation_product_image = foundation_product.featured_media.preview_image
+    | default: foundation_product.featured_image
+  -%}
+
+  {%- assign foundation_initial_image = foundation_selected_variant.featured_media.preview_image
+    | default: foundation_selected_variant.featured_image
+    | default: foundation_product_image
+  -%}
+
+  {%- assign fbt_widget_id = 'fbt-' | append: section.id | append: '-' | append: product.id -%} 
+
+  <style>
+    .fbt-bundle-widget {
+      margin: 2.25rem 0 2.5rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(126, 93, 75, 0.16);
+      border-radius: 24px;
+      background: linear-gradient(135deg, #fffaf7 0%, #ffffff 100%);
+      box-shadow: 0 18px 40px rgba(60, 38, 24, 0.08);
+      font-family: inherit;
+    }
+
+    .fbt-is-hidden {
+      display: none !important;
+    }
+
+    .fbt-bundle-widget__header h3 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.2rem, 2vw, 1.55rem);
+      line-height: 1.3;
+      color: #2f241e;
+    }
+
+    .fbt-bundle-widget__header p {
+      margin: 0;
+      color: #6e5f55;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .fbt-bundle-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    .fbt-option-card {
+      position: relative;
+      display: block;
+      border: 1px solid rgba(126, 93, 75, 0.16);
+      border-radius: 20px;
+      padding: 1rem;
+      background: #ffffff;
+      cursor: pointer;
+      overflow: hidden;
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        border-color 180ms ease,
+        background 180ms ease;
+    }
+
+    .fbt-option-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(60, 38, 24, 0.08);
+    }
+
+    .fbt-option-card.is-selected {
+      border-color: #c89572;
+      box-shadow: 0 16px 30px rgba(200, 149, 114, 0.18);
+      background: linear-gradient(135deg, #fffaf5 0%, #ffffff 100%);
+    }
+
+    .fbt-option-card.is-disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .fbt-option-card.is-disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .fbt-option-card__radio {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .fbt-option-card__radio:disabled {
+      cursor: not-allowed;
+    }
+
+    .fbt-option-card__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .fbt-option-card__title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #2f241e;
+    }
+
+    .fbt-option-card__badge {
+         display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 999px;
+    padding: 0.28rem 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    background: #f6ece4;
+    color: #8d4d2e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+    
+
+    .fbt-option-card__badge--popular {
+      background: #2d6a4f;
+      color: #ffffff;
+    }
+
+    .fbt-option-card__summary {
+      min-height: 2.7rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: #5e4b3f;
+    }
+
+    .fbt-option-card__price-row {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .fbt-option-card__price {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #2f241e;
+    }
+
+    .fbt-option-card__price--strike {
+      color: #9f8a7e;
+      text-decoration: line-through;
+      font-weight: 500;
+    }
+
+    .fbt-option-card__savings {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #2d6a4f;
+    }
+
+    .fbt-product-panel {
+      margin-top: 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(126, 93, 75, 0.16);
+    }
+
+    .fbt-product-row {
+      display: grid;
+      grid-template-columns: 68px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(126, 93, 75, 0.1);
+    }
+
+    .fbt-product-row__connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      margin: 0.35rem auto;
+      border-radius: 999px;
+      background: #f6ece4;
+      color: #8d4d2e;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .fbt-product-row__image {
+      display: block;
+      width: 64px;
+      height: 64px;
+      max-width: 64px;
+      border-radius: 14px;
+      object-fit: cover;
+      object-position: center;
+      background: #f7efe9;
+      transition: opacity 150ms ease;
+    }
+
+    .fbt-product-row__image.is-loading {
+      opacity: 0.55;
+    }
+
+    .fbt-product-row__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #2f241e;
+    }
+
+    .fbt-product-row__meta {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: #6e5f55;
+    }
+
+    .fbt-product-row__select {
+      width: 100%;
+      min-width: 9rem;
+      margin-top: 0.45rem;
+      border: 1px solid rgba(126, 93, 75, 0.22);
+      border-radius: 999px;
+      padding: 0.65rem 2.3rem 0.65rem 0.8rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      line-height: 1.3;
+      background-color: #ffffff;
+      color: #2f241e;
+      cursor: pointer;
+    }
+
+    .fbt-product-row__select:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .fbt-product-row__price {
+      min-width: 4.3rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #2f241e;
+      text-align: right;
+    }
+
+    .fbt-free-gift {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      padding: 0.9rem 1rem;
+      border: 1px dashed rgba(126, 93, 75, 0.3);
+      border-radius: 16px;
+      background: #fef8f2;
+      color: #5e4b3f;
+    }
+
+    .fbt-free-gift__title {
+      font-weight: 700;
+      color: #2f241e;
+    }
+
+    .fbt-free-gift__price {
+      flex-shrink: 0;
+      color: #2d6a4f;
+      font-weight: 800;
+    }
+
+    .fbt-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding: 1rem 1.1rem;
+      border-radius: 18px;
+      background: #2f241e;
+      color: #ffffff;
+    }
+
+    .fbt-summary__content {
+      flex: 1;
+    }
+
+    .fbt-summary__content strong {
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1.35;
+    }
+
+    .fbt-summary__content span {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .fbt-summary__meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.15rem;
+      min-width: 7rem;
+    }
+
+    .fbt-summary__meta-label {
+      font-size: 0.7rem;
+      line-height: 1.2;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .fbt-summary__button {
+      min-width: 10.5rem;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.85rem 1.2rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.3;
+      background: linear-gradient(90deg, #c89572 0%, #a06041 100%);
+      color: #ffffff;
+      cursor: pointer;
+      transition:
+        transform 180ms ease,
+        opacity 180ms ease;
+    }
+
+    .fbt-summary__button:hover {
+      transform: translateY(-1px);
+    }
+
+    .fbt-summary__button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .fbt-status {
+      min-height: 1.2rem;
+      margin-top: 0.7rem;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #6e5f55;
+    }
+
+    .fbt-status.is-success {
+      color: #2d6a4f;
+    }
+
+    .fbt-status.is-error {
+      color: #b42318;
+    }
+
+    .fbt-status.is-loading {
+      color: #8d4d2e;
+    }
+
+    @media screen and (max-width: 989px) {
+      .fbt-summary {
+        flex-wrap: wrap;
+      }
+
+      .fbt-summary__content {
+        flex-basis: 100%;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .fbt-bundle-widget {
+        margin: 1.5rem 0 2rem;
+        padding: 1rem;
+        border-radius: 18px;
+      }
+
+      .fbt-bundle-options {
+        grid-template-columns: 1fr;
+      }
+
+      .fbt-option-card__summary {
+        min-height: 0;
+      }
+
+      .fbt-product-row {
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 0.75rem;
+      }
+
+      .fbt-product-row__image {
+        width: 54px;
+        height: 54px;
+        max-width: 54px;
+        border-radius: 12px;
+      }
+
+      .fbt-product-row__price {
+        grid-column: 2;
+        min-width: 0;
+        margin-top: -0.3rem;
+        text-align: left;
+      }
+
+      .fbt-summary {
+        position: sticky;
+        bottom: 0.75rem;
+        z-index: 20;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.9rem;
+      }
+
+      .fbt-summary__content {
+        flex-basis: auto;
+      }
+
+      .fbt-summary__meta {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        min-width: 0;
+      }
+
+      .fbt-summary__button {
+        display: block;
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    /* Two-tier FBT layout matching the product-page pair picker. */
+    .fbt-bundle-widget {
+      max-width: 100%
+      margin: 1.5rem auto;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: #fff;
+      box-shadow: none;
+      color: #1d1d1d;
+    }
+    .fbt-bundle-widget__header { display: none; }
+    .fbt-bundle-options { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 0; }
+    .fbt-option-card {
+      min-height: 86px;
+      padding: 17px 76px 17px 55px;
+      border: 1px solid #d9d9d9;
+      border-radius: 14px;
+      background: #fff;
+      overflow: visible;
+      box-shadow: none;
+    }
+    .fbt-option-card::before {
+      position: absolute;
+      top: 31px;
+      left: 18px;
+      width: 19px;
+      height: 19px;
+      border: 2px solid #b6b6b6;
+      border-radius: 50%;
+      content: '';
+    }
+    .fbt-option-card.is-selected { border-color: #ad7140; background: #fffdfa; box-shadow: none; }
+    .fbt-option-card.is-selected::after {
+      position: absolute;
+      top: 36px;
+      left: 23px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #ad7140;
+      content: '';
+    }
+    .fbt-option-card__radio { z-index: 4; }
+    .fbt-option-card__top {
+    display: block;
+    margin: 0;
+    font-size: 14px;
+    font-family: 'Poppins';
+    letter-spacing: normal;
+    text-transform: initial;
+}
+    .fbt-option-card__title { font-size: 16px; }
+   
+    .fbt-option-card__badge { margin-left: 8px; background: #ad7140; color: #fff; }
+   .fbt-option-card__summary {
+    min-height: 0;
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #000;
+    font-size: 14px;
+    letter-spacing: normal;
+    text-transform: initial;
+}
+    .fbt-option-card__price-row { position: absolute; top: 32px; right: 17px; }
+    .fbt-option-card__price { display: none; }
+    .fbt-option-card__savings { color: #a56836; font-size: 17px; }
+    .fbt-product-panel {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px dashed #d9b391;
+      border-radius: 14px;
+    }
+    .fbt-product-row { grid-template-columns: 62px minmax(0, 1fr); gap: 11px; }
+    .fbt-product-row__image { width: 60px; height: 60px; border: 1px solid #e0e0e0; border-radius: 11px; object-fit: contain; }
+    .fbt-product-row__price { grid-column: 2; min-width: 0; text-align: left; }
+    .fbt-product-row__connector { margin: 4px auto; background: transparent; }
+    .fbt-summary { margin-top: 14px; border-radius: 0; background: #fff; color: #111; border-top: 1px solid #e4e4e4; }
+    .fbt-summary__content span { color: #177048; }
+    .fbt-summary__meta-label, .fbt-summary__meta { color: #777; }
+    .fbt-summary__button { border-radius: 13px; background: #c8c7c5; }
+  </style>
+
+  <div
+    id="{{ fbt_widget_id }}"
+    class="fbt-bundle-widget"
+    data-fbt-widget
+    data-currency="{{ cart.currency.iso_code | default: shop.currency }}"
+  >
+    <div class="fbt-bundle-widget__header">
+      <h3>Frequently Bought Together</h3>
+
+      <p>
+        Choose one or two matching products, select their variants, and add them with your CMC Skin Tint.
+      </p>
+    </div>
+
+    <div class="fbt-bundle-options">
+      <label
+        class="fbt-option-card is-selected{% if hydrating_product == nil %} is-disabled{% endif %}"
+        data-fbt-option-card
+        data-fbt-option="option-1"
+      >
+        <input
+          class="fbt-option-card__radio"
+          type="radio"
+          name="fbt-bundle-option-{{ fbt_widget_id }}"
+          value="option-1"
+          data-fbt-option-input
+          checked
+          {% if hydrating_product == nil %}
+            disabled
+          {% endif %}
+        >
+
+        <div class="fbt-option-card__top">
+          <span class="fbt-option-card__title">
+            Pair it with any 2nd product
+          </span>
+
+          <span class="fbt-option-card__badge">
+            Best value
+          </span>
+        </div>
+
+        <div class="fbt-option-card__summary">
+          Add the main product and choose one product from the pair below.
+        </div>
+
+        <div class="fbt-option-card__price-row">
+          <span class="fbt-option-card__price">
+            Pick your pair
+          </span>
+
+          <span class="fbt-option-card__savings">
+            Save 5%
+          </span>
+        </div>
+      </label>
+
+      <label
+        class="fbt-option-card{% if hydrating_product == nil or setting_spray_product == nil %} is-disabled{% endif %}"
+        data-fbt-option-card
+        data-fbt-option="option-2"
+      >
+        <input
+          class="fbt-option-card__radio"
+          type="radio"
+          name="fbt-bundle-option-{{ fbt_widget_id }}"
+          value="option-2"
+          data-fbt-option-input
+          {% if hydrating_product == nil or setting_spray_product == nil %}
+            disabled
+          {% endif %}
+        >
+
+        <div class="fbt-option-card__top">
+          <span class="fbt-option-card__title">
+            Complete trio â€” add any 2
+          </span>
+
+          <span class="fbt-option-card__badge">
+            Best value
+          </span>
+        </div>
+
+        <div class="fbt-option-card__summary">
+          Add the main product plus both selected products below.
+        </div>
+
+        <div class="fbt-option-card__price-row">
+          <span class="fbt-option-card__price">
+            Pick 2 products
+          </span>
+
+          <span class="fbt-option-card__savings">
+            Save 10%
+          </span>
+        </div>
+      </label>
+
+    </div>
+
+    <div class="fbt-product-panel">
+      <!-- Foundation product -->
+
+      <div
+        class="fbt-product-row"
+        data-fbt-product-row="foundation"
+      >
+        <img
+          class="fbt-product-row__image"
+          src="{{ foundation_initial_image | image_url: width: 240 }}"
+          data-fbt-product-image
+          data-fbt-fallback-image="{{ foundation_product_image | image_url: width: 240 }}"
+          alt="{{ foundation_product.title | escape }}"
+          width="240"
+          height="240"
+          loading="lazy"
+        >
+
+        <div>
+          <div class="fbt-product-row__title">
+            {{ foundation_product.title }}
+          </div>
+
+          <div class="fbt-product-row__meta">
+            Select the CMC Skin Tint variant to add to your cart.
+          </div>
+
+          <label
+            class="fbt-product-row__meta"
+            for="{{ fbt_widget_id }}-foundation-select"
+          >
+            Select variant
+          </label>
+
+          <select
+            class="fbt-product-row__select"
+            id="{{ fbt_widget_id }}-foundation-select"
+            data-fbt-select
+            data-fbt-product-key="foundation"
+          >
+            {% for variant in foundation_product.variants %}
+              {%- assign variant_image = variant.featured_media.preview_image
+                | default: variant.featured_image
+                | default: foundation_product_image
+              -%}
+
+              <option
+                value="{{ variant.id }}"
+                data-price="{{ variant.price }}"
+                data-available="{{ variant.available }}"
+                data-image="{{ variant_image | image_url: width: 240 }}"
+                {% if variant.id == foundation_selected_variant.id %}
+                  selected
+                {% endif %}
+              >
+                {{ variant.title }}
+                {% unless variant.available %}
+                  Â· Sold out
+                {% endunless %}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div
+          class="fbt-product-row__price"
+          data-fbt-price="foundation"
+        >
+          {{ foundation_selected_variant.price | money }}
+        </div>
+      </div>
+
+      <!-- Hydrating product -->
+
+      <div
+        class="fbt-product-row__connector fbt-is-hidden"
+        data-fbt-connector="hydrating"
+        aria-hidden="true"
+      >
+        +
+      </div>
+
+      <div
+        class="fbt-product-row fbt-is-hidden"
+        data-fbt-product-row="hydrating"
+        data-fbt-optional-row
+      >
+        {% if hydrating_product != nil %}
+          {%- assign hydrating_selected_variant = hydrating_product.selected_or_first_available_variant -%}
+
+          {%- assign hydrating_product_image = hydrating_product.featured_media.preview_image
+            | default: hydrating_product.featured_image
+          -%}
+
+          {%- assign hydrating_initial_image = hydrating_selected_variant.featured_media.preview_image
+            | default: hydrating_selected_variant.featured_image
+            | default: hydrating_product_image
+          -%}
+
+          <img
+            class="fbt-product-row__image"
+            src="{{ hydrating_initial_image | image_url: width: 240 }}"
+            data-fbt-product-image
+            data-fbt-fallback-image="{{ hydrating_product_image | image_url: width: 240 }}"
+            alt="{{ hydrating_product.title | escape }}"
+            width="240"
+            height="240"
+            loading="lazy"
+          >
+        {% else %}
+          <img
+            class="fbt-product-row__image"
+            src="{{ foundation_product_image | image_url: width: 240 }}"
+            data-fbt-product-image
+            data-fbt-fallback-image="{{ foundation_product_image | image_url: width: 240 }}"
+            alt="Hydrating product"
+            width="240"
+            height="240"
+            loading="lazy"
+          >
+        {% endif %}
+
+        <div>
+          <div class="fbt-product-row__title">
+            {% if hydrating_product != nil %}
+              {{ hydrating_product.title }}
+            {% else %}
+              Hydrating product
+            {% endif %}
+          </div>
+
+          <div class="fbt-product-row__meta">
+            Choose the CMC Kiss Drip Lip Gloss variant to add.
+          </div>
+
+          <label
+            class="fbt-product-row__meta"
+            for="{{ fbt_widget_id }}-hydrating-select"
+          >
+            Choose variant
+          </label>
+
+          {% if hydrating_product != nil %}
+            <select
+              class="fbt-product-row__select"
+              id="{{ fbt_widget_id }}-hydrating-select"
+              data-fbt-select
+              data-fbt-product-key="hydrating"
+            >
+              {% for variant in hydrating_product.variants %}
+                {%- assign variant_image = variant.featured_media.preview_image
+                  | default: variant.featured_image
+                  | default: hydrating_product_image
+                -%}
+
+                <option
+                  value="{{ variant.id }}"
+                  data-price="{{ variant.price }}"
+                  data-available="{{ variant.available }}"
+                  data-image="{{ variant_image | image_url: width: 240 }}"
+                  {% if variant.id == hydrating_selected_variant.id %}
+                    selected
+                  {% endif %}
+                >
+                  {{ variant.title }}
+                  {% unless variant.available %}
+                    Â· Sold out
+                  {% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <select
+              class="fbt-product-row__select"
+              id="{{ fbt_widget_id }}-hydrating-select"
+              data-fbt-select
+              data-fbt-product-key="hydrating"
+              disabled
+            >
+              <option
+                value=""
+                data-price="0"
+                data-available="false"
+                data-image=""
+                selected
+              >
+                Unavailable
+              </option>
+            </select>
+          {% endif %}
+        </div>
+
+        <div
+          class="fbt-product-row__price"
+          data-fbt-price="hydrating"
+        >
+          {% if hydrating_product != nil %}
+            {{ hydrating_selected_variant.price | money }}
+          {% else %}
+            â€”
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Setting spray product -->
+
+      <div
+        class="fbt-product-row__connector fbt-is-hidden"
+        data-fbt-connector="spray"
+        aria-hidden="true"
+      >
+        +
+      </div>
+
+      <div
+        class="fbt-product-row fbt-is-hidden"
+        data-fbt-product-row="spray"
+        data-fbt-optional-row
+      >
+        {% if setting_spray_product != nil %}
+          {%- assign spray_selected_variant = setting_spray_product.selected_or_first_available_variant -%}
+
+          {%- assign spray_product_image = setting_spray_product.featured_media.preview_image
+            | default: setting_spray_product.featured_image
+          -%}
+
+          {%- assign spray_initial_image = spray_selected_variant.featured_media.preview_image
+            | default: spray_selected_variant.featured_image
+            | default: spray_product_image
+          -%}
+
+          <img
+            class="fbt-product-row__image"
+            src="{{ spray_initial_image | image_url: width: 240 }}"
+            data-fbt-product-image
+            data-fbt-fallback-image="{{ spray_product_image | image_url: width: 240 }}"
+            alt="{{ setting_spray_product.title | escape }}"
+            width="240"
+            height="240"
+            loading="lazy"
+          >
+        {% else %}
+          <img
+            class="fbt-product-row__image"
+            src="{{ foundation_product_image | image_url: width: 240 }}"
+            data-fbt-product-image
+            data-fbt-fallback-image="{{ foundation_product_image | image_url: width: 240 }}"
+            alt="Setting spray"
+            width="240"
+            height="240"
+            loading="lazy"
+          >
+        {% endif %}
+
+        <div>
+          <div class="fbt-product-row__title">
+            {% if setting_spray_product != nil %}
+              {{ setting_spray_product.title }}
+            {% else %}
+              Setting spray
+            {% endif %}
+          </div>
+
+          <div class="fbt-product-row__meta">
+            Choose the Bestseller Liquid Lipstick Trio Mood Mix variant to add.
+          </div>
+
+          <label
+            class="fbt-product-row__meta"
+            for="{{ fbt_widget_id }}-spray-select"
+          >
+            Choose variant
+          </label>
+
+          {% if setting_spray_product != nil %}
+            <select
+              class="fbt-product-row__select"
+              id="{{ fbt_widget_id }}-spray-select"
+              data-fbt-select
+              data-fbt-product-key="spray"
+            >
+              {% for variant in setting_spray_product.variants %}
+                {%- assign variant_image = variant.featured_media.preview_image
+                  | default: variant.featured_image
+                  | default: spray_product_image
+                -%}
+
+                <option
+                  value="{{ variant.id }}"
+                  data-price="{{ variant.price }}"
+                  data-available="{{ variant.available }}"
+                  data-image="{{ variant_image | image_url: width: 240 }}"
+                  {% if variant.id == spray_selected_variant.id %}
+                    selected
+                  {% endif %}
+                >
+                  {{ variant.title }}
+                  {% unless variant.available %}
+                    Â· Sold out
+                  {% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <select
+              class="fbt-product-row__select"
+              id="{{ fbt_widget_id }}-spray-select"
+              data-fbt-select
+              data-fbt-product-key="spray"
+              disabled
+            >
+              <option
+                value=""
+                data-price="0"
+                data-available="false"
+                data-image=""
+                selected
+              >
+                Unavailable
+              </option>
+            </select>
+          {% endif %}
+        </div>
+
+        <div
+          class="fbt-product-row__price"
+          data-fbt-price="spray"
+        >
+          {% if setting_spray_product != nil %}
+            {{ spray_selected_variant.price | money }}
+          {% else %}
+            â€”
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if free_gift_product != nil and free_gift_product.variants.first != blank %}
+      <div
+        class="fbt-free-gift fbt-is-hidden"
+        data-fbt-free-gift
+        data-fbt-free-gift-variant="{{ free_gift_product.variants.first.id }}"
+      >
+        <div>
+          <div class="fbt-free-gift__title">
+            Complimentary gift included
+          </div>
+
+          <div>
+            {{ free_gift_product.title }}
+          </div>
+        </div>
+
+        <div class="fbt-free-gift__price">
+          FREE
+        </div>
+      </div>
+    {% endif %}
+
+    <div
+      class="fbt-summary"
+      data-fbt-summary
+    >
+      <div class="fbt-summary__content">
+        <strong data-fbt-summary-price>
+          {{ foundation_selected_variant.price | money }}
+        </strong>
+
+        <span data-fbt-summary-copy>
+          Choose a frequently bought together option.
+        </span>
+      </div>
+
+      <div class="fbt-summary__meta">
+        <span class="fbt-summary__meta-label">
+          Regular total
+        </span>
+
+        <strong data-fbt-original-price>
+          {{ foundation_selected_variant.price | money }}
+        </strong>
+      </div>
+
+      <div class="fbt-summary__meta">
+        <span class="fbt-summary__meta-label">
+          Bundle total
+        </span>
+
+        <strong data-fbt-bundle-price>
+          {{ foundation_selected_variant.price | money }}
+        </strong>
+      </div>
+
+      <button
+        class="fbt-summary__button"
+        type="button"
+        data-fbt-add-button
+      >
+        Add Selected Bundle to Cart
+      </button>
+    </div>
+
+    <div
+      class="fbt-status"
+      data-fbt-status
+      role="status"
+      aria-live="polite"
+    ></div>
+  </div>
+
+  <script>
+    (function () {
+      var widgets = document.querySelectorAll('[data-fbt-widget]');
+
+      if (!widgets.length) return;
+
+      widgets.forEach(function (widget) {
+        if (widget.getAttribute('data-fbt-initialized') === 'true') return;
+
+        widget.setAttribute('data-fbt-initialized', 'true');
+
+        var optionCards = Array.from(
+          widget.querySelectorAll('[data-fbt-option-card]')
+        );
+
+        var optionInputs = Array.from(
+          widget.querySelectorAll('[data-fbt-option-input]')
+        );
+
+        var addButton = widget.querySelector('[data-fbt-add-button]');
+        var statusElement = widget.querySelector('[data-fbt-status]');
+        var summaryPriceElement = widget.querySelector('[data-fbt-summary-price]');
+        var summaryCopyElement = widget.querySelector('[data-fbt-summary-copy]');
+        var originalPriceElement = widget.querySelector('[data-fbt-original-price]');
+        var bundlePriceElement = widget.querySelector('[data-fbt-bundle-price]');
+        var freeGiftElement = widget.querySelector('[data-fbt-free-gift]');
+
+        var shopCurrency =
+          widget.getAttribute('data-currency') ||
+          (
+            window.Shopify &&
+            window.Shopify.currency &&
+            window.Shopify.currency.active
+          ) ||
+          'USD';
+
+        var isAdding = false;
+
+        function formatMoney(cents) {
+          var value = Number(cents || 0) / 100;
+
+          try {
+            return new Intl.NumberFormat(undefined, {
+              style: 'currency',
+              currency: shopCurrency
+            }).format(value);
+          } catch (error) {
+            return value.toFixed(2);
+          }
+        }
+
+        function setStatus(message, state) {
+          if (!statusElement) return;
+
+          statusElement.textContent = message || '';
+          statusElement.className = 'fbt-status';
+
+          if (state) {
+            statusElement.classList.add('is-' + state);
+          }
+        }
+
+        function setHidden(element, shouldHide) {
+          if (!element) return;
+
+          element.classList.toggle('fbt-is-hidden', shouldHide);
+        }
+
+        function getSelectedOption() {
+          var selectedInput = widget.querySelector(
+            '[data-fbt-option-input]:checked'
+          );
+
+          return selectedInput ? selectedInput.value : 'option-1';
+        }
+
+        function getVariantInfo(selectElement) {
+          if (!selectElement) return null;
+
+          var selectedOption = selectElement.options[
+            selectElement.selectedIndex
+          ];
+
+          if (!selectedOption) return null;
+
+          var variantId = Number(selectedOption.value);
+
+          return {
+            id: Number.isFinite(variantId) && variantId > 0
+              ? variantId
+              : null,
+
+            price: Number(
+              selectedOption.getAttribute('data-price') || 0
+            ),
+
+            available:
+              selectedOption.getAttribute('data-available') === 'true',
+
+            image:
+              selectedOption.getAttribute('data-image') || ''
+          };
+        }
+
+        function getProductSelect(productKey) {
+          return widget.querySelector(
+            '[data-fbt-product-key="' + productKey + '"]'
+          );
+        }
+
+        function getProductVariant(productKey) {
+          return getVariantInfo(getProductSelect(productKey));
+        }
+
+        function updateProductImage(selectElement) {
+          if (!selectElement) return;
+
+          var productRow = selectElement.closest(
+            '[data-fbt-product-row]'
+          );
+
+          if (!productRow) return;
+
+          var imageElement = productRow.querySelector(
+            '[data-fbt-product-image]'
+          );
+
+          var selectedVariant = getVariantInfo(selectElement);
+
+          if (!imageElement || !selectedVariant) return;
+
+          var newImage =
+            selectedVariant.image ||
+            imageElement.getAttribute('data-fbt-fallback-image');
+
+          if (!newImage) return;
+
+          imageElement.classList.add('is-loading');
+          imageElement.removeAttribute('srcset');
+          imageElement.removeAttribute('sizes');
+          imageElement.removeAttribute('data-fallback-applied');
+
+          imageElement.onload = function () {
+            imageElement.classList.remove('is-loading');
+          };
+
+          imageElement.onerror = function () {
+            var fallbackImage = imageElement.getAttribute(
+              'data-fbt-fallback-image'
+            );
+
+            var fallbackApplied = imageElement.getAttribute(
+              'data-fallback-applied'
+            );
+
+            if (fallbackImage && fallbackApplied !== 'true') {
+              imageElement.setAttribute(
+                'data-fallback-applied',
+                'true'
+              );
+
+              imageElement.src = fallbackImage;
+              return;
+            }
+
+            imageElement.classList.remove('is-loading');
+          };
+
+          imageElement.loading = 'eager';
+          imageElement.src = newImage;
+        }
+
+        function updateRowPrice(selectElement) {
+          if (!selectElement) return;
+
+          var productKey = selectElement.getAttribute(
+            'data-fbt-product-key'
+          );
+
+          if (!productKey) return;
+
+          var priceElement = widget.querySelector(
+            '[data-fbt-price="' + productKey + '"]'
+          );
+
+          var selectedVariant = getVariantInfo(selectElement);
+
+          if (!priceElement || !selectedVariant) return;
+
+          if (!selectedVariant.id) {
+            priceElement.textContent = 'â€”';
+            return;
+          }
+
+          priceElement.textContent = formatMoney(
+            selectedVariant.price
+          );
+        }
+
+        function updateAllRowPrices() {
+          widget.querySelectorAll('[data-fbt-select]').forEach(
+            function (selectElement) {
+              updateRowPrice(selectElement);
+            }
+          );
+        }
+
+        function toggleOptionalProducts() {
+          var selectedOption = getSelectedOption();
+
+          var showHydrating =
+            selectedOption === 'option-1' ||
+            selectedOption === 'option-2';
+
+          var showSpray = selectedOption === 'option-2';
+
+          var hydratingRow = widget.querySelector(
+            '[data-fbt-product-row="hydrating"]'
+          );
+
+          var sprayRow = widget.querySelector(
+            '[data-fbt-product-row="spray"]'
+          );
+
+          var hydratingConnector = widget.querySelector(
+            '[data-fbt-connector="hydrating"]'
+          );
+
+          var sprayConnector = widget.querySelector(
+            '[data-fbt-connector="spray"]'
+          );
+
+          setHidden(hydratingRow, !showHydrating);
+          setHidden(hydratingConnector, !showHydrating);
+
+          setHidden(sprayRow, !showSpray);
+          setHidden(sprayConnector, !showSpray);
+
+          setHidden(freeGiftElement, true);
+        }
+
+        function validateSelection() {
+          var selectedOption = getSelectedOption();
+
+          var foundationVariant = getProductVariant('foundation');
+          var hydratingVariant = getProductVariant('hydrating');
+          var sprayVariant = getProductVariant('spray');
+
+          var needsHydrating =
+            selectedOption === 'option-1' ||
+            selectedOption === 'option-2';
+
+          var needsSpray = selectedOption === 'option-2';
+
+          if (
+            !foundationVariant ||
+            !foundationVariant.id ||
+            !foundationVariant.available
+          ) {
+            return {
+              valid: false,
+              message: 'Please select an available CMC Skin Tint variant.'
+            };
+          }
+
+          if (
+            needsHydrating &&
+            (
+              !hydratingVariant ||
+              !hydratingVariant.id ||
+              !hydratingVariant.available
+            )
+          ) {
+            return {
+              valid: false,
+              message: 'Please select an available CMC Kiss Drip Lip Gloss variant.'
+            };
+          }
+
+          if (
+            needsSpray &&
+            (
+              !sprayVariant ||
+              !sprayVariant.id ||
+              !sprayVariant.available
+            )
+          ) {
+            return {
+              valid: false,
+              message: 'Please select an available Bestseller Liquid Lipstick Trio Mood Mix variant.'
+            };
+          }
+
+          return {
+            valid: true,
+            message: ''
+          };
+        }
+
+        function updateSummary() {
+          var selectedOption = getSelectedOption();
+
+          var foundationVariant =
+            getProductVariant('foundation') || {
+              price: 0,
+              available: false
+            };
+
+          var hydratingVariant =
+            getProductVariant('hydrating') || {
+              price: 0,
+              available: false
+            };
+
+          var sprayVariant =
+            getProductVariant('spray') || {
+              price: 0,
+              available: false
+            };
+
+          var subtotal = foundationVariant.price;
+
+          if (
+            selectedOption === 'option-1' ||
+            selectedOption === 'option-2'
+          ) {
+            subtotal += hydratingVariant.price;
+          }
+
+          if (selectedOption === 'option-2') {
+            subtotal += sprayVariant.price;
+          }
+
+          var discountRate = 0;
+
+          if (selectedOption === 'option-1') {
+            discountRate = 5;
+          }
+
+          if (selectedOption === 'option-2') {
+            discountRate = 10;
+          }
+
+          var discountAmount = Math.round(
+            subtotal * discountRate / 100
+          );
+
+          var calculatedBundlePrice =
+            subtotal - discountAmount;
+
+          if (summaryPriceElement) {
+            summaryPriceElement.textContent = formatMoney(
+              calculatedBundlePrice
+            );
+          }
+
+          if (originalPriceElement) {
+            originalPriceElement.textContent = formatMoney(
+              subtotal
+            );
+          }
+
+          if (bundlePriceElement) {
+            bundlePriceElement.textContent = formatMoney(
+              calculatedBundlePrice
+            );
+          }
+
+          if (summaryCopyElement) {
+            if (discountRate > 0) {
+              summaryCopyElement.textContent =
+                'Save ' +
+                formatMoney(discountAmount) +
+                ' with this bundle.';
+            } else {
+              summaryCopyElement.textContent =
+                'Choose a frequently bought together option.';
+            }
+          }
+
+          var validation = validateSelection();
+
+          if (addButton) {
+            addButton.disabled =
+              isAdding || !validation.valid;
+          }
+
+          if (!validation.valid) {
+            setStatus(validation.message, 'error');
+          } else if (!isAdding) {
+            setStatus(
+              'Ready to add your selected bundle.',
+              ''
+            );
+          }
+        }
+
+        function updateSelectionUI() {
+          var selectedOption = getSelectedOption();
+
+          optionCards.forEach(function (card) {
+            var isSelected =
+              card.getAttribute('data-fbt-option') ===
+              selectedOption;
+
+            card.classList.toggle(
+              'is-selected',
+              isSelected
+            );
+          });
+
+          toggleOptionalProducts();
+          updateAllRowPrices();
+          updateSummary();
+        }
+
+        function getCartComponent() {
+          return (
+            document.querySelector('cart-drawer') ||
+            document.querySelector('cart-notification')
+          );
+        }
+
+        function getCartSections(cartComponent) {
+          if (
+            !cartComponent ||
+            typeof cartComponent.getSectionsToRender !==
+              'function'
+          ) {
+            return [];
+          }
+
+          return cartComponent
+            .getSectionsToRender()
+            .map(function (section) {
+              return section.id;
+            })
+            .filter(Boolean);
+        }
+
+        widget.querySelectorAll('[data-fbt-select]').forEach(
+          function (selectElement) {
+            selectElement.addEventListener(
+              'change',
+              function () {
+                updateProductImage(selectElement);
+                updateRowPrice(selectElement);
+                updateSummary();
+              }
+            );
+
+            updateProductImage(selectElement);
+            updateRowPrice(selectElement);
+          }
+        );
+
+        optionInputs.forEach(function (inputElement) {
+          inputElement.addEventListener(
+            'change',
+            updateSelectionUI
+          );
+        });
+
+        if (addButton) {
+          addButton.addEventListener(
+            'click',
+            async function () {
+              var validation = validateSelection();
+
+              if (!validation.valid) {
+                setStatus(validation.message, 'error');
+                return;
+              }
+
+              var selectedOption = getSelectedOption();
+
+              var foundationVariant =
+                getProductVariant('foundation');
+
+              var hydratingVariant =
+                getProductVariant('hydrating');
+
+              var sprayVariant =
+                getProductVariant('spray');
+
+              var bundleToken =
+                'fbt-' +
+                Date.now() +
+                '-' +
+                Math.random()
+                  .toString(36)
+                  .slice(2, 8);
+
+              var sharedProperties = {
+                _fbt_bundle: bundleToken,
+                _fbt_bundle_option: selectedOption
+              };
+
+              var items = [
+                {
+                  id: foundationVariant.id,
+                  quantity: 1,
+                  properties: Object.assign(
+                    {},
+                    sharedProperties,
+                    {
+                      _fbt_product_role: 'main-product'
+                    }
+                  )
+                }
+              ];
+
+              if (
+                selectedOption === 'option-1' ||
+                selectedOption === 'option-2'
+              ) {
+                items.push({
+                  id: hydratingVariant.id,
+                  quantity: 1,
+                  properties: Object.assign(
+                    {},
+                    sharedProperties,
+                    {
+                      _fbt_product_role: 'cmc-kiss-drip-lip-gloss'
+                    }
+                  )
+                });
+              }
+
+              if (selectedOption === 'option-2') {
+                items.push({
+                  id: sprayVariant.id,
+                  quantity: 1,
+                  properties: Object.assign(
+                    {},
+                    sharedProperties,
+                    {
+                      _fbt_product_role: 'cmc-bestseller-liquid-lipstick-trio-mood-mix'
+                    }
+                  )
+                });
+
+              }
+
+              isAdding = true;
+              addButton.disabled = true;
+              addButton.textContent = 'Adding...';
+
+              setStatus(
+                'Adding your bundle...',
+                'loading'
+              );
+
+              try {
+                var cartComponent = getCartComponent();
+                var cartSections =
+                  getCartSections(cartComponent);
+
+                var requestBody = {
+                  items: items
+                };
+
+                if (cartSections.length) {
+                  requestBody.sections =
+                    cartSections.join(',');
+
+                  requestBody.sections_url =
+                    window.location.pathname;
+                }
+
+                var shopRoot =
+                  window.Shopify &&
+                  window.Shopify.routes &&
+                  window.Shopify.routes.root
+                    ? window.Shopify.routes.root
+                    : '/';
+
+                var response = await fetch(
+                  shopRoot + 'cart/add.js',
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type':
+                        'application/json',
+
+                      Accept:
+                        'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                  }
+                );
+
+                var responseData =
+                  await response.json();
+
+                if (!response.ok) {
+                  throw new Error(
+                    responseData.description ||
+                    responseData.message ||
+                    'Unable to add bundle.'
+                  );
+                }
+
+                addButton.textContent =
+                  'Added to Cart';
+
+                setStatus(
+                  'Bundle added successfully.',
+                  'success'
+                );
+
+                if (
+                  cartComponent &&
+                  responseData.sections &&
+                  typeof cartComponent.renderContents ===
+                    'function'
+                ) {
+                  cartComponent.renderContents(
+                    responseData
+                  );
+                } else {
+                  document.dispatchEvent(
+                    new CustomEvent(
+                      'ajaxProduct:added',
+                      {
+                        detail: responseData
+                      }
+                    )
+                  );
+
+                  document.dispatchEvent(
+                    new CustomEvent(
+                      'cart:updated',
+                      {
+                        detail: responseData
+                      }
+                    )
+                  );
+
+                  document.dispatchEvent(
+                    new CustomEvent('cart:open')
+                  );
+
+                  var cartTrigger =
+                    document.querySelector(
+                      '.js-drawer-open-cart, [data-cart-drawer-trigger], #cart-icon-bubble, .js-drawer-open-cart'
+                    );
+
+                  if (cartTrigger) {
+                    cartTrigger.click();
+                  }
+                }
+
+                // This theme's cart drawer listens for these events rather
+                // than the standard Dawn section response alone.
+                document.dispatchEvent(new CustomEvent('cart:refresh', {
+                  detail: responseData
+                }));
+                document.dispatchEvent(new CustomEvent('cart:updated', {
+                  detail: responseData
+                }));
+                document.dispatchEvent(new CustomEvent('cart:build', {
+                  detail: responseData
+                }));
+                document.dispatchEvent(new CustomEvent('cart-drawer:updated', {
+                  detail: responseData
+                }));
+
+                window.setTimeout(function () {
+                  var drawerTrigger = document.querySelector(
+                    '.js-drawer-open-cart, #cart-icon-bubble, .header__icon--cart, [data-cart-drawer-trigger], [data-cart-drawer-toggle], [data-fastrr-cart], .fastrr-cart-toggle'
+                  );
+
+                  if (drawerTrigger) {
+                    drawerTrigger.click();
+                  } else {
+                    document.dispatchEvent(new CustomEvent('cart:open'));
+                    document.dispatchEvent(new CustomEvent('fastrr:open-cart', {
+                      bubbles: true
+                    }));
+                  }
+                }, 150);
+              } catch (error) {
+                console.error(
+                  'FBT bundle error:',
+                  error
+                );
+
+                setStatus(
+                  error.message ||
+                  'Something went wrong. Please try again.',
+                  'error'
+                );
+
+                addButton.textContent =
+                  'Add Selected Bundle to Cart';
+              } finally {
+                window.setTimeout(function () {
+                  isAdding = false;
+
+                  addButton.textContent =
+                    'Add Selected Bundle to Cart';
+
+                  updateSummary();
+                }, 1200);
+              }
+            }
+          );
+        }
+
+        updateSelectionUI();
+      });
+    })();
+  </script>
+{%- endcomment -%}
+

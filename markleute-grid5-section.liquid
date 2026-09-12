@@ -1,0 +1,124 @@
+{% comment %}
+  Markleute | Five category image grid
+  Demo images are used until an image is selected for each block in the Theme Editor.
+{% endcomment %}
+
+{% assign grid_id = 'markleute-grid-' | append: section.id %}
+
+<section id="{{ grid_id }}" class="markleute-grid5 section-{{ section.id }}">
+  <div class="markleute-grid5__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="markleute-grid5__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    <div class="markleute-grid5__desktop" aria-label="{{ section.settings.heading | default: 'Trending categories' | escape }}">
+      {% for block in section.blocks limit: 5 %}
+        {% capture demo_image %}https://images.unsplash.com/photo-{% cycle '1521572163474-6864f9cf17ab', '1598032895397-b9472444bf93', '1542291026-7eec264c27ff', '1516826957135-700dedea698c', '1552346154-21d32810aba3' %}?auto=format&fit=crop&w=1200&q=85{% endcapture %}
+        <a class="markleute-grid5__card markleute-grid5__card--{{ forloop.index }}" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            {{ block.settings.image | image_url: width: 1400 | image_tag: class: 'markleute-grid5__image', loading: 'lazy', widths: '400, 700, 1000, 1400', alt: block.settings.image.alt | default: block.settings.title }}
+          {% elsif forloop.first %}
+            {{ 'markleute-demo-tshirt.png' | asset_url | image_tag: class: 'markleute-grid5__image', loading: 'lazy', alt: block.settings.title }}
+          {% else %}
+            <img class="markleute-grid5__image" src="{{ demo_image | strip }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="1200" height="1200">
+          {% endif %}
+          <span class="markleute-grid5__label">{{ block.settings.title | escape }}</span>
+        </a>
+      {% endfor %}
+    </div>
+
+    <div class="markleute-grid5__mobile">
+      {% for column in (0..1) %}
+        <div class="markleute-grid5__mobile-column">
+          {% for block in section.blocks limit: 5 %}
+            {% assign show_block = false %}
+            {% if column == 0 and forloop.index <= 3 %}
+              {% assign show_block = true %}
+            {% elsif column == 1 and forloop.index > 3 %}
+              {% assign show_block = true %}
+            {% endif %}
+            {% if show_block %}
+              {% capture demo_image %}https://images.unsplash.com/photo-{% cycle '1521572163474-6864f9cf17ab', '1598032895397-b9472444bf93', '1542291026-7eec264c27ff', '1516826957135-700dedea698c', '1552346154-21d32810aba3' %}?auto=format&fit=crop&w=900&q=85{% endcapture %}
+              <a class="markleute-grid5__card markleute-grid5__card--{{ forloop.index }}" href="{{ block.settings.link | default: '#' }}">
+                {% if block.settings.image != blank %}
+                  {{ block.settings.image | image_url: width: 900 | image_tag: class: 'markleute-grid5__image', loading: 'lazy', widths: '300, 500, 700, 900', alt: block.settings.image.alt | default: block.settings.title }}
+                {% elsif forloop.first %}
+                  {{ 'markleute-demo-tshirt.png' | asset_url | image_tag: class: 'markleute-grid5__image', loading: 'lazy', alt: block.settings.title }}
+                {% else %}
+                  <img class="markleute-grid5__image" src="{{ demo_image | strip }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="900" height="1200">
+                {% endif %}
+                <span class="markleute-grid5__label">{{ block.settings.title | escape }}</span>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  #{{ grid_id }} { padding: {{ section.settings.padding_top }}px 20px {{ section.settings.padding_bottom }}px; }
+  #{{ grid_id }} .markleute-grid5__inner { max-width: {{ section.settings.max_width }}px; margin: 0 auto; }
+  #{{ grid_id }} .markleute-grid5__heading { margin: 0 0 18px; text-align: center; font-size: 15px; line-height: 1.2; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #1b1b1b; }
+  #{{ grid_id }} .markleute-grid5__desktop { display: grid; grid-template-columns: repeat(6, 1fr); gap: {{ section.settings.gap }}px; }
+  #{{ grid_id }} .markleute-grid5__card { position: relative; display: block; overflow: hidden; background: #e9edf5; color: #fff; text-decoration: none; }
+  #{{ grid_id }} .markleute-grid5__card--1, #{{ grid_id }} .markleute-grid5__card--2 { grid-column: span 3; aspect-ratio: 1.6 / 1; }
+  #{{ grid_id }} .markleute-grid5__card--3, #{{ grid_id }} .markleute-grid5__card--4, #{{ grid_id }} .markleute-grid5__card--5 { grid-column: span 2; aspect-ratio: 1 / 1; }
+  #{{ grid_id }} .markleute-grid5__image { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+  #{{ grid_id }} .markleute-grid5__card:hover .markleute-grid5__image { transform: scale(1.035); }
+  #{{ grid_id }} .markleute-grid5__label { position: absolute; right: 7%; bottom: 11%; left: 7%; color: #fff; font-size: clamp(23px, 2.35vw, 48px); font-weight: 800; line-height: 1; text-align: right; letter-spacing: -.035em; text-transform: uppercase; text-shadow: 0 1px 8px rgba(0,0,0,.14); }
+  #{{ grid_id }} .markleute-grid5__card--3 .markleute-grid5__label { text-align: center; }
+  #{{ grid_id }} .markleute-grid5__mobile { display: none; }
+  @media screen and (max-width: 749px) {
+    #{{ grid_id }} { padding: {{ section.settings.padding_top | at_most: 36 }}px 16px {{ section.settings.padding_bottom | at_most: 36 }}px; }
+    #{{ grid_id }} .markleute-grid5__heading { margin-bottom: 16px; font-size: 13px; letter-spacing: .15em; }
+    #{{ grid_id }} .markleute-grid5__desktop { display: none; }
+    #{{ grid_id }} .markleute-grid5__mobile { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: {{ section.settings.gap | at_most: 12 }}px; align-items: start; }
+    #{{ grid_id }} .markleute-grid5__mobile-column { display: grid; gap: {{ section.settings.gap | at_most: 12 }}px; }
+    /* Fixed mobile tile heights: images crop inside these boxes and never set their height. */
+    #{{ grid_id }} .markleute-grid5__mobile .markleute-grid5__card { height: 250px; aspect-ratio: auto; }
+    #{{ grid_id }} .markleute-grid5__mobile .markleute-grid5__card--1,
+    #{{ grid_id }} .markleute-grid5__mobile .markleute-grid5__card--3 { height: 118px; }
+    #{{ grid_id }} .markleute-grid5__label { right: 7%; bottom: 7%; left: 7%; font-size: clamp(13px, 4.2vw, 19px); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Markleute 5 category grid",
+  "tag": "section",
+  "class": "section-markleute-grid5",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Trending categories" },
+    { "type": "range", "id": "max_width", "label": "Maximum width", "min": 900, "max": 1600, "step": 20, "default": 1100, "unit": "px" },
+    { "type": "range", "id": "gap", "label": "Gap between images", "min": 0, "max": 30, "step": 1, "default": 10, "unit": "px" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 100, "step": 4, "default": 32, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 100, "step": 4, "default": 32, "unit": "px" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "limit": 5,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Category" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Markleute 5 category grid",
+      "blocks": [
+        { "type": "category", "settings": { "title": "T-Shirts" } },
+        { "type": "category", "settings": { "title": "Shirts" } },
+        { "type": "category", "settings": { "title": "Footwear" } },
+        { "type": "category", "settings": { "title": "Polos" } },
+        { "type": "category", "settings": { "title": "Jeans" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

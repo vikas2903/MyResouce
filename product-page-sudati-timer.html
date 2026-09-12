@@ -1,0 +1,354 @@
+<style>
+    @font-face {
+        font-family: 'Cinzel Custom';
+        src: url('./Cinzel-VariableFont_wght.ttf') format('truetype');
+        font-weight: 400 900;
+        font-style: normal;
+    }
+
+    :root {
+        --bg-dark: #220003;
+        --bg-mid: #4b0006;
+        --bg-glow: #7d000b;
+        --gold: #f4ddb0;
+        --gold-strong: #ffe5a2;
+        --gold-line: rgba(244, 221, 176, 0.78);
+        --strike: #c93d33;
+        --timer-bg: rgba(22, 0, 3, 0.72);
+    }
+
+    .suddati-offer-widget,
+    .suddati-offer-widget * {
+        box-sizing: border-box;
+    }
+
+    .suddati-offer-widget {
+        width: 100%;
+    }
+
+    .suddati-offer-widget .plp-timer-wrapper {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        max-width: 760px;
+        margin: 0 auto;
+        min-height: auto;
+        padding: 28px 16px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background:
+            radial-gradient(circle at 50% 24%, rgba(145, 0, 12, 0.30), transparent 38%),
+            radial-gradient(circle at 50% 55%, rgba(165, 5, 20, 0.18), transparent 32%),
+            linear-gradient(180deg, rgba(20, 0, 0, 0.18), rgba(0, 0, 0, 0.2)),
+            linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
+        font-family: 'Cinzel Custom', serif;
+        color: var(--gold);
+        isolation: isolate;
+    }
+
+    .suddati-offer-widget .plp-timer-wrapper::before,
+    .suddati-offer-widget .plp-timer-wrapper::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+
+    .suddati-offer-widget .plp-timer-wrapper::before {
+        opacity: 0.22;
+        background:
+            radial-gradient(circle at 12% 8%, rgba(255, 220, 180, 0.12) 0 1px, transparent 1px 100%),
+            radial-gradient(circle at 82% 14%, rgba(255, 220, 180, 0.10) 0 1px, transparent 1px 100%),
+            radial-gradient(circle at 26% 62%, rgba(255, 220, 180, 0.10) 0 1px, transparent 1px 100%),
+            radial-gradient(circle at 75% 76%, rgba(255, 220, 180, 0.09) 0 1px, transparent 1px 100%);
+        background-size: 220px 220px, 260px 260px, 240px 240px, 210px 210px;
+        mix-blend-mode: screen;
+    }
+
+    .suddati-offer-widget .plp-timer-wrapper::after {
+        opacity: 0.20;
+        background:
+            radial-gradient(circle at 50% 50%, transparent 0 68%, rgba(0, 0, 0, 0.45) 100%),
+            repeating-radial-gradient(circle at 50% 50%, rgba(255, 232, 193, 0.02) 0 2px, transparent 2px 12px);
+    }
+
+    .suddati-offer-widget .offer-card {
+        position: relative;
+        z-index: 1;
+        width: min(100%, 620px);
+        text-align: center;
+        text-transform: uppercase;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    }
+
+    .suddati-offer-widget .offer-block {
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .suddati-offer-widget .offer-block + .offer-block {
+        margin-top: 24px;
+    }
+
+    .suddati-offer-widget .offer-title {
+        margin: 0;
+        color: var(--gold);
+        font-weight: 500;
+        font-size: clamp(1.45rem, 4vw, 2.75rem);
+        letter-spacing: 0.05em;
+        line-height: 1.1;
+    }
+
+    .suddati-offer-widget .offer-title.tight {
+        letter-spacing: 0.03em;
+    }
+
+    .suddati-offer-widget .offer-price {
+        margin: 10px 0 0;
+        color: var(--gold-strong);
+        font-size: clamp(1.85rem, 5vw, 3.1rem);
+        font-weight: 700;
+        line-height: 1.02;
+    }
+
+    .suddati-offer-widget .offer-subtext {
+        margin: 8px 0 0;
+        color: var(--gold-strong);
+        font-size: clamp(0.95rem, 2.3vw, 1.35rem);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        line-height: 1.2;
+    }
+
+    .suddati-offer-widget .old-price-wrap {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0.24em;
+        margin-left: 0.2em;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .suddati-offer-widget .old-price {
+        position: relative;
+        display: inline-block;
+        color: var(--gold-strong);
+        font-weight: 700;
+    }
+
+    .suddati-offer-widget .old-price::after {
+        content: '';
+        position: absolute;
+        left: -0.08em;
+        right: -0.08em;
+        top: 52%;
+        height: 0.09em;
+        background: var(--strike);
+        transform: rotate(-8deg);
+        box-shadow: 0 0 10px rgba(201, 61, 51, 0.45);
+    }
+
+    .suddati-offer-widget .divider {
+        width: min(78%, 360px);
+        height: 1px;
+        margin: 18px auto 0;
+        background: linear-gradient(90deg, transparent, var(--gold-line) 18%, var(--gold-line) 82%, transparent);
+    }
+
+    .suddati-offer-widget .accent {
+        color: var(--gold-strong);
+        font-weight: 700;
+    }
+
+    .suddati-offer-widget .timer-panel {
+        margin: 26px auto 0;
+        width: min(100%, 440px);
+        padding: 12px 10px 14px;
+        border: 1px solid rgba(244, 221, 176, 0.34);
+        background: linear-gradient(180deg, rgba(88, 3, 9, 0.3), var(--timer-bg));
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(2px);
+        border-radius: 6px;
+    }
+
+    .suddati-offer-widget .plp-timer-title {
+        margin: 0 0 10px;
+        color: var(--gold-strong);
+        font-size: clamp(0.72rem, 1.5vw, 0.92rem);
+        letter-spacing: 0.18em;
+        line-height: 1.2;
+    }
+
+    .suddati-offer-widget .timer-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .suddati-offer-widget .timer-unit {
+        min-width: 62px;
+    }
+
+    .suddati-offer-widget .timer-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 6px 8px;
+        border: 1px solid rgba(255, 229, 162, 0.42);
+        background: linear-gradient(180deg, rgba(255, 229, 162, 0.08), rgba(255, 229, 162, 0.02));
+        color: var(--gold-strong);
+        font-size: clamp(1.2rem, 3vw, 1.85rem);
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: 0.06em;
+        border-radius: 4px;
+    }
+
+    .suddati-offer-widget .timer-label {
+        margin-top: 6px;
+        color: rgba(244, 221, 176, 0.92);
+        font-size: 0.54rem;
+        letter-spacing: 0.14em;
+    }
+
+    .suddati-offer-widget .timer-separator {
+        margin-top: -10px;
+        color: var(--gold-strong);
+        font-size: clamp(1rem, 2vw, 1.45rem);
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    @media (max-width: 767px) {
+        .suddati-offer-widget .plp-timer-wrapper {
+            padding: 22px 12px 18px;
+        }
+
+        .suddati-offer-widget .offer-block + .offer-block {
+            margin-top: 20px;
+        }
+
+        .suddati-offer-widget .divider {
+            width: min(86%, 280px);
+            margin-top: 14px;
+        }
+
+        .suddati-offer-widget .timer-panel {
+            margin-top: 22px;
+            padding: 10px 8px 12px;
+        }
+
+        .suddati-offer-widget .timer-wrapper {
+            gap: 5px;
+        }
+
+        .suddati-offer-widget .timer-unit {
+            min-width: 56px;
+        }
+
+        .suddati-offer-widget .timer-box {
+            min-height: 42px;
+            font-size: 1.1rem;
+        }
+
+        .suddati-offer-widget .timer-label {
+            font-size: 0.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .suddati-offer-widget .timer-separator {
+            font-size: 0.95rem;
+            margin-top: -8px;
+        }
+    }
+</style>
+
+<div class="suddati-offer-widget">
+    <div class="plp-timer-wrapper">
+        <div class="offer-card">
+            <div class="offer-block">
+                <h2 class="offer-title tight">Buy 2 Get 1 Free</h2>
+                <div class="offer-subtext">Limited Time Offer</div>
+                <div class="divider"></div>
+            </div>
+
+        <!-- <div class="offer-block">
+            <h2 class="offer-title tight">Every Tijori = <span class="accent">2X Benefits</span></h2>
+            <div class="divider"></div>
+        </div> -->
+<!-- 
+        <div class="offer-block">
+            <h2 class="offer-title">Win Golden Ticket</h2>
+            <div class="offer-price">Worth &#8377;500</div>
+            <div class="divider"></div>
+        </div>
+
+        <div class="offer-block">
+            <h2 class="offer-title">A Lucky Customer May</h2>
+            <div class="offer-price">Win Voucher Worth</div>
+            <div class="offer-price">&#8377;10,000/-</div>
+        </div> -->
+
+            <div class="timer-panel">
+                <div class="plp-timer-title">Sale Ends In</div>
+                <div class="timer-wrapper">
+                    <div class="timer-unit">
+                        <div class="timer-box" id="hour">00</div>
+                        <div class="timer-label">Hours</div>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-unit">
+                        <div class="timer-box" id="minute">00</div>
+                        <div class="timer-label">Minutes</div>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-unit">
+                        <div class="timer-box" id="second">00</div>
+                        <div class="timer-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function start24HrISTCountdown() {
+        const hourEl = document.getElementById('hour');
+        const minuteEl = document.getElementById('minute');
+        const secondEl = document.getElementById('second');
+
+        function updateCountdown() {
+            const now = new Date();
+            const nowIST = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+            const nextMidnightIST = new Date(nowIST);
+            nextMidnightIST.setHours(24, 0, 0, 0);
+
+            const diff = nextMidnightIST.getTime() - nowIST.getTime();
+
+            if (diff <= 0) {
+                hourEl.textContent = '00';
+                minuteEl.textContent = '00';
+                secondEl.textContent = '00';
+                return;
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            hourEl.textContent = String(hours).padStart(2, '0');
+            minuteEl.textContent = String(minutes).padStart(2, '0');
+            secondEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    }
+
+    start24HrISTCountdown();
+</script>

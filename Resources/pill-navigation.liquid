@@ -1,0 +1,165 @@
+{%- comment -%}
+  Section: Horizontal pill navigation (like image)
+  - Uses blocks for each pill (label + URL)
+{%- endcomment -%}
+
+{%- if section.blocks.size > 0 -%}
+  <section class="pillnav" data-section-id="{{ section.id }}">
+    <div class="pillnav__wrap">
+      <div class="pillnav__scroller" data-pillnav-scroller>
+        <div class="pillnav__row">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'pill' -%}
+                {%- assign label = block.settings.label | strip -%}
+                {%- assign url = block.settings.url -%}
+                {%- if label != blank -%}
+                  <a
+                    class="pillnav__pill"
+                    {% if url != blank %}href="{{ url }}"{% else %}role="link" aria-disabled="true"{% endif %}
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ label | escape }}
+                  </a>
+                {%- endif -%}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .pillnav {
+      padding: {{ section.settings.padding_y }}px 0;
+      background: {{ section.settings.bg }};
+    }
+
+    .pillnav__wrap {
+      position: relative;
+      max-width: {{ section.settings.max_width }}px;
+      margin: 0 auto;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pillnav__scroller {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: auto;
+      scroll-behavior: smooth;
+      flex: 1;
+    }
+
+    .pillnav__row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 2px;
+      min-width: max-content;
+    }
+
+    .pillnav__pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: {{ section.settings.pill_bg }};
+      color: {{ section.settings.pill_text }};
+      font: 600 14px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+    }
+
+    .pillnav__pill[aria-disabled="true"] {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    /* subtle separators like the screenshot's rail */
+    .pillnav__scroller {
+      border-radius: 999px;
+    }
+  </style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Pill navigation",
+  "settings": [
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 320,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "bg",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pill_bg",
+      "label": "Pill background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pill_text",
+      "label": "Pill text",
+      "default": "#1f1b17"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pill",
+      "name": "Pill",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Bracelets"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pill navigation",
+      "blocks": [
+        { "type": "pill" },
+        { "type": "pill" },
+        { "type": "pill" }
+      ]
+    }
+  ]
+}
+{% endschema %}

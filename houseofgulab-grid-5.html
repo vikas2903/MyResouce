@@ -1,0 +1,117 @@
+<div class="shop-by-category-wrapper">
+<div class="shop-by-category-container">
+
+    <div class="home-title-img-wrap">
+        <img src="">
+    </div>
+    
+    <div class="home-product-card-slider">
+        <div class="home-product-item">
+            <a href="/collection/tote-bags">
+                <img src="https://houseofgulab.com/cdn/shop/files/WhatsApp_Image_2026-01-17_at_5.02.21_PM.jpg?v=1768655599&width=1920">
+                <span>Tote Bag</span>
+            </a>
+        </div>
+        <div class="home-product-item">
+            <a href="/collections/bathrobes">
+                <img src="https://houseofgulab.com/cdn/shop/files/Gemini_Generated_Image_fgr1z9fgr1z9fgr1.png?v=1767438725&width=1920">
+                <span>Bathrobes</span>
+            </a>
+        </div>
+        <div class="home-product-item">
+            <a href="https://houseofgulab.com/collections/towel-gift-boxes">
+                <img src="https://houseofgulab.com/cdn/shop/files/WhatsAppImage2026-06-20at2.39.25PM.jpg?crop=center&height=1344&v=1781948115&width=799">
+                <span>Towel Gift Boxes</span>
+            </a>
+        </div>
+        <div class="home-product-item">
+            <a href="https://houseofgulab.com/collections/tote-bags-pouches">
+                <img src="https://houseofgulab.com/cdn/shop/files/WhatsApp_Image_2026-01-17_at_4.57.26_PM.jpg?v=1768655568&width=1920">
+                <span>Tote Bags + Pouches</span>
+            </a>
+        </div>
+        <div class="home-product-item">
+            <a href="https://houseofgulab.com/collections/bedsheet-gift-boxes">
+                <img src="https://houseofgulab.com/cdn/shop/files/WhatsAppImage2026-07-20at1.31.14PM.jpg?v=1784612399&width=1920">
+                <span>Bedsheet Gift Boxes</span>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+
+<style>
+.shop-by-category-container {
+    max-width: 1440px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.shop-by-category-wrapper {
+    padding: 0;
+}
+
+.home-title-img-wrap img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.home-product-card-slider {
+    display: flex;
+    gap: 10px;
+}
+
+.home-product-item {
+    flex: 0 0 calc(20% - 8px);
+    margin: 0 !important;
+    text-align: center;
+}
+
+.home-product-item img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    border-radius: 10px;
+}
+
+.home-product-item a {
+    display: block;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .shop-by-category-container {
+        padding: 0 10px;
+    }
+
+    .shop-by-category-wrapper {
+        padding: 0;
+    }
+
+    .home-product-item {
+        flex: 0 0 clamp(150px, 44vw, 220px);
+        scroll-snap-align: start;
+    }
+
+    .home-product-card-slider {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .home-product-card-slider::-webkit-scrollbar {
+        display: none;
+    }
+
+    .home-product-item:last-child {
+        margin-right: 10px !important;
+    }
+}
+</style>

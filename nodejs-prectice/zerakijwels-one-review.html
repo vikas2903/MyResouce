@@ -1,0 +1,167 @@
+<section class="zeraki-buy2-offer">
+  <div class="zeraki-buy2-offer__card">
+    <div class="zeraki-buy2-offer__badge">Limited Time Offer</div>
+
+    <div class="zeraki-buy2-offer__hero">
+      <div class="zeraki-buy2-offer__price">
+        <span class="zeraki-buy2-offer__count">BUY 2</span>
+        <span class="zeraki-buy2-offer__value">@ ₹599</span>
+      </div>
+
+      <div class="zeraki-buy2-offer__copy">
+        <h2>Pick Any 2 Styles For Just ₹599</h2>
+        <p>Mix, match, and build your combo with our best-selling jewellery picks.</p>
+      </div>
+    </div>
+
+    <div class="zeraki-buy2-offer__highlights">
+      <div class="zeraki-buy2-offer__item">Any 2 designs</div>
+      <div class="zeraki-buy2-offer__item">One flat combo price</div>
+      <div class="zeraki-buy2-offer__item">Perfect for gifting</div>
+    </div>
+
+    <div class="zeraki-buy2-offer__footer">
+      <span>Select your 2 favourites to unlock the offer.</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .zeraki-buy2-offer {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 8px 0;
+  }
+
+  .zeraki-buy2-offer__card {
+    overflow: hidden;
+    border: 1px solid #e7d7b6;
+    border-radius: 20px;
+    background:
+      radial-gradient(circle at top left, rgba(255, 221, 138, 0.26), transparent 34%),
+      linear-gradient(135deg, #17110a 0%, #2f2113 48%, #120d08 100%);
+    box-shadow: 0 16px 36px rgba(29, 18, 8, 0.22);
+    color: #fff7ea;
+  }
+
+  .zeraki-buy2-offer__badge {
+    display: inline-flex;
+    margin: 18px 18px 0;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 226, 166, 0.4);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffe0a0;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .zeraki-buy2-offer__hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 22px 18px;
+  }
+
+  .zeraki-buy2-offer__price {
+    min-width: 220px;
+    padding: 20px 18px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #f6d171 0%, #d2a63f 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    text-align: center;
+    color: #2c1903;
+  }
+
+  .zeraki-buy2-offer__count {
+    display: block;
+    font-size: 34px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .zeraki-buy2-offer__value {
+    display: block;
+    margin-top: 8px;
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 800;
+  }
+
+  .zeraki-buy2-offer__copy h2 {
+    margin: 0 0 8px;
+    color: #fff7ea;
+    font-size: 30px;
+    line-height: 1.15;
+    font-weight: 800;
+  }
+
+  .zeraki-buy2-offer__copy p {
+    margin: 0;
+    color: #eadcc7;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .zeraki-buy2-offer__highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0 22px 18px;
+  }
+
+  .zeraki-buy2-offer__item {
+    padding: 14px 12px;
+    border: 1px solid rgba(255, 229, 180, 0.18);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    text-align: center;
+    color: #f8ead2;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .zeraki-buy2-offer__footer {
+    padding: 14px 22px 20px;
+    border-top: 1px solid rgba(255, 228, 173, 0.14);
+    color: #ffd98d;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  @media (max-width: 767px) {
+    .zeraki-buy2-offer__hero {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+      padding: 18px 16px 16px;
+    }
+
+    .zeraki-buy2-offer__price {
+      min-width: 0;
+    }
+
+    .zeraki-buy2-offer__copy h2 {
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .zeraki-buy2-offer__copy p {
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .zeraki-buy2-offer__highlights {
+      grid-template-columns: 1fr;
+      padding: 0 16px 16px;
+    }
+
+    .zeraki-buy2-offer__footer {
+      padding: 14px 16px 18px;
+    }
+  }
+</style>

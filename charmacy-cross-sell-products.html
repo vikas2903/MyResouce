@@ -1,0 +1,120 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose your foundation size</title>
+    </head>
+    <body>
+    <section class="attars-section" aria-labelledby="foundation-options-title">
+        <div class="attars-container">
+        <div class="attars-header">
+            <div>
+            <!-- <p class="attars-eyebrow">Complete your base</p> -->
+            <h2 id="foundation-options-title">Choose your foundation size</h2>
+            </div>
+            <span class="attars-count">2 options</span>
+        </div>
+
+        <div class="attars-products">
+            <a href="https://charmacyworld.com/products/cmc-matte-foundation" class="attars-card attars-card--selected" aria-label="Matt Foundation 30ML, ₹1,079">
+            <div class="attars-image">
+                <img src="https://cdn.shopify.com/s/files/1/0558/4584/7231/files/1_c5ded15d-3127-448a-94ca-4d85af7ee363.png?v=1788515439" alt="Matt Foundation 30ML">
+                <span class="attars-badge">Popular</span>
+            </div>
+            <div class="attars-info">
+                <div class="attars-product-row">
+                <h3>Matt Foundation</h3>
+                <span>30 ML</span>
+                </div>
+                <div class="attars-prices">
+                <strong>₹1,079</strong>
+                <del>₹1,179</del>
+                </div>
+            </div>
+            </a>
+
+            <a href="https://charmacyworld.com/products/cmc-matte-foundation-60ml" class="attars-card" aria-label="Matt Foundation 60ML, ₹1,899">
+            <div class="attars-image">
+                <img src="https://cdn.shopify.com/s/files/1/0558/4584/7231/files/2_1877afe7-5ea4-43c7-847e-8b4d21a7045b.png?v=1788515438" alt="Matt Foundation 60ML">
+            </div>
+            <div class="attars-info">
+                <div class="attars-product-row">
+                <h3>Matt Foundation</h3>
+                <span>60 ML</span>
+                </div>
+                <div class="attars-prices">
+                <strong>₹1,899</strong>
+                <!-- <del>₹1,179</del> -->
+                </div>
+            </div>
+            </a>
+        </div>
+        </div>
+    </section>
+
+    <style>
+        .attars-section,
+        .attars-section * { box-sizing: border-box; }
+
+        .attars-section {
+        width: 100%;
+      padding: 9px 0 12px;
+        background: #f8f5f1;
+        color: #22201f;
+        font-family: Poppins, Arial, sans-serif;
+        }
+
+    .attars-container { width: 300px; max-width: calc(100% - 20px); margin: auto; }
+
+        .attars-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+        }
+
+    .attars-eyebrow { margin: 0 0 1px; color: #9a6b3d; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .attars-header h2 { margin: 0; font-size: 15px; font-weight: 650; line-height: 1.2; letter-spacing: -.3px; }
+    .attars-count { padding: 3px 6px; border-radius: 999px; background: #eee7df; color: #715b4a; font-size: 9px; font-weight: 600; white-space: nowrap; }
+
+    .attars-products { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+
+        .attars-card {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid #e9e3dc;
+      border-radius: 8px;
+        background: #fff;
+        color: inherit;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(58, 39, 23, .04);
+        transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+        .attars-card:hover { transform: translateY(-2px); box-shadow: 0 7px 16px rgba(58, 39, 23, .11); }
+        .attars-card--selected { border: 2px solid #c88c42; }
+
+    .attars-image { position: relative; height: 72px; background: #fff; overflow: hidden; }
+        .attars-image img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+    .attars-badge { position: absolute; top: 5px; left: 5px; padding: 3px 5px; border-radius: 999px; background: #27211d; color: #fff; font-size: 8px; font-weight: 700; line-height: 1.1; }
+
+    .attars-info { padding: 5px 6px 6px; }
+        .attars-product-row { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+    .attars-product-row h3 { margin: 0; overflow: hidden; font-size: 11px; font-weight: 600; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+    .attars-product-row span { flex: none; color: #826243; font-size: 9px; font-weight: 700; }
+    .attars-prices { display: flex; align-items: baseline; gap: 5px; margin-top: 4px; }
+    .attars-prices strong { font-size: 13px; font-weight: 700; line-height: 1; letter-spacing: -.2px; }
+    .attars-prices del { color: #99918b; font-size: 9px; }
+
+        @media (max-width: 360px) {
+        .attars-container { max-width: calc(100% - 20px); }
+      .attars-image { height: 66px; }
+      .attars-info { padding: 6px; }
+      .attars-product-row h3 { font-size: 10px; }
+        }
+    </style>
+    </body>
+    </html>

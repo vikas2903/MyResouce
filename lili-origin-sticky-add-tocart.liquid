@@ -1,0 +1,140 @@
+{% comment %}
+  Usage (inside the main product section):
+  {% render 'lili-origin-sticky-add-tocart', product: product, section: section %}
+{% endcomment %}
+
+{% liquid
+  assign sticky_variant = product.selected_or_first_available_variant
+  assign sticky_section_id = section.id | default: 'main-product'
+%}
+
+<div
+  id="LiliStickyAddToCart-{{ sticky_section_id }}"
+  class="lili-sticky-atc"
+  data-product-id="{{ product.id }}"
+  data-section-id="{{ sticky_section_id }}"
+  aria-label="Sticky product add to cart"
+>
+  <div class="lili-sticky-atc__details">
+    {% if product.featured_image %}
+      {{ product.featured_image | image_url: width: 120 | image_tag: class: 'lili-sticky-atc__image', loading: 'lazy', widths: '60, 120' }}
+    {% endif %}
+    <div>
+      <strong class="lili-sticky-atc__title">{{ product.title | escape }}</strong>
+      <span class="lili-sticky-atc__price">{{ sticky_variant.price | money }}</span>
+    </div>
+  </div>
+
+  {% unless product.has_only_default_variant %}
+    <label class="visually-hidden" for="LiliStickyVariant-{{ sticky_section_id }}">Variant</label>
+    <select id="LiliStickyVariant-{{ sticky_section_id }}" class="lili-sticky-atc__variants">
+      {% for variant in product.variants %}
+        <option
+          value="{{ variant.id }}"
+          data-price="{{ variant.price | money | escape }}"
+          {% unless variant.available %}disabled{% endunless %}
+          {% if variant.id == sticky_variant.id %}selected{% endif %}
+        >
+          {{ variant.title | escape }}{% unless variant.available %} — Sold out{% endunless %}
+        </option>
+      {% endfor %}
+    </select>
+  {% endunless %}
+
+  <button type="button" class="button lili-sticky-atc__button" {% unless sticky_variant.available %}disabled{% endunless %}>
+    {% if sticky_variant.available %}Add to cart{% else %}Sold out{% endif %}
+  </button>
+</div>
+
+<style>
+  .lili-sticky-atc { position:fixed; z-index:30; right:0; bottom:0; left:0; display:flex; align-items:center; justify-content:center; gap:16px; padding:10px 24px; background:#fff; border-top:1px solid rgba(0,0,0,.14); box-shadow:0 -3px 14px rgba(0,0,0,.08); }
+  .lili-sticky-atc__details { display:flex; align-items:center; gap:10px; min-width:220px; }
+  .lili-sticky-atc__image { width:46px; height:46px; object-fit:contain; }
+  .lili-sticky-atc__details strong, .lili-sticky-atc__details span { display:block; }
+  .lili-sticky-atc__title { font-size:14px; }
+  .lili-sticky-atc__price { margin-top:3px; font-size:13px; }
+  .lili-sticky-atc__variants { min-width:180px; height:42px; padding:0 10px; background:#fff; }
+  .lili-sticky-atc__button { min-width:170px; min-height:42px; }
+  @media screen and (max-width: 749px) { .lili-sticky-atc { gap:8px; padding:8px 12px; } .lili-sticky-atc__details { display:none; } .lili-sticky-atc__variants, .lili-sticky-atc__button { min-width:0; flex:1; } }
+</style>
+
+<script>
+  (() => {
+    const sticky = document.getElementById('LiliStickyAddToCart-{{ sticky_section_id }}');
+    if (!sticky || sticky.dataset.initialized) return;
+    sticky.dataset.initialized = 'true';
+
+    const variants = {{ product.variants | json }};
+    const variantSelect = sticky.querySelector('.lili-sticky-atc__variants');
+    const price = sticky.querySelector('.lili-sticky-atc__price');
+    const addButton = sticky.querySelector('.lili-sticky-atc__button');
+    const productInfo = document.querySelector('product-info[data-product-id="{{ product.id }}"]');
+    const getMainForm = () => productInfo?.querySelector('form[action*="/cart/add"]') || document.querySelector('form[id="product-form-{{ sticky_section_id }}"]');
+    if (!getMainForm()) return;
+
+    const getMainVariantInput = () => getMainForm()?.querySelector('input[name="id"]');
+    const setStickyVariant = (variantId) => {
+      const variant = variants.find((item) => String(item.id) === String(variantId));
+      if (!variant) return;
+      if (variantSelect) variantSelect.value = variant.id;
+      if (price) price.textContent = window.Shopify?.formatMoney ? window.Shopify.formatMoney(variant.price, {{ shop.money_format | json }}) : (variant.price / 100).toFixed(2);
+      addButton.disabled = !variant.available;
+      addButton.textContent = variant.available ? 'Add to cart' : 'Sold out';
+    };
+
+    const setMainVariant = (variant) => {
+      // Update the theme's option controls first, so the main picker UI and URL
+      // use the same variant as this sticky bar.
+      variant.options.forEach((value, index) => {
+        const select = productInfo?.querySelectorAll('variant-selects select')[index];
+        if (select && select.value !== value) {
+          select.value = value;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          return;
+        }
+        // This theme renders pill radios inside <variant-selects>, rather than
+        // Dawn's optional <variant-radios> element.
+        const radioPicker = productInfo?.querySelector('variant-selects, variant-radios');
+        const radioGroups = radioPicker?.querySelectorAll('fieldset') || [];
+        const radioInputs = radioGroups[index]
+          ? [...radioGroups[index].querySelectorAll('input[type="radio"]')]
+          : [...(radioPicker?.querySelectorAll('input[type="radio"]') || [])];
+        const radio = radioInputs.find((input) => input.value === value);
+        if (radio && !radio.checked) {
+          // Explicitly remove the previous selected pill, then select the
+          // matching option in the main product picker.
+          radioInputs.forEach((input) => { input.checked = false; });
+          radio.checked = true;
+          radio.dispatchEvent(new Event('input', { bubbles: true }));
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+      const mainId = getMainVariantInput();
+      if (mainId && String(mainId.value) !== String(variant.id)) {
+        mainId.value = variant.id;
+        mainId.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      setStickyVariant(variant.id);
+    };
+
+    variantSelect?.addEventListener('change', () => {
+      const variant = variants.find((item) => String(item.id) === variantSelect.value);
+      if (variant) setMainVariant(variant);
+    });
+
+    // Dawn updates the hidden variant id after any main-product option change.
+    productInfo?.addEventListener('change', () => setTimeout(() => setStickyVariant(getMainVariantInput()?.value), 0));
+    productInfo?.addEventListener('variant:change', (event) => setStickyVariant(event.detail?.variant?.id));
+
+    addButton.addEventListener('click', () => {
+      const mainId = getMainVariantInput();
+      const variant = variants.find((item) => String(item.id) === String(mainId?.value));
+      if (!variant || !variant.available) return;
+      setStickyVariant(variant.id);
+      const mainSubmitButton = document.querySelector('.product-form__submit');
+      mainSubmitButton?.click();
+    });
+
+    setStickyVariant(getMainVariantInput()?.value || {{ sticky_variant.id | json }});
+  })();
+</script>

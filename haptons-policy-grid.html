@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shipping, Exchange & Care</title>
+  <style>
+    :root {
+      --background: #101612;
+      --cream: #eee8da;
+      --body-copy: #b2b8ae;
+      --gold-line: rgba(194, 146, 74, 0.7);
+      --top-line: rgba(143, 164, 148, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--background);
+    }
+
+    body {
+      color: var(--cream);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .details-section {
+      min-height: 340px;
+      padding: 67px 7.1% 70px;
+      border-top: 1px solid var(--top-line);
+    }
+
+    .details-section__items {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4.1%;
+      max-width: 1265px;
+      margin: 82px auto 0;
+    }
+
+    .details-item {
+      min-width: 0;
+      border-top: 1px solid var(--gold-line);
+      padding-top: 27px;
+    }
+
+    .details-item__title {
+      margin: 0 0 16px;
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+
+    .details-item__copy {
+      max-width: 420px;
+      margin: 0;
+      color: var(--body-copy);
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.005em;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 800px) {
+      .details-section {
+        min-height: 100vh;
+        padding: 44px 24px 56px;
+      }
+
+      .details-section__items {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        margin-top: 52px;
+      }
+
+      .details-item {
+        padding-top: 22px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .details-section {
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      .details-section__items {
+        margin-top: 42px;
+      }
+
+      .details-item__title {
+        font-size: 19px;
+      }
+
+      .details-item__copy {
+        font-size: 15px;
+        line-height: 1.6;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="details-section">
+    <section class="details-section__items" aria-label="Customer information">
+      <article class="details-item">
+        <h1 class="details-item__title">Shipping</h1>
+        <p class="details-item__copy">Free across India. Dispatched in 2-3 working days with tracking.</p>
+      </article>
+
+      <article class="details-item">
+        <h2 class="details-item__title">Exchange</h2>
+        <p class="details-item__copy">15 days from delivery. If the fit isn't right, send it back — no questions.</p>
+      </article>
+
+      <article class="details-item">
+        <h2 class="details-item__title">Care</h2>
+        <p class="details-item__copy">Machine wash cold inside out. Hang dry. Keep it out of the dryer — heat is the enemy of a hand stitch.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<style>
+  .hamptons-discount-offer {
+    --offer-ink: #182b24;
+    --offer-accent: #c6723f;
+    --offer-surface: #fffaf4;
+    --offer-border: #ead9c8;
+    border: 1px solid var(--offer-border);
+    border-radius: 14px;
+    background: var(--offer-surface);
+    color: var(--offer-ink);
+    overflow: hidden;
+  }
+
+  .hamptons-discount-offer .sale_message {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 13px 16px;
+    background: var(--offer-ink);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  .hamptons-discount-offer .sale_word {
+    color: #f6c99f;
+  }
+
+  .hamptons-discount-offer .promotion-container {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--offer-border);
+  }
+
+  .hamptons-discount-offer .promotion-container:first-of-type {
+    border-top: 0;
+  }
+
+  .hamptons-discount-offer .promotion-image {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 50%;
+  }
+
+  .hamptons-discount-offer .promotion-details {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .hamptons-discount-offer .promotion-details b {
+    font-weight: 600;
+  }
+
+  .hamptons-discount-offer .offer-saving {
+    flex: 0 0 auto;
+    color: var(--offer-accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Overrides theme rules that hide promotion content inside product blocks. */
+  .product-info__block-item .hamptons-discount-offer .sale_message,
+  .product-info__block-item .hamptons-discount-offer .promotion-container {
+    display: flex !important;
+  }
+
+  @media screen and (max-width: 480px) {
+    .hamptons-discount-offer .promotion-details {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 3px;
+    }
+  }
+</style>
+
+{% assign discounted_price_15 = product.price | times: 85 | divided_by: 10000 | round %}
+{% assign discounted_price_18 = product.price | times: 82 | divided_by: 10000 | round %}
+{% assign discounted_price_23 = product.price | times: 77 | divided_by: 10000 | round %}
+
+<section class="hamptons-discount-offer dicount-information" aria-label="Multi-buy sale offers">
+  <h3 class="sale_message">
+    Beginning of the end <span class="sale_word">sale</span>
+  </h3>
+
+{% comment %}
+  <div class="promotion-container">
+    <img src="https://cdn.shopify.com/s/files/1/0561/5019/6358/files/icons8-us-dollar-circled.gif?v=1777622816" class="promotion-image" alt="Offer" width="34" height="34" loading="lazy">
+    <div class="promotion-details">
+      <b>Buy any 1 and get this at ₹{{ discounted_price_15 }} at checkout</b>
+      <span class="offer-saving">Save 15%</span>
+    </div>
+  </div>
+  {% endcomment %}
+
+  <div class="promotion-container">
+    <img src="https://cdn.shopify.com/s/files/1/0561/5019/6358/files/icons8-us-dollar-circled.gif?v=1777622816" class="promotion-image" alt="Offer" width="34" height="34" loading="lazy">
+    <div class="promotion-details">
+      <b>Buy any 2 and get this at ₹{{ discounted_price_18 }} at checkout</b>
+      <span class="offer-saving">Save 18%</span>
+    </div>
+  </div>
+
+  <div class="promotion-container">
+    <img src="https://cdn.shopify.com/s/files/1/0561/5019/6358/files/icons8-us-dollar-circled.gif?v=1777622816" class="promotion-image" alt="Offer" width="34" height="34" loading="lazy">
+    <div class="promotion-details">
+      <b>Buy any 3 and get this at ₹{{ discounted_price_23 }} at checkout</b>
+      <span class="offer-saving">Save 23%</span>
+    </div>
+  </div>
+</section>

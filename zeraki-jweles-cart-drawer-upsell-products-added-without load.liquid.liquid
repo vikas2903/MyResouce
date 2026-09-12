@@ -1,0 +1,1043 @@
+{%- comment -%}
+Dawn Theme — Cart Upsell Snippet
+Optimized for Dawn theme
+- Instant cart drawer updates
+- Full Dawn theme integration
+- Cart drawer auto-refresh
+- Variant selection support
+- Add to cart functionality
+- Updated UI with horizontal scrollable cards
+{%- endcomment -%}
+
+<div id="cart-upsell-wrapper" style="padding:0px;border-top:0px solid #f0f0f0;">
+  <h4 style="margin:0 0 4px 0;font-size:14px;font-weight:500;color:#666;letter-spacing:0.3px;">You may also like</h4>
+  <p style="margin:0 0 10px 0;font-size:12px;font-weight:500;color:#9d6f14;letter-spacing:0.2px;">Buy 1 Get 1 FREE | Get 2 Rings at 399/</p>
+  <div id="cart-upsell-list" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scroll-behavior:smooth;    max-width: 400px;
+    min-width: 200px;">
+    <!-- Products will be loaded here -->
+  </div>
+  <div id="cart-upsell-empty" style="display:none;color:#999;font-size:12px;margin-top:12px;text-align:center;">No suggestions available</div>
+</div>
+
+<style>
+.cart-upsell-item {
+     min-width: 280px;
+    max-width: 280px;
+    flex: 0 0 auto;
+    display: flex
+;
+    flex-direction: row;
+    gap: 12px;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    transition: box-shadow 0.2s 
+ease;
+}
+
+.cart-upsell-item:hover {
+  background: #fafafa;
+}
+
+.cart-upsell-item:last-child {
+  border-bottom: none;
+}
+
+.cart-upsell-item-image-wrapper {
+     width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: transform 0.2s 
+ease;
+}
+
+.cart-upsell-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cart-upsell-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.cart-upsell-title {
+     font-weight: 600;
+    font-size: 11px;
+    color: rgb(0, 0, 0);
+    margin-bottom: 6px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: color 0.2s 
+ease;
+
+display: -webkit-box; max-width: 200px; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.cart-upsell-title:hover {
+  color: #000;
+}
+
+.cart-upsell-price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.cart-upsell-price-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cart-upsell-original-price {
+  font-size: 11px;
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.cart-upsell-price {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+.cart-upsell-discount {
+  font-size: 12px;
+    font-weight: 600;
+    color: #10b981;
+    margin-top: 2px;
+}
+
+.cart-upsell-btn {
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #333;
+  width: 100%;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 400;
+  transition: all 0.15s ease;
+  margin-top: auto;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.cart-upsell-btn:hover:not(:disabled) {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}
+
+.cart-upsell-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cart-upsell-btn.adding {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}
+
+.cart-upsell-btn.added {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+#cart-upsell-list::-webkit-scrollbar {
+  height: 2px;
+}
+
+#cart-upsell-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#cart-upsell-list::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 1px;
+}
+
+#cart-upsell-list::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
+
+#upsell-variant-popup {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  background: #fff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+}
+
+#upsell-variant-popup .close-btn {
+  margin-top: 12px;
+  padding: 10px;
+  width: 100%;
+  background: #f5f5f5;
+  border-radius: 4px;
+  border: 0;
+  cursor: pointer;
+  font-size: 13px;
+  color: #666;
+  transition: background 0.15s ease;
+}
+
+#upsell-variant-popup .close-btn:hover {
+  background: #eee;
+}
+
+.upsell-variant-btn:hover {
+  background: #333 !important;
+  color: #fff !important;
+  border-color: #333 !important;
+}
+
+@media screen and (max-width: 749px) {
+  .cart-upsell-item {
+    min-width: 220px;
+    max-width: 220px;
+  }
+  
+  .cart-upsell-item-image-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+}
+</style>
+
+<script>
+(function(){
+  const LIST = document.getElementById('cart-upsell-list');
+  const EMPTY = document.getElementById('cart-upsell-empty');
+  const POPUP_ID = 'upsell-variant-popup';
+  const UPSELL_COLLECTION_HANDLE = 'rings';
+  const UPSELL_PRODUCTS_LIMIT = 20;
+
+  function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  // Calculate discount percentage
+  function calculateDiscount(originalPrice, currentPrice) {
+    if (!originalPrice || !currentPrice || originalPrice <= currentPrice) return null;
+    const discount = ((originalPrice - currentPrice) / originalPrice) * 100;
+    return Math.round(discount);
+  }
+
+  // Format price
+  function formatPrice(price) {
+    const numericPrice = Number(price);
+    if (Number.isNaN(numericPrice)) return price || '';
+
+    if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+      return window.Shopify.formatMoney(Math.round(numericPrice * 100), "{{ shop.money_format | escape }}");
+    }
+
+    return `Rs. ${numericPrice.toFixed(2)}`;
+  }
+
+  function getProductImageSrc(product) {
+    const rawImage =
+      product?.featured_image?.url ||
+      product?.featured_image?.src ||
+      product?.featured_image ||
+      product?.image?.url ||
+      product?.image?.src ||
+      product?.image ||
+      product?.images?.[0]?.src ||
+      product?.images?.[0];
+
+    if (!rawImage) return '';
+
+    let normalizedImage = String(rawImage).trim();
+
+    if (normalizedImage.startsWith('//')) {
+      normalizedImage = `${window.location.protocol}${normalizedImage}`;
+    } else if (normalizedImage.startsWith('/')) {
+      normalizedImage = `${window.location.origin}${normalizedImage}`;
+    }
+
+    return normalizedImage;
+  }
+
+  // --- Ensure Upsell Wrapper is in Cart Drawer (Dawn Theme) ---
+  function ensureUpsellWrapperInDrawer() {
+    const upsellWrapper = document.getElementById('cart-upsell-wrapper');
+    if (!upsellWrapper) return;
+
+    // Dawn theme uses #cart-drawer or .cart-drawer
+    const cartDrawer = document.querySelector('#cart-drawer') ||
+                      document.querySelector('.cart-drawer') ||
+                      document.querySelector('[id*="cart-drawer"]') ||
+                      document.querySelector('[class*="cart-drawer"]') ||
+                      document.querySelector('cart-drawer');
+    
+    if (cartDrawer && !cartDrawer.contains(upsellWrapper)) {
+      // Find the best insertion point (after cart items, before footer)
+      const cartFooter = cartDrawer.querySelector('cart-drawer-footer') ||
+                         cartDrawer.querySelector('.cart-drawer__footer') ||
+                         cartDrawer.querySelector('[id*="cart-drawer-footer"]') ||
+                         cartDrawer.querySelector('[class*="cart-drawer-footer"]');
+      
+      if (cartFooter) {
+        cartDrawer.insertBefore(upsellWrapper, cartFooter);
+      } else {
+        cartDrawer.appendChild(upsellWrapper);
+      }
+      console.log('✅ Upsell wrapper moved to cart drawer');
+    }
+  }
+
+  // --- Instant Cart Drawer Update for Dawn Theme ---
+  async function updateDawnCartDrawer(cart) {
+    const cartDrawer = document.querySelector('#cart-drawer') ||
+                      document.querySelector('.cart-drawer') ||
+                      document.querySelector('cart-drawer');
+    
+    if (!cartDrawer) return;
+    
+    // CRITICAL: Preserve upsell wrapper position BEFORE any updates
+    const upsellWrapper = document.getElementById('cart-upsell-wrapper');
+    let wrapperNextSibling = null;
+    let wrapperParent = null;
+    
+    if (upsellWrapper && cartDrawer.contains(upsellWrapper)) {
+      wrapperNextSibling = upsellWrapper.nextElementSibling;
+      wrapperParent = upsellWrapper.parentElement;
+    }
+    
+    try {
+      // Method 1: Use Dawn's sections API (MOST RELIABLE)
+      const sectionsRes = await fetch('/?sections=cart-drawer');
+      if (sectionsRes.ok) {
+        const sectionsData = await sectionsRes.json();
+        const cartDrawerHtml = sectionsData['cart-drawer'];
+        
+        if (cartDrawerHtml) {
+          const parser = new DOMParser();
+          const cartDoc = parser.parseFromString(cartDrawerHtml, 'text/html');
+          
+          const newCartDrawer = cartDoc.querySelector('#cart-drawer') ||
+                               cartDoc.querySelector('.cart-drawer') ||
+                               cartDoc.querySelector('cart-drawer');
+          
+          if (newCartDrawer) {
+            // Update cart items container ONLY
+            const itemsContainer = cartDrawer.querySelector('cart-drawer-items') ||
+                                 cartDrawer.querySelector('.cart-drawer__items') ||
+                                 cartDrawer.querySelector('[id*="cart-drawer-items"]') ||
+                                 cartDrawer.querySelector('[class*="cart-drawer-items"]');
+            
+            const newItemsContainer = newCartDrawer.querySelector('cart-drawer-items') ||
+                                    newCartDrawer.querySelector('.cart-drawer__items') ||
+                                    newCartDrawer.querySelector('[id*="cart-drawer-items"]') ||
+                                    newCartDrawer.querySelector('[class*="cart-drawer-items"]');
+            
+            if (itemsContainer && newItemsContainer) {
+              itemsContainer.innerHTML = newItemsContainer.innerHTML;
+              console.log('✅ Cart items updated instantly');
+            }
+            
+            // Update cart totals/footer - but DON'T replace if upsell is inside
+            const footerSelectors = [
+              'cart-drawer-footer',
+              '.cart-drawer__footer',
+              '[id*="cart-drawer-footer"]',
+              '[class*="cart-drawer-footer"]'
+            ];
+            
+            footerSelectors.forEach(selector => {
+              const oldFooter = cartDrawer.querySelector(selector);
+              const newFooter = newCartDrawer.querySelector(selector);
+              if (oldFooter && newFooter) {
+                // Check if upsell wrapper is a child of footer
+                const upsellInFooter = upsellWrapper && oldFooter.contains(upsellWrapper);
+                
+                if (!upsellInFooter) {
+                  // Safe to update footer innerHTML
+                  oldFooter.innerHTML = newFooter.innerHTML;
+                } else {
+                  // Update footer content but preserve upsell wrapper position
+                  const footerContent = Array.from(oldFooter.children).filter(child => child.id !== 'cart-upsell-wrapper');
+                  const newFooterContent = Array.from(newFooter.children);
+                  
+                  // Remove old footer content (except upsell)
+                  footerContent.forEach(child => child.remove());
+                  
+                  // Add new footer content after upsell wrapper
+                  newFooterContent.forEach(child => {
+                    if (upsellWrapper && oldFooter.contains(upsellWrapper)) {
+                      oldFooter.insertBefore(child, upsellWrapper.nextSibling);
+                    } else {
+                      oldFooter.appendChild(child);
+                    }
+                  });
+                }
+              }
+            });
+            
+            // Restore upsell wrapper to exact position if it was moved
+            if (upsellWrapper && wrapperParent && wrapperNextSibling) {
+              const currentParent = upsellWrapper.parentElement;
+              const currentNextSibling = upsellWrapper.nextElementSibling;
+              
+              // Only restore if position changed
+              if (currentParent !== wrapperParent || currentNextSibling !== wrapperNextSibling) {
+                if (wrapperNextSibling && wrapperNextSibling.parentElement === wrapperParent) {
+                  wrapperParent.insertBefore(upsellWrapper, wrapperNextSibling);
+                } else if (wrapperParent) {
+                  wrapperParent.appendChild(upsellWrapper);
+                }
+              }
+            } else if (upsellWrapper && !cartDrawer.contains(upsellWrapper)) {
+              // Wrapper was lost, restore it before footer
+              const cartFooter = cartDrawer.querySelector('cart-drawer-footer') ||
+                               cartDrawer.querySelector('.cart-drawer__footer');
+              if (cartFooter) {
+                cartDrawer.insertBefore(upsellWrapper, cartFooter);
+              } else {
+                cartDrawer.appendChild(upsellWrapper);
+              }
+            }
+            
+            console.log('✅ Cart drawer updated instantly via sections API');
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Sections API failed, trying fallback:', e);
+      
+      // Fallback: Try /cart?view=drawer
+      try {
+        const cartDrawerRes = await fetch('/cart?view=drawer');
+        if (cartDrawerRes.ok) {
+          const cartHtml = await cartDrawerRes.text();
+          const parser = new DOMParser();
+          const cartDoc = parser.parseFromString(cartHtml, 'text/html');
+          
+          const newCartDrawer = cartDoc.querySelector('#cart-drawer') ||
+                               cartDoc.querySelector('.cart-drawer') ||
+                               cartDoc.querySelector('cart-drawer');
+          
+          if (newCartDrawer) {
+            const itemsContainer = cartDrawer.querySelector('cart-drawer-items') ||
+                                 cartDrawer.querySelector('.cart-drawer__items');
+            const newItemsContainer = newCartDrawer.querySelector('cart-drawer-items') ||
+                                    newCartDrawer.querySelector('.cart-drawer__items');
+            
+            if (itemsContainer && newItemsContainer) {
+              itemsContainer.innerHTML = newItemsContainer.innerHTML;
+            }
+            
+            // Restore upsell wrapper position
+            if (upsellWrapper && wrapperParent && wrapperNextSibling) {
+              const currentParent = upsellWrapper.parentElement;
+              const currentNextSibling = upsellWrapper.nextElementSibling;
+              
+              if (currentParent !== wrapperParent || currentNextSibling !== wrapperNextSibling) {
+                if (wrapperNextSibling && wrapperNextSibling.parentElement === wrapperParent) {
+                  wrapperParent.insertBefore(upsellWrapper, wrapperNextSibling);
+                } else if (wrapperParent) {
+                  wrapperParent.appendChild(upsellWrapper);
+                }
+              }
+            } else if (upsellWrapper && !cartDrawer.contains(upsellWrapper)) {
+              const cartFooter = cartDrawer.querySelector('cart-drawer-footer');
+              if (cartFooter) {
+                cartDrawer.insertBefore(upsellWrapper, cartFooter);
+              } else {
+                cartDrawer.appendChild(upsellWrapper);
+              }
+            }
+            
+            console.log('✅ Cart drawer updated via fallback method');
+          }
+        }
+      } catch (e2) {
+        console.warn('Fallback method also failed:', e2);
+      }
+    }
+    
+    // Method 2: Dispatch Dawn theme events
+    document.dispatchEvent(
+      new CustomEvent('cart:updated', { 
+        detail: { cart },
+        bubbles: true 
+      })
+    );
+    
+    window.dispatchEvent(
+      new CustomEvent('cart:updated', { 
+        detail: { cart }
+      })
+    );
+    
+    // Only ensure wrapper if it's not already in correct position
+    if (upsellWrapper && (!cartDrawer.contains(upsellWrapper) || !wrapperParent)) {
+      ensureUpsellWrapperInDrawer();
+    }
+  }
+
+  // --- Add to Cart Function for Dawn Theme ---
+  async function addToCart(variantId, buttonElement = null){
+    const btn = buttonElement || document.querySelector(`[data-id="${variantId}"]`);
+    
+    try {
+      // Show loading state
+      if (btn) {
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Adding...';
+        btn.classList.add('adding');
+        btn.dataset.originalText = originalText;
+      }
+
+      // Add to cart
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Add to cart failed', res.status, errorText);
+        alert('Could not add item to cart. Please try again.');
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = btn.dataset.originalText || 'Add';
+          btn.classList.remove('adding');
+        }
+        return;
+      }
+
+      const addedItem = await res.json();
+      console.log('✅ Item added to cart:', addedItem);
+
+      // Get fresh cart data immediately
+      const cartRes = await fetch('/cart.js');
+      const cart = await cartRes.json();
+
+      // INSTANT UPDATE: Update cart drawer immediately
+      await updateDawnCartDrawer(cart);
+      
+      // Update cart count in header
+      const itemCount = cart.item_count || cart.items.length;
+      const headerCountSelectors = [
+        '[data-cart-count]',
+        '.cart-count',
+        '.cart__count',
+        '#cart-count',
+        '.js-cart-count'
+      ];
+      
+      headerCountSelectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(el => {
+          el.textContent = itemCount;
+          if (el.hasAttribute('aria-label')) {
+            el.setAttribute('aria-label', `${itemCount} items in cart`);
+          }
+          });
+        });
+
+      // Open cart drawer if closed (Dawn theme)
+      const cartDrawer = document.querySelector('#cart-drawer') ||
+                        document.querySelector('.cart-drawer') ||
+                        document.querySelector('cart-drawer');
+      
+      if (cartDrawer) {
+        const isOpen = !cartDrawer.classList.contains('is-empty') &&
+                      cartDrawer.hasAttribute('open');
+        
+        if (!isOpen) {
+          // Dawn theme: open cart drawer
+          cartDrawer.setAttribute('open', '');
+          cartDrawer.classList.remove('is-empty');
+          
+          // Trigger Dawn's cart drawer open event
+          cartDrawer.dispatchEvent(new Event('cart:open', { bubbles: true }));
+        }
+      }
+
+      // Show success feedback on button
+      if (btn) {
+        btn.textContent = '✓ Added';
+        btn.classList.remove('adding');
+        btn.classList.add('added');
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = btn.dataset.originalText || 'Add';
+          btn.classList.remove('added');
+        }, 2000);
+      }
+
+      // Show success notification
+      showSuccessNotification('Product added to cart!');
+
+      // Reload upsell products after cart updates
+      setTimeout(() => {
+        ensureUpsellWrapperInDrawer();
+        loadUpsell();
+      }, 300);
+
+    } catch (err) {
+      console.error('Add to cart error', err);
+      alert('Network error while adding to cart.');
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = btn.dataset.originalText || 'Add';
+        btn.classList.remove('adding');
+      }
+    }
+  }
+
+  // --- Show Success Notification ---
+  function showSuccessNotification(message) {
+    const existing = document.querySelector('.cart-success-notification');
+    if (existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = 'cart-success-notification';
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #000;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 3px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 10000;
+      font-weight: 400;
+      font-size: 13px;
+      animation: slideInRight 0.3s ease;
+    `;
+
+    if (!document.querySelector('#cart-notification-styles')) {
+      const style = document.createElement('style');
+      style.id = 'cart-notification-styles';
+      style.textContent = `
+        @keyframes slideInRight {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        @keyframes slideOutRight {
+          from {
+            transform: translateX(0);
+            opacity: 1;
+          }
+          to {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    document.body.appendChild(notification);
+              
+              setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // --- Variant Popup ---
+  function showVariantPopup(p){
+    document.getElementById(POPUP_ID)?.remove();
+
+    let html = `
+      <div id="${POPUP_ID}" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#fff;border-top-left-radius:12px;border-top-right-radius:12px;padding:14px;box-shadow:0 -8px 30px rgba(0,0,0,.12)">
+        <h4 style="margin:0 0 8px 0;font-size:16px">${escapeHtml(p.title)}</h4>
+        <div style="max-height:60vh;overflow:auto;padding-bottom:6px">
+    `;
+
+    if (Array.isArray(p.variants) && p.variants.length) {
+      p.variants.forEach(v => {
+        const vPrice = formatPrice(v.price);
+        const comparePrice = v.compare_at_price ? formatPrice(v.compare_at_price) : null;
+        const discount = comparePrice ? calculateDiscount(v.compare_at_price, v.price) : null;
+        
+        html += `
+          <button class="cart-upsell-btn upsell-variant-btn" data-id="${v.id}" 
+            style="display:block;margin-bottom:8px;width:100%;padding:10px;border-radius:3px;border:1px solid #ddd;background:#fff;color:#333;font-size:12px;text-align:left;cursor:pointer;transition:all 0.15s ease;">
+            <div style="font-weight:400;margin-bottom:4px;color:#333;">${escapeHtml(v.title)}</div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              ${comparePrice ? `<span style="text-decoration:line-through;color:#aaa;font-size:11px;">${comparePrice}</span>` : ''}
+              <span style="font-weight:500;color:#000;font-size:13px;">${vPrice}
+               ${discount ? `<span style="color:#666;font-size:11px;font-weight:400;">${discount}% off</span>` : ''}
+              </span>
+             
+            </div>
+          </button>`;
+      });
+    } else {
+      html += `<div style="color:#666;font-size:14px">No selectable variants available.</div>`;
+    }
+
+    html += `
+        </div>
+        <button class="close-btn" style="margin-top:10px;padding:8px;width:100%;background:#eee;border-radius:8px;border:0;cursor:pointer">Close</button>
+      </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', html);
+  }
+
+  // --- Load Upsell Products ---
+  async function loadUpsell(){
+    try {
+      const wrapper = document.getElementById('cart-upsell-wrapper');
+      if (!wrapper) return;
+
+      LIST.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">Loading recommendations...</div>';
+      EMPTY.style.display = 'none';
+      const cartRes = await fetch('/cart.js');
+      const cart = await cartRes.json();
+      const cartProductIds = new Set((cart.items || []).map(i => String(i.product_id)));
+
+      const collectionRes = await fetch(`/collections/${UPSELL_COLLECTION_HANDLE}/products.json?limit=${UPSELL_PRODUCTS_LIMIT}`);
+      const collectionData = await collectionRes.json();
+      let products = collectionData.products || [];
+
+      products = products.filter(p => !cartProductIds.has(String(p.id))).slice(0, UPSELL_PRODUCTS_LIMIT);
+
+      if (!products.length) {
+        EMPTY.style.display = 'block';
+        EMPTY.textContent = 'No suggestions available';
+        LIST.innerHTML = '';
+        return;
+      }
+
+      LIST.innerHTML = '';
+      products.forEach(p => {
+        const imgSrc = getProductImageSrc(p);
+        const variant = p.variants && p.variants.length > 0 ? p.variants[0] : null;
+        const price = variant ? variant.price : p.price || 0;
+        const comparePrice = variant ? variant.compare_at_price : p.compare_at_price || null;
+        const discount = comparePrice ? calculateDiscount(comparePrice, price) : null;
+        
+        const priceFormatted = formatPrice(price);
+        const comparePriceFormatted = comparePrice ? formatPrice(comparePrice) : null;
+        
+        const btnHtml = (p.variants?.length > 1)
+          ? `<button class="cart-upsell-btn upsell-select" data-handle="${encodeURIComponent(p.handle)}">Choose</button>`
+          : `<button class="cart-upsell-btn upsell-add" data-id="${variant?.id || ''}">Add</button>`;
+
+        LIST.insertAdjacentHTML('beforeend', `
+          <div class="cart-upsell-item">
+            <a href="${escapeHtml(p.url)}" class="cart-upsell-item-image-wrapper" style="text-decoration:none;display:block;">
+              <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(p.title)}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'%3E%3Crect fill=\'%23f5f5f5\' width=\'80\' height=\'80\'/%3E%3C/svg%3E'"/>
+            </a>
+            <div class="cart-upsell-item-content">
+              <a href="${escapeHtml(p.url)}" class="cart-upsell-title" style="text-decoration:none;color:inherit;">${escapeHtml(p.title)}</a>
+              <div class="cart-upsell-price-container">
+                <div class="cart-upsell-price-wrapper">
+                  ${comparePriceFormatted ? `<span class="cart-upsell-original-price">${comparePriceFormatted}</span>` : ''}
+                  <span class="cart-upsell-price">${priceFormatted}</span>
+                   ${discount ? `<div class="cart-upsell-discount">${discount}% off</div>` : ''}
+                </div>
+               
+              </div>
+              ${btnHtml}
+            </div>
+          </div>
+        `);
+      });
+
+      wrapper.style.display = '';
+      
+      // Ensure wrapper is in cart drawer
+      ensureUpsellWrapperInDrawer();
+
+    } catch (err) {
+      console.error('loadUpsell error', err);
+      EMPTY.style.display = 'block';
+      EMPTY.textContent = 'No suggestions available';
+      LIST.innerHTML = '';
+    }
+  }
+
+  // --- Handle All Clicks (Event Delegation) ---
+  document.addEventListener('click', async e => {
+    const addBtn = e.target.closest('.upsell-add');
+    const selectBtn = e.target.closest('.upsell-select');
+    const variantBtn = e.target.closest('.upsell-variant-btn');
+    const closeBtn = e.target.closest('.close-btn');
+
+    // Handle add to cart button
+    if (addBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const vid = addBtn.dataset.id;
+      if (vid) await addToCart(vid, addBtn);
+      return;
+    }
+
+    // Handle select variant button
+    if (selectBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const handle = selectBtn.dataset.handle;
+      if (!handle) return alert('Product handle not found.');
+      try {
+        const p = await fetch(`/products/${decodeURIComponent(handle)}.js`).then(r => r.json());
+        showVariantPopup(p);
+      } catch (err) {
+        alert('Unable to fetch product details');
+      }
+      return;
+    }
+
+    // Handle variant selection button - add to cart
+    if (variantBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const id = variantBtn.dataset.id;
+      if (id) {
+        await addToCart(id, variantBtn);
+        document.getElementById(POPUP_ID)?.remove();
+      }
+      return;
+    }
+
+    // Handle close button
+    if (closeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.getElementById(POPUP_ID)?.remove();
+      return;
+    }
+    
+    // Image and title links will handle navigation naturally
+  });
+
+  // --- Wait for Dawn theme to be ready ---
+  function waitForDawnTheme(callback, maxAttempts = 20) {
+    let attempts = 0;
+    const checkInterval = setInterval(() => {
+      attempts++;
+      
+      // Dawn theme uses cart-drawer element
+      if (document.querySelector('#cart-drawer') || 
+          document.querySelector('.cart-drawer') ||
+          document.querySelector('cart-drawer')) {
+        clearInterval(checkInterval);
+        console.log('✅ Dawn theme ready');
+        callback();
+      } else if (attempts >= maxAttempts) {
+        clearInterval(checkInterval);
+        console.log('⚠️ Dawn theme not detected, proceeding anyway');
+        callback();
+      }
+    }, 100);
+  }
+
+  // --- Event Listeners for Dawn Theme ---
+  function setupCartEventListeners() {
+    // Listen for cart drawer open (Dawn theme events)
+    const cartOpenEvents = [
+      'cart:open',
+      'cart-drawer:open',
+      'cartdrawer:open'
+    ];
+    
+    let lastCartOpenTime = 0;
+    const cartOpenDebounce = 300;
+    
+    const handleCartOpen = () => {
+      const now = Date.now();
+      if (now - lastCartOpenTime < cartOpenDebounce) return;
+      lastCartOpenTime = now;
+      
+      console.log('Cart drawer opened');
+      ensureUpsellWrapperInDrawer();
+      loadUpsell();
+    };
+    
+    cartOpenEvents.forEach(eventName => {
+      document.addEventListener(eventName, handleCartOpen, { passive: true });
+      window.addEventListener(eventName, handleCartOpen, { passive: true });
+    });
+
+    // Listen for cart updates (Dawn theme events)
+    const cartUpdateEvents = [
+      'cart:updated',
+      'cart:change',
+      'cart:add',
+      'cart:refresh'
+    ];
+
+    let lastCartUpdateTime = 0;
+    const cartUpdateDebounce = 300;
+    
+    const handleCartUpdate = () => {
+      const now = Date.now();
+      if (now - lastCartUpdateTime < cartUpdateDebounce) return;
+      lastCartUpdateTime = now;
+      
+      ensureUpsellWrapperInDrawer();
+      setTimeout(() => {
+        loadUpsell();
+      }, 200);
+    };
+    
+    cartUpdateEvents.forEach(eventName => {
+      document.addEventListener(eventName, handleCartUpdate, { passive: true });
+      window.addEventListener(eventName, handleCartUpdate, { passive: true });
+    });
+
+    // Listen for cart item removal/updates
+    document.addEventListener('cart:remove', () => {
+      ensureUpsellWrapperInDrawer();
+      loadUpsell();
+    }, { passive: true });
+  }
+
+  // --- Cart Drawer Observer for Dawn Theme ---
+  function setupCartDrawerObserver() {
+    const cartDrawerSelectors = [
+      '#cart-drawer',
+      '.cart-drawer',
+      'cart-drawer',
+      '[id*="cart-drawer"]',
+      '[class*="cart-drawer"]'
+    ];
+
+    let cartDrawer = null;
+    cartDrawerSelectors.forEach(selector => {
+      const drawer = document.querySelector(selector);
+      if (drawer && !cartDrawer) {
+        cartDrawer = drawer;
+      }
+    });
+
+    if (!cartDrawer) {
+      setTimeout(setupCartDrawerObserver, 500);
+      return;
+    }
+
+    // Observe cart drawer for visibility and content changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        // Check if drawer became visible (Dawn uses 'open' attribute)
+        if (mutation.type === 'attributes') {
+          const isVisible = cartDrawer.hasAttribute('open') &&
+                           !cartDrawer.classList.contains('is-empty') &&
+                           cartDrawer.offsetParent !== null;
+          
+          if (isVisible && (mutation.attributeName === 'open' || 
+                           mutation.attributeName === 'class')) {
+            ensureUpsellWrapperInDrawer();
+            loadUpsell();
+          }
+        }
+        
+        // Check if cart items changed
+        if (mutation.type === 'childList') {
+          if (mutation.target && mutation.target.id === 'cart-upsell-wrapper') {
+            return;
+          }
+          
+          const isVisible = cartDrawer.hasAttribute('open') &&
+                           !cartDrawer.classList.contains('is-empty');
+          
+          if (isVisible) {
+            clearTimeout(cartDrawer._ensureTimeout);
+            cartDrawer._ensureTimeout = setTimeout(() => {
+              ensureUpsellWrapperInDrawer();
+            }, 100);
+          }
+        }
+      });
+    });
+
+    // Observe cart drawer
+    observer.observe(cartDrawer, {
+      attributes: true,
+      attributeFilter: ['open', 'class'],
+      childList: true,
+      subtree: true
+    });
+
+    // Observe cart items container
+    const itemsContainer = cartDrawer.querySelector('cart-drawer-items') ||
+                          cartDrawer.querySelector('.cart-drawer__items') ||
+                          cartDrawer.querySelector('[id*="cart-drawer-items"]');
+    
+    if (itemsContainer) {
+      observer.observe(itemsContainer, {
+        childList: true,
+        subtree: true
+      });
+    }
+
+    // Initial check
+    if (cartDrawer.hasAttribute('open')) {
+      ensureUpsellWrapperInDrawer();
+      loadUpsell();
+    }
+  }
+
+  // --- Initialize after Dawn theme is ready ---
+  waitForDawnTheme(() => {
+    // Setup event listeners
+    setupCartEventListeners();
+    
+    // Setup cart drawer observer
+    setupCartDrawerObserver();
+    
+    // Ensure wrapper is in drawer immediately
+    ensureUpsellWrapperInDrawer();
+    
+    // Initial load
+    loadUpsell();
+    
+    // Also try loading after a short delay (fallback)
+    setTimeout(() => {
+      const cartDrawer = document.querySelector('#cart-drawer') ||
+                        document.querySelector('.cart-drawer') ||
+                        document.querySelector('cart-drawer');
+      if (cartDrawer && cartDrawer.hasAttribute('open')) {
+        ensureUpsellWrapperInDrawer();
+        loadUpsell();
+      }
+    }, 300);
+  });
+  })();
+</script>

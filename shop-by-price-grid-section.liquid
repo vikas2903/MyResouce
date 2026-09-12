@@ -1,0 +1,280 @@
+{% liquid
+  assign section_title = section.settings.heading
+%}
+
+<section class="sbp-grid-section sbp-grid-section--{{ section.id }}">
+  <div class="sbp-grid-shell page-width">
+    {% if section_title != blank %}
+      <div class="sbp-grid-header">
+        <h2 class="sbp-grid-title">{{ section_title }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="sbp-grid">
+      {% for block in section.blocks limit: 4 %}
+        {% liquid
+          assign block_link = block.settings.link
+          assign block_title = block.settings.title
+        %}
+
+        <a
+          class="sbp-card"
+          {% if block_link != blank %}
+            href="{{ block_link }}"
+          {% else %}
+            aria-disabled="true"
+          {% endif %}
+          {{ block.shopify_attributes }}
+        >
+          <div class="sbp-card-media">
+            {% if block.settings.desktop_image != blank %}
+              {{
+                block.settings.desktop_image
+                | image_url: width: 1200
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'sbp-card-image sbp-card-image--desktop',
+                  alt: block_title,
+                  widths: '300, 500, 700, 900, 1200'
+              }}
+            {% endif %}
+
+            {% if block.settings.mobile_image != blank %}
+              {{
+                block.settings.mobile_image
+                | image_url: width: 900
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'sbp-card-image sbp-card-image--mobile',
+                  alt: block_title,
+                  widths: '240, 360, 500, 700, 900'
+              }}
+            {% elsif block.settings.desktop_image != blank %}
+              {{
+                block.settings.desktop_image
+                | image_url: width: 900
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'sbp-card-image sbp-card-image--mobile',
+                  alt: block_title,
+                  widths: '240, 360, 500, 700, 900'
+              }}
+            {% endif %}
+
+            <div class="sbp-card-overlay">
+              {% if block_title != blank %}
+                <span class="sbp-card-title">{{ block_title }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .sbp-grid-section--{{ section.id }} {
+    padding: 28px 0 32px;
+    background: #ffffff;
+  }
+
+  .sbp-grid-section--{{ section.id }} .page-width {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-grid-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-grid-title {
+    margin: 0;
+    color: #151515;
+    font-size: clamp(26px, 2.8vw, 42px);
+    line-height: 1.1;
+    font-weight: 500;
+    font-family: "Times New Roman", serif;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-card-media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    aspect-ratio: 0.8;
+    background: #efe7df;
+    isolation: isolate;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-card-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-card-image--mobile {
+    display: none;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-card-overlay {
+    position: absolute;
+    inset: auto 16px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 58px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 28px rgba(17, 17, 17, 0.16);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s ease, transform 0.35s ease, background 0.35s ease;
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-card-title {
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-card:hover .sbp-card-image {
+    transform: scale(1.06);
+  }
+
+  .sbp-grid-section--{{ section.id }} .sbp-card:hover .sbp-card-overlay {
+    opacity: 1;
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  @media screen and (max-width: 749px) {
+    .sbp-grid-section--{{ section.id }} {
+      padding: 22px 0 26px;
+    }
+
+    .sbp-grid-section--{{ section.id }} .page-width {
+      padding: 0 12px;
+    }
+
+    .sbp-grid-section--{{ section.id }} .sbp-grid-header {
+      margin-bottom: 14px;
+    }
+
+    .sbp-grid-section--{{ section.id }} .sbp-grid-title {
+      font-size: 28px;
+    }
+
+    .sbp-grid-section--{{ section.id }} .sbp-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .sbp-grid-section--{{ section.id }} .sbp-card-media {
+      border-radius: 12px;
+    }
+
+    .sbp-grid-section--{{ section.id }} .sbp-card-image--desktop {
+      display: none;
+    }
+
+    .sbp-grid-section--{{ section.id }} .sbp-card-image--mobile {
+      display: block;
+    }
+
+    .sbp-grid-section--{{ section.id }} .sbp-card-overlay {
+      inset: auto 10px 10px;
+      min-height: 42px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      opacity: 1;
+      transform: none;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .sbp-grid-section--{{ section.id }} .sbp-card-title {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shop By Price Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Shop By Price"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Price card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "desktop_image",
+          "label": "Desktop image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Overlay title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Card link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Shop By Price Grid",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

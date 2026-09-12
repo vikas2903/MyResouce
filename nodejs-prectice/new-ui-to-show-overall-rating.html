@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+ .zeraki-trust-strip {
+    max-width: 900px;
+    margin: 0 0 16px;
+    padding: 20px 24px 18px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #fffefe 0%, #fff8fb 100%);
+    border: 1px solid #f2e9ee;
+    box-shadow: 0 8px 18px rgba(78, 50, 59, 0.06);
+  }
+
+  .zeraki-trust-strip__heading {
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #221c1f;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .zeraki-trust-strip__heart {
+    color: #f1628d;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .zeraki-trust-strip__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) auto auto;
+    align-items: center;
+    column-gap: 28px;
+  }
+
+  .zeraki-trust-strip__avatars {
+    display: flex;
+    align-items: center;
+    padding-left: 4px;
+  }
+
+  .zeraki-trust-strip__avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 6px 12px rgba(61, 31, 42, 0.12);
+    margin-left: -12px;
+    background: #eed8df;
+  }
+
+  .zeraki-trust-strip__avatar:first-child {
+    margin-left: 0;
+  }
+
+  .zeraki-trust-strip__summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  .zeraki-trust-strip__rating {
+    color: #171416;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 700;
+  }
+
+  .zeraki-trust-strip__caption {
+    margin-top: 6px;
+    color: #3c3538;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .zeraki-trust-strip__stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #ffbf1d;
+  }
+
+  .zeraki-trust-strip__star {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    display: block;
+  }  @media (max-width: 600px) {
+    .zeraki-trust-strip {
+      padding: 14px 14px 12px;
+      border-radius: 14px;
+    }
+
+    .zeraki-trust-strip__heading {
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .zeraki-trust-strip__body {
+      grid-template-columns: 1fr;
+      row-gap: 12px;
+      justify-items: center;
+    }
+
+    .zeraki-trust-strip__avatar {
+      width: 46px;
+      height: 46px;
+      margin-left: -10px;
+    }
+
+    .zeraki-trust-strip__rating {
+      font-size: 16px;
+    }
+
+    .zeraki-trust-strip__caption {
+      font-size: 12px;
+    }
+
+    .zeraki-trust-strip__star {
+      width: 20px;
+      height: 20px;
+      flex-basis: 20px;
+    }
+
+    .testimonial-card {
+      padding: 14px;
+    }
+  }
+
+
+    </style>
+
+</head>
+<body>
+
+    <div class="zeraki-trust-strip">
+  <p class="zeraki-trust-strip__heading">
+    <span class="zeraki-trust-strip__heart" aria-hidden="true">&#10084;</span>
+    Trusted by 55,000+ Happy Customers
+  </p>
+
+  <div class="zeraki-trust-strip__body">
+    <div class="zeraki-trust-strip__avatars" aria-hidden="true">
+      <img class="zeraki-trust-strip__avatar" src="https://dummyimage.com/120x120/f1d7df/3f2f35.jpg&text=%20" alt="">
+      <img class="zeraki-trust-strip__avatar" src="https://dummyimage.com/120x120/d9d1d6/3f2f35.jpg&text=%20" alt="">
+      <img class="zeraki-trust-strip__avatar" src="https://dummyimage.com/120x120/e7cfd6/3f2f35.jpg&text=%20" alt="">
+      <img class="zeraki-trust-strip__avatar" src="https://dummyimage.com/120x120/ddd6db/3f2f35.jpg&text=%20" alt="">
+    </div>
+
+    <div class="zeraki-trust-strip__summary">
+      <span class="zeraki-trust-strip__rating">4.8/5</span>
+      <span class="zeraki-trust-strip__caption">Average Rating</span>
+    </div>
+
+    <div class="zeraki-trust-strip__stars" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="zeraki-trust-strip__star"><path d="M12 2.75l2.84 5.75 6.35.92-4.59 4.47 1.08 6.33L12 17.24l-5.68 2.98 1.08-6.33L2.81 9.42l6.35-.92L12 2.75Z" fill="currentColor"></path></svg>
+      <svg viewBox="0 0 24 24" class="zeraki-trust-strip__star"><path d="M12 2.75l2.84 5.75 6.35.92-4.59 4.47 1.08 6.33L12 17.24l-5.68 2.98 1.08-6.33L2.81 9.42l6.35-.92L12 2.75Z" fill="currentColor"></path></svg>
+      <svg viewBox="0 0 24 24" class="zeraki-trust-strip__star"><path d="M12 2.75l2.84 5.75 6.35.92-4.59 4.47 1.08 6.33L12 17.24l-5.68 2.98 1.08-6.33L2.81 9.42l6.35-.92L12 2.75Z" fill="currentColor"></path></svg>
+      <svg viewBox="0 0 24 24" class="zeraki-trust-strip__star"><path d="M12 2.75l2.84 5.75 6.35.92-4.59 4.47 1.08 6.33L12 17.24l-5.68 2.98 1.08-6.33L2.81 9.42l6.35-.92L12 2.75Z" fill="currentColor"></path></svg>
+      <svg viewBox="0 0 24 24" class="zeraki-trust-strip__star"><path d="M12 2.75l2.84 5.75 6.35.92-4.59 4.47 1.08 6.33L12 17.24l-5.68 2.98 1.08-6.33L2.81 9.42l6.35-.92L12 2.75Z" fill="currentColor"></path></svg>
+    </div>
+  </div>
+</div>
+    
+</body>
+</html>

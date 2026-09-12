@@ -1,0 +1,2109 @@
+{% comment %}
+  Weavekala Custom Stitching Flow
+
+  Step 1: Select Size
+  Step 2: Select Height
+  Step 3: Review Stitching Services and Checkout
+
+  Place this code inside the product section.
+  It can be added below the Buy Now button.
+{% endcomment %}
+
+{% assign cs_heights = "5'0|5'1|5'2|5'3|5'4|5'5|5'6|5'7|5'8|5'9|5'10|5'11|6'0" | split: "|" %}
+{% assign cs_sizes = "XS,S,M,L,XL,XXL" | split: "," %}
+{% assign cs_id = 'custom-stitching-' | append: section.id | append: '-' | append: product.id %}
+
+<div
+  id="{{ cs_id }}"
+  class="cs-stitching"
+  data-custom-stitching
+  data-root-url="{{ routes.root_url }}"
+>
+  <div class="cs-stitching__header">
+    <div class="cs-stitching__title-row">
+      <h3 class="cs-stitching__title">
+        Custom Stitching
+      </h3>
+
+      <span class="cs-stitching__badge">
+        ✦ Easy 3-Step Process
+      </span>
+    </div>
+
+    <p class="cs-stitching__subtitle">
+      Select your size and height for a comfortable, well-tailored fit.
+    </p>
+  </div>
+
+  <div
+    class="cs-stepper"
+    aria-label="Custom stitching steps"
+  >
+    <button
+      type="button"
+      class="cs-step is-active"
+      data-step-target="1"
+    >
+      <span class="cs-step__number">1</span>
+      <span class="cs-step__label">Select Your Size</span>
+    </button>
+
+    <span class="cs-stepper__line"></span>
+
+    <button
+      type="button"
+      class="cs-step"
+      data-step-target="2"
+      disabled
+    >
+      <span class="cs-step__number">2</span>
+      <span class="cs-step__label">Select Your Height</span>
+    </button>
+
+    <span class="cs-stepper__line"></span>
+
+    <button
+      type="button"
+      class="cs-step"
+      data-step-target="3"
+      disabled
+    >
+      <span class="cs-step__number">3</span>
+      <span class="cs-step__label">Review &amp; Checkout</span>
+    </button>
+  </div>
+
+  <div class="cs-stitching__content">
+
+    {% comment %}
+      STEP 1: SIZE
+    {% endcomment %}
+
+    <div
+      class="cs-panel is-active"
+      data-step-panel="1"
+    >
+      <div class="cs-panel__top">
+        <div class="cs-panel__icon">
+          S
+        </div>
+
+        <div class="cs-panel__heading">
+          <span class="cs-panel__step">
+            Step 1
+          </span>
+
+          <h4>Select Your Size</h4>
+
+          <p>
+            Choose your regular clothing size.
+          </p>
+        </div>
+      </div>
+
+      <div class="cs-options cs-options--size">
+        {% for size in cs_sizes %}
+          <button
+            type="button"
+            class="cs-option"
+            data-size="{{ size | escape }}"
+            aria-pressed="false"
+          >
+            {{ size }}
+          </button>
+        {% endfor %}
+      </div>
+
+      <p class="cs-panel__help">
+        Your selected size will be saved with this product.
+      </p>
+    </div>
+
+    {% comment %}
+      STEP 2: HEIGHT
+    {% endcomment %}
+
+    <div
+      class="cs-panel"
+      data-step-panel="2"
+      hidden
+    >
+      <div class="cs-panel__top">
+        <div class="cs-panel__icon">
+          ↕
+        </div>
+
+        <div class="cs-panel__heading">
+          <span class="cs-panel__step">
+            Step 2
+          </span>
+
+          <h4>Select Your Height</h4>
+
+          <p>
+            Selected size:
+            <strong data-size-summary>
+              Not selected
+            </strong>
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="cs-change-button"
+          data-go-step="1"
+        >
+          Change
+        </button>
+      </div>
+
+      <div class="cs-options cs-options--height">
+        {% for height in cs_heights %}
+          <button
+            type="button"
+            class="cs-option"
+            data-height="{{ height | escape }}&quot;"
+            aria-pressed="false"
+          >
+            {{ height }}&quot;
+          </button>
+        {% endfor %}
+      </div>
+
+      <div class="cs-info-box">
+        <span class="cs-info-box__icon">
+          i
+        </span>
+
+        <p>
+          Your size and height will be added to the product as stitching details.
+        </p>
+      </div>
+    </div>
+
+    {% comment %}
+      STEP 3: REVIEW AND SERVICES
+    {% endcomment %}
+
+    <div
+      class="cs-panel"
+      data-step-panel="3"
+      hidden
+    >
+      <div class="cs-panel__top">
+        <div class="cs-panel__icon">
+          ✓
+        </div>
+
+        <div class="cs-panel__heading">
+          <span class="cs-panel__step">
+            Step 3
+          </span>
+
+          <h4>Review Your Stitching Details</h4>
+
+          <p>
+            Confirm your selections and review our stitching services.
+          </p>
+        </div>
+      </div>
+
+      <div class="cs-summary">
+        <div class="cs-summary__item">
+          <span>
+            Selected Size
+          </span>
+
+          <strong data-review-size>
+            -
+          </strong>
+
+          <button
+            type="button"
+            data-go-step="1"
+          >
+            Change
+          </button>
+        </div>
+
+        <div class="cs-summary__item">
+          <span>
+            Selected Height
+          </span>
+
+          <strong data-review-height>
+            -
+          </strong>
+
+          <button
+            type="button"
+            data-go-step="2"
+          >
+            Change
+          </button>
+        </div>
+      </div>
+
+      <div class="cs-services">
+        <div class="cs-services__header">
+          <span class="cs-services__eyebrow">
+            Stitching Information
+          </span>
+
+          <h5>
+            Weavekala Stitching Services
+          </h5>
+
+          <p>
+            The prices below are applicable for basic stitching.
+          </p>
+        </div>
+
+        <div class="cs-services__pricing">
+          <div class="cs-service-card">
+            <div class="cs-service-card__heading">
+              <span class="cs-service-card__icon">
+                ✨
+              </span>
+
+              <h6>
+                Kurta Stitching
+              </h6>
+            </div>
+
+            <div class="cs-service-card__rows">
+              <div class="cs-service-price">
+                <div class="cs-service-price__details">
+                  <strong>
+                    Plain Kurta
+                  </strong>
+
+                  <span>
+                    Without lining
+                  </span>
+                </div>
+
+                <b>
+                  ₹799
+                </b>
+              </div>
+
+              <div class="cs-service-price">
+                <div class="cs-service-price__details">
+                  <strong>
+                    Plain Kurta
+                  </strong>
+
+                  <span>
+                    With lining
+                  </span>
+                </div>
+
+                <b>
+                  ₹999
+                </b>
+              </div>
+            </div>
+          </div>
+
+          <div class="cs-service-card">
+            <div class="cs-service-card__heading">
+              <span class="cs-service-card__icon">
+                ✨
+              </span>
+
+              <h6>
+                Suit Stitching
+              </h6>
+            </div>
+
+            <div class="cs-service-card__rows">
+              <div class="cs-service-price">
+                <div class="cs-service-price__details">
+                  <strong>
+                    Plain Suit
+                  </strong>
+
+                  <span>
+                    Top and bottom without lining
+                  </span>
+                </div>
+
+                <b>
+                  ₹1,199
+                </b>
+              </div>
+
+              <div class="cs-service-price">
+                <div class="cs-service-price__details">
+                  <strong>
+                    Partial Lining Suit
+                  </strong>
+
+                  <span>
+                    Top lined, bottom without lining
+                  </span>
+                </div>
+
+                <b>
+                  ₹1,599
+                </b>
+              </div>
+
+              <div class="cs-service-price">
+                <div class="cs-service-price__details">
+                  <strong>
+                    Full Lining Plain Suit
+                  </strong>
+
+                  <span>
+                    Top and bottom with lining
+                  </span>
+                </div>
+
+                <b>
+                  ₹1,999
+                </b>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cs-services__additional">
+          <div class="cs-services__section-title">
+            <span>
+              +
+            </span>
+
+            <h6>
+              Additional Charges
+            </h6>
+          </div>
+
+          <p>
+            Extra detailing or customization such as designer necklines,
+            buttons, piping, tassels, lace work, pockets, special sleeves,
+            or custom design requests will be charged additionally.
+          </p>
+        </div>
+
+        <div class="cs-promise">
+          <div class="cs-services__section-title">
+            <span>
+              ✓
+            </span>
+
+            <h6>
+              Our Stitching Promise
+            </h6>
+          </div>
+
+          <div class="cs-promise__grid">
+            <div class="cs-promise__item">
+              <span>✓</span>
+
+              <p>
+                Double stitching for durability
+              </p>
+            </div>
+
+            <div class="cs-promise__item">
+              <span>✓</span>
+
+              <p>
+                Interlock finishing for a neat look
+              </p>
+            </div>
+
+            <div class="cs-promise__item">
+              <span>✓</span>
+
+              <p>
+                2-inch margin on both sides for future alterations
+              </p>
+            </div>
+
+            <div class="cs-promise__item">
+              <span>✓</span>
+
+              <p>
+                Clean and premium finishing
+              </p>
+            </div>
+
+            <div class="cs-promise__item">
+              <span>✓</span>
+
+              <p>
+                Comfortable and well-tailored fit
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cs-services__notice">
+          <span class="cs-services__notice-icon">
+            i
+          </span>
+
+          <p>
+            Prices are for basic stitching. Any customization charges will
+            be discussed with you before starting the work.
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="cs-checkout-button"
+        data-stitching-checkout
+      >
+        <span class="cs-checkout-button__text">
+          Add Stitching Details &amp; Checkout
+        </span>
+
+        <span class="cs-checkout-button__arrow">
+          →
+        </span>
+      </button>
+
+      <div class="cs-confirmation-row">
+        <span>
+          ✓ Size saved
+        </span>
+
+        <span>
+          ✓ Height saved
+        </span>
+
+        <span>
+          ✓ Added with main product
+        </span>
+      </div>
+
+      <div
+        class="cs-error-message"
+        data-stitching-error
+        hidden
+      ></div>
+    </div>
+  </div>
+
+  <div class="cs-size-guide">
+    <span>
+      Need help choosing?
+    </span>
+
+    <a href="/pages/size-guide">
+      View size guide →
+    </a>
+  </div>
+</div>
+
+<style>
+  .cs-stitching {
+    --cs-primary: #9b0d15;
+    --cs-primary-light: #fff3f4;
+    --cs-border: #ead8da;
+    --cs-text: #202020;
+    --cs-muted: #6d6d6d;
+    --cs-success: #27763b;
+
+    margin-top: 22px;
+    padding: 22px;
+    border: 1px solid var(--cs-border);
+    border-radius: 16px;
+    background: #fff6f5;
+    box-shadow: 0 8px 30px rgba(40, 10, 12, 0.06);
+  }
+
+  .cs-stitching *,
+  .cs-stitching *::before,
+  .cs-stitching *::after {
+    box-sizing: border-box;
+  }
+
+  .cs-stitching button,
+  .cs-stitching input,
+  .cs-stitching a {
+    font-family: inherit;
+  }
+
+  .cs-stitching__title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .cs-stitching__title {
+    margin: 0;
+    color: var(--cs-text);
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .cs-stitching__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: var(--cs-primary-light);
+    color: var(--cs-primary);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .cs-stitching__subtitle {
+    margin: 9px 0 0;
+    color: var(--cs-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .cs-stepper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 25px 0 22px;
+  }
+
+  .cs-step {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #9b9b9b;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .cs-step:disabled {
+    cursor: not-allowed;
+  }
+
+  .cs-step__number {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 32px;
+    border: 1px solid #d7d7d7;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .cs-step__label {
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .cs-step.is-active,
+  .cs-step.is-complete {
+    color: var(--cs-primary);
+  }
+
+  .cs-step.is-active .cs-step__number,
+  .cs-step.is-complete .cs-step__number {
+    border-color: var(--cs-primary);
+    background: var(--cs-primary);
+    color: #fff;
+  }
+
+  .cs-step.is-complete .cs-step__number {
+    font-size: 0;
+  }
+
+  .cs-step.is-complete .cs-step__number::before {
+    content: "✓";
+    font-size: 15px;
+  }
+
+  .cs-stepper__line {
+    width: 28px;
+    height: 2px;
+    flex-shrink: 0;
+    background: #dedede;
+  }
+
+  .cs-panel {
+    padding: 22px;
+    border: 1px solid var(--cs-border);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .cs-panel[hidden] {
+    display: none !important;
+  }
+
+  .cs-panel.is-active {
+    border-color: rgba(155, 13, 21, 0.35);
+    background: linear-gradient(
+      180deg,
+      #fff 0%,
+      #fffafa 100%
+    );
+  }
+
+  .cs-panel__top {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+  }
+
+  .cs-panel__heading {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cs-panel__icon {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 42px;
+    border-radius: 50%;
+    background: var(--cs-primary-light);
+    color: var(--cs-primary);
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .cs-panel__step {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--cs-primary);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .cs-panel h4 {
+    margin: 0;
+    color: var(--cs-text);
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .cs-panel p {
+    margin: 5px 0 0;
+    color: var(--cs-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .cs-change-button {
+    margin-left: auto;
+    padding: 7px 0;
+    border: 0;
+    background: transparent;
+    color: var(--cs-primary);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .cs-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .cs-option {
+    position: relative;
+    min-width: 74px;
+    min-height: 46px;
+    padding: 10px 14px;
+    border: 1px solid #d8d8d8;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--cs-text);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .cs-option:hover {
+    border-color: var(--cs-primary);
+    color: var(--cs-primary);
+    transform: translateY(-1px);
+  }
+
+  .cs-option.is-selected {
+    border-color: var(--cs-primary);
+    background: var(--cs-primary);
+    color: #fff;
+  }
+
+  .cs-option.is-selected::after {
+    content: "✓";
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--cs-primary);
+    color: #fff;
+    font-size: 11px;
+  }
+
+  .cs-panel__help {
+    margin-top: 17px !important;
+    font-size: 12px !important;
+  }
+
+  .cs-info-box {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 14px;
+    border: 1px solid #ebebeb;
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .cs-info-box__icon {
+    width: 21px;
+    height: 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 21px;
+    border: 1px solid var(--cs-primary);
+    border-radius: 50%;
+    color: var(--cs-primary);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .cs-info-box p {
+    margin: 0;
+    font-size: 13px;
+  }
+
+  .cs-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 22px 0;
+  }
+
+  .cs-summary__item {
+    position: relative;
+    padding: 15px;
+    border: 1px solid #ead8da;
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .cs-summary__item > span {
+    display: block;
+    color: var(--cs-muted);
+    font-size: 12px;
+  }
+
+  .cs-summary__item strong {
+    display: block;
+    margin-top: 5px;
+    padding-right: 55px;
+    color: var(--cs-text);
+    font-size: 18px;
+  }
+
+  .cs-summary__item button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--cs-primary);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .cs-services {
+    margin-bottom: 22px;
+    overflow: hidden;
+    border: 1px solid var(--cs-border);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .cs-services__header {
+    padding: 20px;
+    border-bottom: 1px solid var(--cs-border);
+    background: linear-gradient(
+      135deg,
+      var(--cs-primary-light) 0%,
+      #fff 100%
+    );
+  }
+
+  .cs-services__eyebrow {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--cs-primary);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cs-services__header h5 {
+    margin: 0;
+    color: var(--cs-text);
+    font-size: 21px;
+    font-weight: 750;
+    line-height: 1.25;
+  }
+
+  .cs-services__header p {
+    margin: 7px 0 0;
+    color: var(--cs-muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .cs-services__pricing {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .cs-service-card {
+    padding: 17px;
+    border: 1px solid #ead8da;
+    border-radius: 12px;
+    background: #fffafa;
+  }
+
+  .cs-service-card__heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0dfe1;
+  }
+
+  .cs-service-card__icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .cs-service-card h6,
+  .cs-services__section-title h6 {
+    margin: 0;
+    color: var(--cs-text);
+    font-size: 16px;
+    font-weight: 750;
+    line-height: 1.3;
+  }
+
+  .cs-service-card__rows {
+    display: grid;
+  }
+
+  .cs-service-price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px solid #f0e5e6;
+  }
+
+  .cs-service-price:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .cs-service-price__details {
+    min-width: 0;
+  }
+
+  .cs-service-price strong {
+    display: block;
+    color: var(--cs-text);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .cs-service-price span {
+    display: block;
+    margin-top: 3px;
+    color: var(--cs-muted);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .cs-service-price b {
+    flex-shrink: 0;
+    color: var(--cs-primary);
+    font-size: 16px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .cs-services__additional,
+  .cs-promise {
+    margin: 0 18px 18px;
+    padding: 17px;
+    border-radius: 12px;
+  }
+
+  .cs-services__additional {
+    border: 1px solid #f1dfc1;
+    background: #fffaf0;
+  }
+
+  .cs-promise {
+    border: 1px solid #dce9df;
+    background: #f7fcf8;
+  }
+
+  .cs-services__section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cs-services__section-title > span {
+    width: 25px;
+    height: 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 25px;
+    border-radius: 50%;
+    background: var(--cs-primary);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .cs-services__additional p {
+    margin: 10px 0 0;
+    color: var(--cs-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .cs-promise__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 18px;
+    margin-top: 14px;
+  }
+
+  .cs-promise__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .cs-promise__item > span {
+    margin-top: 1px;
+    color: var(--cs-success);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .cs-promise__item p {
+    margin: 0;
+    color: var(--cs-text);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .cs-services__notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0 18px 18px;
+    padding: 13px 14px;
+    border: 1px solid var(--cs-border);
+    border-radius: 10px;
+    background: var(--cs-primary-light);
+  }
+
+  .cs-services__notice-icon {
+    width: 21px;
+    height: 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 21px;
+    border: 1px solid var(--cs-primary);
+    border-radius: 50%;
+    color: var(--cs-primary);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .cs-services__notice p {
+    margin: 0;
+    color: var(--cs-text);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  .cs-checkout-button {
+    width: 100%;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--cs-primary);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .cs-checkout-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .cs-checkout-button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+    transform: none;
+  }
+
+  .cs-checkout-button__arrow {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .cs-confirmation-row {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 17px;
+    color: var(--cs-primary);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .cs-size-guide {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+    color: var(--cs-muted);
+    font-size: 13px;
+  }
+
+  .cs-size-guide a {
+    color: var(--cs-primary);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .cs-error-message {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #b10000;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 749px) {
+    .cs-stitching {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+    }
+
+    .cs-stitching__title-row {
+      align-items: flex-start;
+      gap: 8px 10px;
+    }
+
+    .cs-stitching__title {
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .cs-stitching__badge {
+      padding: 5px 8px;
+      font-size: 10px;
+      line-height: 1.3;
+    }
+
+    .cs-stitching__subtitle {
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .cs-stepper {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px;
+      margin: 16px 0 14px;
+    }
+
+    .cs-step {
+      justify-content: center;
+      gap: 5px;
+      min-width: 0;
+      text-align: center;
+    }
+
+    .cs-step__label {
+      font-size: 10px;
+      line-height: 1.25;
+      white-space: normal;
+    }
+
+    .cs-stepper__line {
+      display: none;
+    }
+
+    .cs-panel {
+      padding: 13px;
+      border-radius: 11px;
+    }
+
+    .cs-panel__top {
+      gap: 9px;
+    }
+
+    .cs-panel__icon {
+      width: 32px;
+      height: 32px;
+      flex-basis: 32px;
+      font-size: 14px;
+    }
+
+    .cs-panel h4 {
+      font-size: 16px;
+    }
+
+    .cs-panel p {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .cs-panel__step {
+      margin-bottom: 2px;
+      font-size: 10px;
+    }
+
+    .cs-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 15px;
+    }
+
+    .cs-options--height {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .cs-option {
+      width: 100%;
+      min-width: 0;
+      min-height: 40px;
+      padding: 6px 4px;
+      font-size: 13px;
+    }
+
+    .cs-panel__help {
+      margin-top: 11px !important;
+      font-size: 11px !important;
+    }
+
+    .cs-info-box {
+      gap: 8px;
+      margin-top: 14px;
+      padding: 10px;
+    }
+
+    .cs-summary {
+      gap: 9px;
+      margin: 15px 0;
+      grid-template-columns: 1fr;
+    }
+
+    .cs-summary__item {
+      padding: 11px;
+    }
+
+    .cs-summary__item > span,
+    .cs-summary__item button {
+      font-size: 11px;
+    }
+
+    .cs-summary__item strong {
+      margin-top: 3px;
+      font-size: 16px;
+    }
+
+    .cs-services__header {
+      padding: 13px;
+    }
+
+    .cs-services__header h5 {
+      font-size: 17px;
+    }
+
+    .cs-services__header p {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .cs-services__eyebrow {
+      margin-bottom: 3px;
+      font-size: 10px;
+    }
+
+    .cs-services__pricing {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .cs-service-card {
+      padding: 12px;
+    }
+
+    .cs-service-price {
+      gap: 8px;
+      padding: 9px 0;
+    }
+
+    .cs-service-card__heading {
+      gap: 6px;
+      padding-bottom: 9px;
+    }
+
+    .cs-service-card h6,
+    .cs-services__section-title h6 {
+      font-size: 14px;
+    }
+
+    .cs-service-price strong {
+      font-size: 12px;
+    }
+
+    .cs-service-price span {
+      margin-top: 2px;
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .cs-service-price b {
+      font-size: 14px;
+    }
+
+    .cs-services__additional,
+    .cs-promise {
+      margin: 0 10px 10px;
+      padding: 12px;
+    }
+
+    .cs-services__section-title {
+      gap: 6px;
+    }
+
+    .cs-services__section-title > span {
+      width: 22px;
+      height: 22px;
+      flex-basis: 22px;
+      font-size: 12px;
+    }
+
+    .cs-services__additional p {
+      margin-top: 7px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .cs-promise__grid {
+      grid-template-columns: 1fr;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .cs-promise__item {
+      gap: 6px;
+    }
+
+    .cs-promise__item p {
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .cs-services__notice {
+      gap: 8px;
+      margin: 0 10px 10px;
+      padding: 10px;
+    }
+
+    .cs-services__notice p {
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .cs-checkout-button {
+      min-height: 46px;
+      gap: 8px;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .cs-confirmation-row {
+      justify-content: flex-start;
+      gap: 6px 9px;
+      margin-top: 11px;
+      font-size: 10px;
+    }
+
+    .cs-size-guide {
+      gap: 5px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      font-size: 12px;
+    }
+  }
+
+  @media screen and (max-width: 420px) {
+    .cs-stitching {
+      padding: 10px 8px;
+    }
+
+    .cs-stitching__title {
+      font-size: 19px;
+    }
+
+    .cs-step {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cs-step__label {
+      font-size: 10px;
+    }
+
+    .cs-options--height {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .cs-option {
+      min-height: 38px;
+      font-size: 12px;
+    }
+
+    .cs-step__number {
+      width: 27px;
+      height: 27px;
+      flex-basis: 27px;
+      font-size: 12px;
+    }
+
+    .cs-checkout-button {
+      min-height: 44px;
+      padding: 9px;
+      font-size: 13px;
+    }
+
+    .cs-checkout-button__arrow {
+      font-size: 20px;
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    .cs-stitching {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .cs-stitching__title-row {
+      gap: 5px 8px;
+    }
+
+    .cs-stitching__title {
+      font-size: 18px;
+    }
+
+    .cs-stitching__badge {
+      padding: 4px 6px;
+      font-size: 9px;
+    }
+
+    .cs-stitching__subtitle {
+      font-size: 11px;
+    }
+
+    .cs-stepper {
+      margin: 13px 0 11px;
+    }
+
+    .cs-step__label {
+      font-size: 9px;
+      line-height: 1.15;
+    }
+
+    .cs-panel {
+      padding: 10px;
+      border-radius: 9px;
+    }
+
+    .cs-panel__top {
+      gap: 7px;
+    }
+
+    .cs-panel__icon {
+      width: 29px;
+      height: 29px;
+      flex-basis: 29px;
+      font-size: 12px;
+    }
+
+    .cs-panel__step {
+      font-size: 9px;
+    }
+
+    .cs-panel h4 {
+      font-size: 15px;
+    }
+
+    .cs-panel p,
+    .cs-panel__help {
+      font-size: 11px !important;
+    }
+
+    .cs-options {
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .cs-options--height {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .cs-option {
+      min-height: 36px;
+      padding: 4px 2px;
+      border-radius: 7px;
+      font-size: 11px;
+    }
+
+    .cs-option.is-selected::after {
+      top: -5px;
+      right: -5px;
+      width: 16px;
+      height: 16px;
+      border-width: 1px;
+      font-size: 9px;
+    }
+
+    .cs-info-box {
+      margin-top: 11px;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .cs-info-box__icon,
+    .cs-services__notice-icon {
+      width: 18px;
+      height: 18px;
+      flex-basis: 18px;
+      font-size: 10px;
+    }
+
+    .cs-summary {
+      gap: 7px;
+      margin: 12px 0;
+    }
+
+    .cs-summary__item {
+      padding: 9px;
+      border-radius: 8px;
+    }
+
+    .cs-summary__item strong {
+      font-size: 14px;
+    }
+
+    .cs-services {
+      margin-bottom: 14px;
+      border-radius: 10px;
+    }
+
+    .cs-services__header {
+      padding: 10px;
+    }
+
+    .cs-services__header h5 {
+      font-size: 15px;
+    }
+
+    .cs-services__header p,
+    .cs-services__additional p {
+      font-size: 11px;
+    }
+
+    .cs-services__pricing {
+      gap: 7px;
+      padding: 8px;
+    }
+
+    .cs-service-card {
+      padding: 10px;
+      border-radius: 9px;
+    }
+
+    .cs-service-card h6,
+    .cs-services__section-title h6 {
+      font-size: 13px;
+    }
+
+    .cs-service-price {
+      padding: 7px 0;
+    }
+
+    .cs-service-price strong,
+    .cs-service-price span,
+    .cs-promise__item p {
+      font-size: 11px;
+    }
+
+    .cs-service-price b {
+      font-size: 13px;
+    }
+
+    .cs-services__additional,
+    .cs-promise,
+    .cs-services__notice {
+      margin: 0 8px 8px;
+      padding: 9px;
+      border-radius: 9px;
+    }
+
+    .cs-promise__grid {
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .cs-services__notice p {
+      font-size: 10px;
+    }
+
+    .cs-checkout-button {
+      min-height: 42px;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .cs-confirmation-row,
+    .cs-size-guide {
+      margin-top: 9px;
+      font-size: 9px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const root = document.getElementById('{{ cs_id }}');
+
+    if (!root || root.dataset.initialized === 'true') {
+      return;
+    }
+
+    root.dataset.initialized = 'true';
+
+    const stepButtons = root.querySelectorAll(
+      '[data-step-target]'
+    );
+
+    const panels = root.querySelectorAll(
+      '[data-step-panel]'
+    );
+
+    const sizeButtons = root.querySelectorAll(
+      '[data-size]'
+    );
+
+    const heightButtons = root.querySelectorAll(
+      '[data-height]'
+    );
+
+    const goStepButtons = root.querySelectorAll(
+      '[data-go-step]'
+    );
+
+    const sizeSummaryElements = root.querySelectorAll(
+      '[data-size-summary]'
+    );
+
+    const reviewSize = root.querySelector(
+      '[data-review-size]'
+    );
+
+    const reviewHeight = root.querySelector(
+      '[data-review-height]'
+    );
+
+    const checkoutButton = root.querySelector(
+      '[data-stitching-checkout]'
+    );
+
+    const checkoutButtonText = root.querySelector(
+      '.cs-checkout-button__text'
+    );
+
+    const errorBox = root.querySelector(
+      '[data-stitching-error]'
+    );
+
+    let selectedSize = '';
+    let selectedHeight = '';
+    let activeStep = 1;
+
+    function findProductForm() {
+      const closestForm = root.closest(
+        'form[action*="/cart/add"]'
+      );
+
+      if (closestForm) {
+        return closestForm;
+      }
+
+      const productContainer = root.closest(
+        'product-info, product-form, .product, .product__info-container, .shopify-section'
+      );
+
+      if (productContainer) {
+        const containerForm = productContainer.querySelector(
+          'form[action*="/cart/add"]'
+        );
+
+        if (containerForm) {
+          return containerForm;
+        }
+      }
+
+      return (
+        document.querySelector(
+          'product-form form[action*="/cart/add"]'
+        ) ||
+        document.querySelector(
+          'form[action*="/cart/add"]'
+        )
+      );
+    }
+
+    function getOrCreatePropertyInput(propertyName) {
+      const productForm = findProductForm();
+
+      if (!productForm) {
+        return null;
+      }
+
+      let input = Array.from(
+        productForm.elements
+      ).find(function (element) {
+        return element.name === propertyName;
+      });
+
+      if (!input) {
+        input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = propertyName;
+        productForm.appendChild(input);
+      }
+
+      return input;
+    }
+
+    function saveProperty(propertyName, value) {
+      const input = getOrCreatePropertyInput(
+        propertyName
+      );
+
+      if (input) {
+        input.value = value;
+      }
+    }
+
+    function getMaximumAllowedStep() {
+      if (selectedSize && selectedHeight) {
+        return 3;
+      }
+
+      if (selectedSize) {
+        return 2;
+      }
+
+      return 1;
+    }
+
+    function updateStepUI() {
+      const maximumStep = getMaximumAllowedStep();
+
+      stepButtons.forEach(function (button) {
+        const buttonStep = Number(
+          button.dataset.stepTarget
+        );
+
+        button.classList.remove(
+          'is-active',
+          'is-complete'
+        );
+
+        if (buttonStep === activeStep) {
+          button.classList.add('is-active');
+        }
+
+        if (buttonStep < activeStep) {
+          button.classList.add('is-complete');
+        }
+
+        button.disabled = buttonStep > maximumStep;
+      });
+
+      panels.forEach(function (panel) {
+        const panelStep = Number(
+          panel.dataset.stepPanel
+        );
+
+        const isCurrentPanel =
+          panelStep === activeStep;
+
+        panel.hidden = !isCurrentPanel;
+
+        panel.classList.toggle(
+          'is-active',
+          isCurrentPanel
+        );
+      });
+
+      sizeSummaryElements.forEach(function (element) {
+        element.textContent =
+          selectedSize || 'Not selected';
+      });
+
+      if (reviewSize) {
+        reviewSize.textContent =
+          selectedSize || '-';
+      }
+
+      if (reviewHeight) {
+        reviewHeight.textContent =
+          selectedHeight || '-';
+      }
+    }
+
+    function goToStep(step) {
+      const maximumStep = getMaximumAllowedStep();
+
+      if (step < 1 || step > maximumStep) {
+        return;
+      }
+
+      activeStep = step;
+      updateStepUI();
+
+      const activePanel = root.querySelector(
+        '[data-step-panel="' + step + '"]'
+      );
+
+      if (activePanel) {
+        activePanel.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }
+    }
+
+    function clearError() {
+      if (!errorBox) {
+        return;
+      }
+
+      errorBox.textContent = '';
+      errorBox.hidden = true;
+    }
+
+    function showError(message) {
+      if (!errorBox) {
+        return;
+      }
+
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+    }
+
+    function resetCheckoutButton() {
+      if (checkoutButton) {
+        checkoutButton.disabled = false;
+      }
+
+      if (checkoutButtonText) {
+        checkoutButtonText.textContent =
+          'Add Stitching Details & Checkout';
+      }
+    }
+
+    sizeButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        clearError();
+
+        selectedSize =
+          button.dataset.size || '';
+
+        sizeButtons.forEach(function (item) {
+          const isSelected = item === button;
+
+          item.classList.toggle(
+            'is-selected',
+            isSelected
+          );
+
+          item.setAttribute(
+            'aria-pressed',
+            isSelected ? 'true' : 'false'
+          );
+        });
+
+        saveProperty(
+          'properties[Stitching Size]',
+          selectedSize
+        );
+
+        activeStep = 2;
+        updateStepUI();
+      });
+    });
+
+    heightButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        clearError();
+
+        selectedHeight =
+          button.dataset.height || '';
+
+        heightButtons.forEach(function (item) {
+          const isSelected = item === button;
+
+          item.classList.toggle(
+            'is-selected',
+            isSelected
+          );
+
+          item.setAttribute(
+            'aria-pressed',
+            isSelected ? 'true' : 'false'
+          );
+        });
+
+        saveProperty(
+          'properties[Stitching Height]',
+          selectedHeight
+        );
+
+        activeStep = 3;
+        updateStepUI();
+      });
+    });
+
+    stepButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        goToStep(
+          Number(button.dataset.stepTarget)
+        );
+      });
+    });
+
+    goStepButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        goToStep(
+          Number(button.dataset.goStep)
+        );
+      });
+    });
+
+    if (checkoutButton) {
+      checkoutButton.addEventListener(
+        'click',
+        async function () {
+          clearError();
+
+          if (!selectedSize) {
+            activeStep = 1;
+            updateStepUI();
+
+            showError(
+              'Please select your stitching size.'
+            );
+
+            return;
+          }
+
+          if (!selectedHeight) {
+            activeStep = 2;
+            updateStepUI();
+
+            showError(
+              'Please select your height.'
+            );
+
+            return;
+          }
+
+          const productForm = findProductForm();
+
+          if (!productForm) {
+            showError(
+              'Product form was not found. Please place this code inside the product section.'
+            );
+
+            return;
+          }
+
+          const variantField = productForm.querySelector(
+            '[name="id"]'
+          );
+
+          if (
+            !variantField ||
+            !variantField.value
+          ) {
+            showError(
+              'Please select an available product variant before checkout.'
+            );
+
+            return;
+          }
+
+          checkoutButton.disabled = true;
+
+          if (checkoutButtonText) {
+            checkoutButtonText.textContent =
+              'Adding details...';
+          }
+
+          try {
+            const formData = new FormData(
+              productForm
+            );
+
+            formData.set(
+              'id',
+              variantField.value
+            );
+
+            formData.set(
+              'quantity',
+              formData.get('quantity') || '1'
+            );
+
+            formData.set(
+              'properties[Stitching Size]',
+              selectedSize
+            );
+
+            formData.set(
+              'properties[Stitching Height]',
+              selectedHeight
+            );
+
+            const rootUrl =
+              root.dataset.rootUrl || '/';
+
+            const normalizedRootUrl =
+              rootUrl.endsWith('/')
+                ? rootUrl
+                : rootUrl + '/';
+
+            const response = await fetch(
+              normalizedRootUrl + 'cart/add.js',
+              {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'X-Requested-With':
+                    'XMLHttpRequest'
+                },
+                body: formData
+              }
+            );
+
+            let result = {};
+
+            try {
+              result = await response.json();
+            } catch (jsonError) {
+              result = {};
+            }
+
+            if (!response.ok) {
+              throw new Error(
+                result.description ||
+                result.message ||
+                'Unable to add the product to cart.'
+              );
+            }
+
+            window.location.href =
+              normalizedRootUrl + 'checkout';
+          } catch (error) {
+            showError(
+              error.message ||
+              'Something went wrong. Please try again.'
+            );
+
+            resetCheckoutButton();
+          }
+        }
+      );
+    }
+
+    updateStepUI();
+  })();
+</script>

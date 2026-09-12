@@ -1,0 +1,407 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  .golden-offers,
+  .golden-offers * {
+    box-sizing: border-box;
+  }
+
+  .golden-offers {
+    --ink: #291c22;
+    --primary: #d4ac38;
+    --rose: var(--primary);
+    --blush: #fffaf0;
+    --gold: var(--primary);
+    width: 100%;
+    max-width: 767px;
+    margin: 32px auto;
+    overflow: hidden;
+    color: var(--ink);
+    background: #fffdfc;
+    border: 1px solid #f0e5c4;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(94, 73, 20, .12);
+    font-family: "DM Sans", Arial, sans-serif;
+  }
+
+  .go-hero {
+    position: relative;
+    isolation: isolate;
+    padding: 8px 24px 8px;
+    color: #fff;
+    overflow: hidden;
+    background: linear-gradient(120deg, #3d3010 0%, #8d7025 52%, var(--primary) 100%);
+  }
+
+  .go-hero::before,
+  .go-hero::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 50%;
+  }
+
+  .go-hero::before {
+    width: 380px;
+    height: 380px;
+    right: -130px;
+    top: -245px;
+  }
+
+  .go-hero::after {
+    width: 220px;
+    height: 220px;
+    right: 70px;
+    bottom: -170px;
+  }
+
+  .go-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    opacity: .82;
+  }
+
+  .go-sparkle {
+    color: var(--primary);
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .go-heading {
+    margin: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 28px;
+    letter-spacing: -.03em;
+    line-height: 1.04;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .go-heading em {
+    color: #fff0b8;
+    font-style: normal;
+  }
+
+  .go-subtitle {
+    max-width: 510px;
+    margin: 14px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, .78);
+  }
+
+  .go-content {
+    padding: 12px 24px;
+    background: radial-gradient(circle at 100% 0%, #fff4d6 0, transparent 260px), var(--blush);
+  }
+
+  .go-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 12px;
+    margin: 0 5px 14px;
+  }
+
+  .go-intro h2 {
+    margin: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+  }
+
+  .go-intro p {
+    margin: 0;
+    color: #806a31;
+    font-size: 12px;
+  }
+
+  .go-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .go-card {
+    position: relative;
+    min-height: 0;
+    padding: 10px 14px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #f0e1b8;
+    border-radius: 15px;
+    box-shadow: 0 7px 18px rgba(109, 87, 30, .07);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+
+  .go-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 11px 22px rgba(109, 87, 30, .14);
+  }
+
+  .go-card::after {
+    content: "";
+    position: absolute;
+    right: -35px;
+    bottom: -48px;
+    width: 115px;
+    height: 115px;
+    border: 18px solid #fff4d6;
+    border-radius: 50%;
+  }
+
+  .go-count {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin-bottom: 11px;
+    border-radius: 50%;
+    color: var(--rose);
+    background: #fff4d6;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .go-off {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: var(--rose);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -.03em;
+    line-height: 1;
+  }
+
+  .go-description {
+    position: relative;
+    z-index: 1;
+    margin: 7px 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 1.35;
+  }
+
+  .go-footer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-top: 10px;
+    border-top: 1px dashed #ead59d;
+    color: #806a31;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .go-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .go-note {
+    margin: 14px 5px 0;
+    color: #806a31;
+    font-size: 10px;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  @media (max-width:767px) {
+    .golden-offers {
+      margin: 18px auto;
+      border-radius: 18px;
+    }
+
+    .go-heading {
+      font-size: 24px;
+      line-height: 1.08;
+    }
+
+    .go-hero {
+      padding: 10px 18px 10px;
+    }
+
+    .go-content {
+      padding: 13px 6px 13px;
+    }
+
+    .go-grid {
+      gap: 12px;
+    }
+
+    .go-card {
+      min-height: 0;
+      padding: 14px;
+    }
+
+    .go-count {
+      margin-bottom: 10px;
+    }
+
+    .go-description {
+      margin-bottom: 11px;
+    }
+  }
+
+  @media (max-width:600px) {
+    .go-intro {
+      margin: 0 5px 18px;
+      align-items: start;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .go-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .go-card {
+      padding: 12px 10px;
+    }
+
+    .go-off {
+      font-size: 26px;
+    }
+
+    .go-description {
+      font-size: 12px;
+    }
+
+    .go-footer {
+      gap: 5px;
+      font-size: 9px;
+      letter-spacing: .04em;
+    }
+  }
+
+  @media (max-width:420px) {
+    .golden-offers {
+      margin: 12px 0;
+      border-radius: 14px;
+    }
+
+    .go-hero {
+      padding: 12px 18px 12px;
+    }
+
+    .go-hero::before {
+      width: 260px;
+      height: 260px;
+      right: -100px;
+      top: -170px;
+    }
+
+    .go-hero::after {
+      width: 160px;
+      height: 160px;
+      right: 18px;
+      bottom: -125px;
+    }
+
+    .go-heading {
+      font-size: 24px;
+      line-height: 1.08;
+    }
+
+    .go-content {
+      padding: 16px 6px 20px;
+    }
+
+    .go-grid {
+      gap: 6px;
+    }
+
+    .go-card {
+      min-height: 0;
+      padding: 10px 8px;
+      border-radius: 14px;
+    }
+
+    .go-card::after {
+      width: 110px;
+      height: 110px;
+      right: -35px;
+      bottom: -48px;
+      border-width: 17px;
+    }
+
+    .go-count {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .go-off {
+      font-size: 20px;
+    }
+
+    .go-description {
+      margin: 6px 0 9px;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .go-footer {
+      padding-top: 5px;
+      font-size: 8px;
+    }
+
+    .go-note {
+      margin: 10px 4px 0;
+      font-size: 9px;
+    }
+  }
+</style>
+
+<section class="golden-offers" aria-labelledby="golden-offers-title">
+  <header class="go-hero">
+    <h1 class="go-heading" id="golden-offers-title">Golden <em>Offers.</em></h1>
+  </header>
+  <div class="go-content">
+    <div class="go-grid">
+      <article class="go-card">
+        <div class="go-count">01</div>
+        <p class="go-off">5% Off</p>
+        <p class="go-description">Buy 2 get 5% off</p>
+        <div class="go-footer"><span class="go-dot"></span>Sitewide</div>
+      </article>
+      <article class="go-card">
+        <div class="go-count">02</div>
+        <p class="go-off">7% Off</p>
+        <p class="go-description">Buy 3 get 7% off</p>
+        <div class="go-footer"><span class="go-dot"></span>Sitewide</div>
+      </article>
+      <article class="go-card">
+        <div class="go-count">03</div>
+        <p class="go-off">10% Off</p>
+        <p class="go-description">Buy 4 get 10% off</p>
+        <div class="go-footer"><span class="go-dot"></span> Sitewide</div>
+      </article>
+    </div>
+    <p class="go-note">Discount is automatically reflected when eligible items are added to your bag.</p>
+  </div>
+</section>

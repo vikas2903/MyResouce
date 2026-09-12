@@ -1,0 +1,124 @@
+<div class="cart-sale-marquee">
+  <div class="cart-sale-marquee__track">
+    <div class="cart-sale-marquee__content">
+      <span class="cart-sale-marquee__pill">Sale Live</span>
+      <span class="cart-sale-marquee__text"
+        >END OF SEASON SALE 🎉 FLAT 20% OFF SITEWIDE</span
+      >
+      <span class="cart-sale-marquee__dot"></span>
+      <span class="cart-sale-marquee__text">LIMITED TIME ONLY!</span>
+      <span class="cart-sale-marquee__dot"></span>
+    </div>
+
+    <div class="cart-sale-marquee__content" aria-hidden="true">
+      <span class="cart-sale-marquee__pill">Sale Live</span>
+      <span class="cart-sale-marquee__text"
+        >END OF SEASON SALE 🎉 FLAT 20% OFF SITEWIDE</span
+      >
+      <span class="cart-sale-marquee__dot"></span>
+      <span class="cart-sale-marquee__text">LIMITED TIME ONLY!</span>
+      <span class="cart-sale-marquee__dot"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cart-sale-marquee {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding: 10px 0;
+    background: linear-gradient(180deg, #111111 0%, #000000 100%);
+    border-top: 1px solid #2a2a2a;
+    border-bottom: 1px solid #2a2a2a;
+    color: #ffffff;
+  }
+
+  .cart-sale-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: cart-sale-marquee-scroll 24s linear infinite;
+    will-change: transform;
+  }
+
+  .cart-sale-marquee__content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+    padding-right: 14px;
+  }
+
+  .cart-sale-marquee__pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    background: #ffffff;
+    color: #000000;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .cart-sale-marquee__text {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .cart-sale-marquee__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffffff;
+    flex-shrink: 0;
+  }
+
+  @keyframes cart-sale-marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (hover: hover) {
+    .cart-sale-marquee:hover .cart-sale-marquee__track {
+      animation-play-state: paused;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .cart-sale-marquee {
+      padding: 8px 0;
+    }
+
+    .cart-sale-marquee__content {
+      gap: 10px;
+      padding-right: 10px;
+    }
+
+    .cart-sale-marquee__pill {
+      padding: 4px 8px;
+      font-size: 9px;
+    }
+
+    .cart-sale-marquee__text {
+      font-size: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    .cart-sale-marquee__dot {
+      width: 5px;
+      height: 5px;
+    }
+  }
+</style>

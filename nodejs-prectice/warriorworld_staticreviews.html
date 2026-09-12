@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warrior World</title>
+    <style>
+        :root {
+            --accent: #000000;
+            --text: #111111;
+            --line: #d7d7d7;
+            --bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        .reviews-section {
+            width: min(100%, 1040px);
+            margin: 0 auto;
+            padding: 28px 48px 48px;
+        }
+
+        .reviews-heading {
+            margin: 0 0 46px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 27px;
+            font-weight: 700;
+            letter-spacing: 0;
+            color: #000000;
+        }
+
+        .reviews-heading span {
+            color: #f3ab00;
+        }
+
+        .reviews-list {
+            margin: 0 auto;
+            max-width: 900px;
+        }
+
+        .review-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 24px;
+            min-height: 58px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .review-label {
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .review-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            white-space: nowrap;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 17px;
+        }
+
+        .stars {
+            color: #ffb000;
+            letter-spacing: 1px;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .score {
+            color: #111111;
+            font-size: 18px;
+        }
+
+        .bottom-band {
+            height: 16px;
+            margin-top: 50px;
+            background:
+                linear-gradient(90deg, rgba(31, 22, 7, 0.9), rgba(34, 67, 96, 0.9), rgba(83, 49, 16, 0.9), rgba(10, 25, 11, 0.9), rgba(150, 110, 18, 0.9), rgba(18, 26, 29, 0.9));
+            filter: blur(0.2px);
+        }
+
+        @media (max-width: 767px) {
+            .reviews-section {
+                padding: 24px 20px 36px;
+            }
+
+            .reviews-heading {
+                margin-bottom: 30px;
+                font-size: 22px;
+                line-height: 1.3;
+            }
+
+            .review-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 14px 0;
+            }
+
+            .review-rating {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="reviews-section">
+        <h2 class="reviews-heading"><span>5,35,000+</span> CUSTOMERS LOVE THE WarriorWorld</h2>
+
+        <div class="reviews-list" aria-label="Customer review summary">
+            <div class="review-row">
+                <div class="review-label">Fabric Quality</div>
+                <div class="review-rating" aria-label="Fabric Quality rated 4.8 out of 5">
+                    <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    <span class="score">4.8</span>
+                </div>
+            </div>
+
+            <div class="review-row">
+                <div class="review-label">Comfort & Fit</div>
+                <div class="review-rating" aria-label="Comfort & Fit rated 4.9 out of 5">
+                    <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    <span class="score">4.9</span>
+                </div>
+            </div>
+
+            <div class="review-row">
+                <div class="review-label">Stitching Strength</div>
+                <div class="review-rating" aria-label="Stitching Strength rated 4.8 out of 5">
+                    <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    <span class="score">4.8</span>
+                </div>
+            </div>
+
+            <div class="review-row">
+                <div class="review-label">Durability</div>
+                <div class="review-rating" aria-label="Durability rated 4.6 out of 5">
+                    <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    <span class="score">4.6</span>
+                </div>
+            </div>
+
+            <div class="review-row">
+                <div class="review-label">Value For Money</div>
+                <div class="review-rating" aria-label="Value For Money rated 4.5 out of 5">
+                    <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                    <span class="score">4.6</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="bottom-band" aria-hidden="true"></div>
+</body>
+</html>

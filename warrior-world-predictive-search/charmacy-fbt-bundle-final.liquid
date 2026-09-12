@@ -1,0 +1,922 @@
+{%- comment -%}
+  ============================================================================
+  Frequently Bought Together — Bundle Picker
+  ============================================================================
+  Matches the reference UI:
+    - "Pair it with any 2nd product" (5% off)  -> one scrollable row, pick 1,
+                                                   then choose its shade
+    - "Complete trio — add any 2"    (10% off) -> two scrollable rows ("Pick
+                                                   1" / "Pick 2"), pick one
+                                                   DIFFERENT product from
+                                                   each, then choose its shade
+  Each row heading updates to show the picked product's name (e.g.
+  "Pick 1 — CMC Matte Foundation"), and a "Shade" swatch strip appears below
+  the row for whichever product is currently picked there.
+
+  HOW TO INSTALL
+    1. Save this file as: snippets/fbt-bundle-picker.liquid
+    2. Render it on the product page, e.g. inside sections/main-product.liquid:
+         {% render 'fbt-bundle-picker' %}
+    3. Edit fbt_addon_handles below — ONE array, manually maintained by you.
+       It's the single source of products offered in every row:
+         - "Pair it with any 2nd product" shows this whole list, pick 1.
+         - "Complete trio" shows this same list in Pick 1 AND Pick 2; picking
+           a product in one row disables it in the other so you can't pick
+           the same product twice.
+       Add/remove handles freely — the UI adapts (arrows/scrollbar only show
+       up when there's more than one card to scroll through).
+    4. Shade swatch images: this reads them straight off your CDN using the
+       variant's title, so there's nothing to attach per-variant in the
+       Shopify admin. It builds:
+         fbt_shade_image_base + handleized(variant.title) + '.' + fbt_shade_image_ext
+       e.g. a variant titled "Shade 01" -> shade-01.png. Upload your shade
+       swatch files (Settings > Content > Files) with filenames that match
+       each variant's title, handleized the same way (lowercase, spaces to
+       hyphens). If an image is missing/404s, the swatch falls back to a
+       plain palette color instead of a broken image.
+
+  ASSUMPTIONS MADE (easy to change — search the tag in the code):
+    [ASSUMPTION-1] fbt_addon_handles currently holds cmc-soft-satin-matte-lipstick,
+                   cmc-blush-drip, cmc-duo-drama-eyeliners-multichrome-metallics.
+                   Edit this list — it feeds both options.
+    [ASSUMPTION-2] "Complete trio" requires two DIFFERENT products, enforced
+                   by disabling the other row's matching card. Remove the
+                   enforceDistinctTrio() call if duplicates should be allowed.
+    [ASSUMPTION-3] The main product's variant is auto-read from the page's
+                   own add-to-cart form (falls back to the server-rendered
+                   selected/first-available variant if that form isn't
+                   found) — no separate main-variant control in this widget.
+    [ASSUMPTION-4] Shade image URLs are built from variant.title. If any of
+                   your addon products use more than one option (e.g. "Shade
+                   / Size"), variant.title will include both and won't match
+                   your filename — swap variant.title for variant.option1 (or
+                   whichever option holds the shade) in that case.
+  ============================================================================
+{%- endcomment -%}
+
+{%- comment -%} ====================== CONFIG — edit me ====================== {%- endcomment -%}
+{%- assign fbt_main_product = product -%}
+{%- assign fbt_addon_handles = 'cmc-insane-shifters-eye-shadow,cmc-blush-drip,cmc-duo-drama-eyeliners-multichrome-metallics'
+  | split: ','
+-%}
+{%- assign fbt_discount_pair = 5 -%}
+{%- assign fbt_discount_trio = 10 -%}
+{%- assign fbt_shade_image_base = 'https://charmacyworld.com/cdn/shop/files/' -%}
+{%- assign fbt_shade_image_ext = 'png' -%}
+{%- comment -%} =============================================================== {%- endcomment -%}
+
+{%- if fbt_main_product != null and fbt_main_product.id != blank -%}
+  {%- assign fbt_addon_count = 0 -%}
+  {%- for handle in fbt_addon_handles -%}
+    {%- assign fbt_addon_lookup = all_products[handle] -%}
+    {%- if fbt_addon_lookup != null and fbt_addon_lookup.id != blank -%}
+      {%- assign fbt_addon_count = fbt_addon_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if fbt_addon_count > 0 -%}
+    {%- assign fbt_widget_id = 'fbt-' | append: section.id | append: '-' | append: fbt_main_product.id -%}
+    {%- assign fbt_main_variant = fbt_main_product.selected_or_first_available_variant -%}
+    {%- assign fbt_trio_available = true -%}
+    {%- assign fbt_shade_palette = '#f3d9be,#efc99f,#dda66f,#b88350,#9d6a36,#70461f,#3e2816' -%}
+
+    <style>
+            .fbt-card__select {display: none;}
+            #{{ fbt_widget_id }} {
+              {% comment %} max-width: 560px; {% endcomment %}
+                margin: 1rem auto;
+                font-family: Archivo, system-ui, sans-serif;
+                color: #1d1d1d;
+                background: rgb(239 234 227 / 17%);
+                padding: 18px 20px 0;
+                border-radius: 4px;
+            }
+            #{{ fbt_widget_id }} * { box-sizing: border-box; }
+            #{{ fbt_widget_id }} .fbt-heading {
+                 margin: 0 0 10px;
+                 font-size: 14px;
+                font-weight: 700;
+                {% comment %} letter-spacing: 0.16em; {% endcomment %}
+                text-transform: uppercase;
+                color: rgb(156, 107, 60);
+                margin-bottom: 10px;
+                font-family: Archivo, system-ui, sans-serif;
+
+            }
+
+            /* ---- option cards (radio rows) ---- */
+            #{{ fbt_widget_id }} .fbt-option {
+              position: relative;
+              display: block;
+              min-height: 66px;
+              margin-bottom: 10px;
+              padding: 12px 60px 11px 42px;
+              border: 1px solid #d9d9d9;
+              border-radius: 12px;
+              background: #fff;
+              cursor: pointer;
+            }
+            #{{ fbt_widget_id }} .fbt-option.is-disabled { opacity: .5; cursor: not-allowed; }
+            #{{ fbt_widget_id }} .fbt-option input { position: absolute; opacity: 0; pointer-events: none; }
+            #{{ fbt_widget_id }} .fbt-option:before {
+              position: absolute; top: 21px; left: 14px; width: 16px; height: 16px;
+              border: 2px solid #b4b4b4; border-radius: 50%; content: '';
+            }
+            #{{ fbt_widget_id }} .fbt-option.is-selected { border-color: #ad7140; background: #fffdfa; }
+            #{{ fbt_widget_id }} .fbt-option.is-selected:before { border-color: #ad7140; }
+            #{{ fbt_widget_id }} .fbt-option.is-selected:after {
+              position: absolute; top: 25px; left: 18px; width: 8px; height: 8px;
+              border-radius: 50%; background: #ad7140; content: '';
+            }
+            #{{ fbt_widget_id }} .fbt-option__title { font-size: 14px;
+          font-family: 'GOTHAM-2';
+          text-transform: uppercase;
+          letter-spacing: normal;
+          font-weight: 200;
+      }
+            #{{ fbt_widget_id }} .fbt-badge {
+              display: inline-block; margin-left: 6px; padding: 2px 8px; border-radius: 12px;
+              background: #ad7140; color: #fff; font-size: 10px;s
+              text-transform: uppercase; vertical-align: 2px;
+            }
+            #{{ fbt_widget_id }} .fbt-option__desc { display: block;
+          margin-top: 4px;
+          color: #858585;
+          font-size: 13px;
+          text-transform: initial;
+          letter-spacing: 1px; }
+            #{{ fbt_widget_id }} .fbt-option__pct {
+              position: absolute; top: 21px; right: 14px; color: #a56836; font-size: 16px; font-weight: 700;
+            }
+
+            /* ---- picker panel ---- */
+            #{{ fbt_widget_id }} .fbt-picker { margin: 0 0 10px; padding: 14px 12px; border: 1px dashed #d9b391; border-radius: 12px; }
+            #{{ fbt_widget_id }} .fbt-picker.fbt-is-hidden { display: none; }
+            #{{ fbt_widget_id }} .fbt-pick + .fbt-pick { margin-top: 16px; }
+            #{{ fbt_widget_id }} .fbt-pick__label { margin: 0 0 8px; font-size: 14px; font-weight: 700; }
+            #{{ fbt_widget_id }} .fbt-pick__name { color: #ad7140; font-weight: 700; }
+            #{{ fbt_widget_id }} .fbt-row-wrap { position: relative; display: flex; align-items: center; gap: 4px; }
+            #{{ fbt_widget_id }} .fbt-arrow {
+              flex: none; width: 20px; height: 20px; border: 0; border-radius: 50%; background: transparent;
+              color: #9a9a9a; font-size: 17px; line-height: 1; cursor: pointer;
+            }
+            #{{ fbt_widget_id }} .fbt-arrow:disabled { opacity: .3; cursor: default; }
+            #{{ fbt_widget_id }} .fbt-row {
+              display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory;
+              scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 2px;
+            }
+            #{{ fbt_widget_id }} .fbt-row::-webkit-scrollbar { display: none; }
+            #{{ fbt_widget_id }} .fbt-track { position: relative; height: 3px; margin: 6px 24px 0; border-radius: 2px; background: #e6e2dd; }
+            #{{ fbt_widget_id }} .fbt-thumb { position: absolute; top: 0; left: 0; height: 3px; border-radius: 2px; background: #b7b0a6; }
+
+            #{{ fbt_widget_id }} .fbt-card {
+              position: relative; flex: 0 0 138px; width: 138px; scroll-snap-align: start;
+              padding: 9px; border: 1px solid #dfdfdf; border-radius: 12px; background: #fff; cursor: pointer;
+            }
+            #{{ fbt_widget_id }} .fbt-card.is-selected { border: 2px solid #ad7140; padding: 8px; }
+            #{{ fbt_widget_id }} .fbt-card.is-disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
+            #{{ fbt_widget_id }} .fbt-card__swatch {
+              display: block; width: 20px; height: 20px; margin-bottom: 6px; border-radius: 50%;
+              border: 1px solid rgba(0,0,0,.08); background-size: cover; background-position: center;
+            }
+            #{{ fbt_widget_id }} .fbt-card__title { display: block; min-height: 30px; font-size: 12.5px; font-weight: 700; line-height: 16px; }
+            #{{ fbt_widget_id }} .fbt-card__price { display: block; margin-top: 2px; color: #777; font-size: 12.5px; }
+
+            /* ---- shade strip (shown below each row, for whichever card is picked) ---- */
+            #{{ fbt_widget_id }} .fbt-shade { margin-top: 12px; }
+            #{{ fbt_widget_id }} .fbt-shade.fbt-is-hidden { display: none; }
+            #{{ fbt_widget_id }} .fbt-shade__label {
+              margin: 0 0 8px; color: #8a8a8a; font-size: 11px; font-weight: 700;
+               text-transform: uppercase;
+            }
+            #{{ fbt_widget_id }} .fbt-shade__row { display: flex; flex-wrap: wrap; gap: 8px; }
+            #{{ fbt_widget_id }} .fbt-shade__swatch {
+              width: 30px; height: 30px; padding: 0; border: 1px solid #ddd; border-radius: 50%;
+              background-size: cover; background-position: center; cursor: pointer;
+            }
+            #{{ fbt_widget_id }} .fbt-shade__swatch.is-selected { outline: 2px solid #ad7140; outline-offset: 2px; }
+            #{{ fbt_widget_id }} .fbt-shade__swatch:disabled { opacity: .35; cursor: not-allowed; }
+            #{{ fbt_widget_id }} .fbt-shade__hint { margin-top: 6px; color: #6e5f55; font-size: 12.5px; font-weight: 600; }
+
+            /* ---- summary ---- */
+            #{{ fbt_widget_id }} .fbt-summary {
+              display: flex; align-items: center; justify-content: space-between; gap: 10px;
+              padding: 12px 4px 0; border-top: 1px solid #e7e7e7;
+            }
+            #{{ fbt_widget_id }} .fbt-summary__prices { display: flex; align-items: baseline; gap: 7px; }
+            #{{ fbt_widget_id }} .fbt-summary__total { font-size: 20px; font-weight: 700; }
+            #{{ fbt_widget_id }} .fbt-summary__strike { color: #9f8a7e; text-decoration: line-through; font-size: 13px; }
+            #{{ fbt_widget_id }} .fbt-summary__save { display: block; margin-top: 2px; color: #177246; font-weight: 700; font-size: 12.5px; }
+            #{{ fbt_widget_id }} .fbt-cta {
+              min-width: 156px; border: 0; border-radius: 12px; padding: 12px 14px;
+              background: #c8c7c5; color: #fff; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+            }
+            #{{ fbt_widget_id }} .fbt-cta:not(:disabled) { background: linear-gradient(90deg,#c89572 0%,#a06041 100%); cursor: pointer; }
+            #{{ fbt_widget_id }} .fbt-cta:disabled { cursor: not-allowed; }
+            #{{ fbt_widget_id }} .fbt-status { min-height: 16px; margin-top: 6px; font-size: 12.5px; }
+            #{{ fbt_widget_id }} .fbt-status.is-error { color: #a33; }
+            #{{ fbt_widget_id }} .fbt-status.is-success { color: #177246; }
+
+            @media (max-width: 480px) {
+              #{{ fbt_widget_id }} .fbt-summary { flex-direction: column; align-items: stretch; }
+              #{{ fbt_widget_id }} .fbt-cta { width: 100%; }
+            }
+
+            @media(max-width:767px){
+              #{{ fbt_widget_id }} {
+                  padding: 8px 4px 0;
+                  border-radius: 4px;
+              }
+               #{{ fbt_widget_id }} .fbt-option__title{font-size:11px;}
+              #{{ fbt_widget_id }} .fbt-option{position: relative;
+                  display: block;
+                  min-height: auto;
+                  margin-bottom: 10px;
+                  padding: 10px 4px 12px 39px;
+                  border: 1px solid #d9d9d9;
+                  border-radius: 12px;
+                  background: #fff;
+                  cursor: pointer;
+              }
+              #{{ fbt_widget_id }} .fbt-option__desc{
+                font-size:12px;
+              }
+              #{{ fbt_widget_id }}  .fbt-option__pct{
+                    position: absolute;
+                  bottom: 5px;
+                  right: 10px;
+                  color: #a56836;
+                  font-size: 14px;
+                  font-weight: 700;
+              }
+          #{{ fbt_widget_id }} .fbt-picker{
+                    margin: 0 0 10px;
+                    padding: 12px 16px;
+                    border: 1px dashed #d9b391;
+                    border-radius: 12px;
+            }
+          #{{ fbt_widget_id }} .fbt-pick__name{font-size:12px;}
+          #{{ fbt_widget_id }}  .fbt-card__title{font-size:12px;}
+          #{{ fbt_widget_id }}  .fbt-shade__swatch{width:20px; height:20px;}
+            }
+    </style>
+
+    <div
+      id="{{ fbt_widget_id }}"
+      class="fbt-widget"
+      data-fbt-widget
+      data-currency="{{ cart.currency.iso_code | default: shop.currency }}"
+      data-main-variant-id="{{ fbt_main_variant.id }}"
+      data-main-price="{{ fbt_main_variant.price }}"
+      data-discount-pair="{{ fbt_discount_pair }}"
+      data-discount-trio="{{ fbt_discount_trio }}"
+    >
+      <div class="fbt-heading">Build your set & save</div>
+
+      {%- comment -%} ---------------- Option 1: Pair ---------------- {%- endcomment -%}
+      <label class="fbt-option is-selected" data-fbt-option-card="pair">
+        <input type="radio" name="{{ fbt_widget_id }}-option" value="pair" data-fbt-option-input checked>
+        <span class="fbt-option__title">Pair it with any 2nd product<span class="fbt-badge">Best value</span></span>
+        <span class="fbt-option__desc">Extra {{ fbt_discount_pair }}% off everything</span>
+        <span class="fbt-option__pct">−{{ fbt_discount_pair }}%</span>
+      </label>
+
+      <div class="fbt-picker" data-fbt-picker="pair">
+        <div class="fbt-pick" data-fbt-pick="pair-1">
+          <div class="fbt-pick__label">Pick your pair<span class="fbt-pick__name" data-fbt-pick-name></span></div>
+          <div class="fbt-row-wrap">
+            <button
+              type="button"
+              class="fbt-arrow"
+              data-fbt-scroll="prev"
+              data-fbt-target="pair-1"
+              aria-label="Scroll left"
+            >
+              ‹
+            </button>
+            <div class="fbt-row" data-fbt-row="pair-1">
+              {%- for handle in fbt_addon_handles -%}
+                {%- assign addon = all_products[handle] -%}
+                {%- if addon != null and addon.id != blank -%}
+                  {%- assign addon_variant = addon.selected_or_first_available_variant -%}
+                  {%- assign addon_shade_slug = addon_variant.title | handleize -%}
+                  {%- assign addon_shade_url = fbt_shade_image_base
+                    | append: addon_shade_slug
+                    | append: '.'
+                    | append: fbt_shade_image_ext
+                  -%}
+                  <article
+                    class="fbt-card{% if forloop.first %} is-selected{% endif %}"
+                    data-fbt-card
+                    data-fbt-product-id="{{ addon.id }}"
+                    data-fbt-product-title="{{ addon.title | escape }}"
+                  >
+                    <span
+                      class="fbt-card__swatch"
+                      data-fbt-card-swatch
+                      style="background-image:url('{{ addon_shade_url }}');background-color:{{ fbt_shade_palette | split: ',' | first }};"
+                    ></span>
+                    <span class="fbt-card__title">{{ addon.title | truncate: 28 }}</span>
+                    <span class="fbt-card__price" data-fbt-card-price>{{ addon_variant.price | money }}</span>
+                    <select class="fbt-card__select" data-fbt-variant-select hidden>
+                      {%- for variant in addon.variants -%}
+                        {%- assign v_shade_slug = variant.title | handleize -%}
+                        {%- assign v_shade_url = fbt_shade_image_base
+                          | append: v_shade_slug
+                          | append: '.'
+                          | append: fbt_shade_image_ext
+                        -%}
+                        <option
+                          value="{{ variant.id }}"
+                          data-price="{{ variant.price }}"
+                          data-available="{{ variant.available }}"
+                          data-image="{{ v_shade_url }}"
+                          {% if variant.id == addon_variant.id %}
+                            selected
+                          {% endif %}
+                        >
+                          {{ variant.title -}}
+                          {%- unless variant.available %} · Sold out{% endunless %}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                  </article>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            <button
+              type="button"
+              class="fbt-arrow"
+              data-fbt-scroll="next"
+              data-fbt-target="pair-1"
+              aria-label="Scroll right"
+            >
+              ›
+            </button>
+          </div>
+          <div class="fbt-track"><div class="fbt-thumb" data-fbt-thumb="pair-1"></div></div>
+
+          <div class="fbt-shade" data-fbt-shade-block="pair-1">
+            <div class="fbt-shade__label">Shade</div>
+            <div class="fbt-shade__row" data-fbt-shade-row="pair-1"></div>
+            <div class="fbt-shade__hint" data-fbt-shade-hint>Select a shade</div>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} ---------------- Option 2: Trio ---------------- {%- endcomment -%}
+      <label class="fbt-option{% unless fbt_trio_available %} is-disabled{% endunless %}" data-fbt-option-card="trio">
+        <input
+          type="radio"
+          name="{{ fbt_widget_id }}-option"
+          value="trio"
+          data-fbt-option-input
+          {% unless fbt_trio_available %}
+            disabled
+          {% endunless %}
+        >
+        <span class="fbt-option__title">Complete trio — add any 2</span>
+        <span class="fbt-option__desc">Extra {{ fbt_discount_trio }}% off everything</span>
+        <span class="fbt-option__pct">−{{ fbt_discount_trio }}%</span>
+      </label>
+
+      <div class="fbt-picker fbt-is-hidden" data-fbt-picker="trio">
+        <div class="fbt-pick" data-fbt-pick="trio-1">
+          <div class="fbt-pick__label">Pick 1<span class="fbt-pick__name" data-fbt-pick-name></span></div>
+          <div class="fbt-row-wrap">
+            <button
+              type="button"
+              class="fbt-arrow"
+              data-fbt-scroll="prev"
+              data-fbt-target="trio-1"
+              aria-label="Scroll left"
+            >
+              ‹
+            </button>
+            <div class="fbt-row" data-fbt-row="trio-1">
+              {%- for handle in fbt_addon_handles -%}
+                {%- assign addon = all_products[handle] -%}
+                {%- if addon != null and addon.id != blank -%}
+                  {%- assign addon_variant = addon.selected_or_first_available_variant -%}
+                  {%- assign addon_shade_slug = addon_variant.title | handleize -%}
+                  {%- assign addon_shade_url = fbt_shade_image_base
+                    | append: addon_shade_slug
+                    | append: '.'
+                    | append: fbt_shade_image_ext
+                  -%}
+                  <article
+                    class="fbt-card{% if forloop.first %} is-selected{% endif %}"
+                    data-fbt-card
+                    data-fbt-product-id="{{ addon.id }}"
+                    data-fbt-product-title="{{ addon.title | escape }}"
+                  >
+                    <span
+                      class="fbt-card__swatch"
+                      data-fbt-card-swatch
+                      style="background-image:url('{{ addon_shade_url }}');background-color:{{ fbt_shade_palette | split: ',' | first }};"
+                    ></span>
+                    <span class="fbt-card__title">{{ addon.title | truncate: 28 }}</span>
+                    <span class="fbt-card__price" data-fbt-card-price>{{ addon_variant.price | money }}</span>
+                    <select class="fbt-card__select" data-fbt-variant-select hidden>
+                      {%- for variant in addon.variants -%}
+                        {%- assign v_shade_slug = variant.title | handleize -%}
+                        {%- assign v_shade_url = fbt_shade_image_base
+                          | append: v_shade_slug
+                          | append: '.'
+                          | append: fbt_shade_image_ext
+                        -%}
+                        <option
+                          value="{{ variant.id }}"
+                          data-price="{{ variant.price }}"
+                          data-available="{{ variant.available }}"
+                          data-image="{{ v_shade_url }}"
+                          {% if variant.id == addon_variant.id %}
+                            selected
+                          {% endif %}
+                        >
+                          {{ variant.title -}}
+                          {%- unless variant.available %} · Sold out{% endunless %}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                  </article>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            <button
+              type="button"
+              class="fbt-arrow"
+              data-fbt-scroll="next"
+              data-fbt-target="trio-1"
+              aria-label="Scroll right"
+            >
+              ›
+            </button>
+          </div>
+          <div class="fbt-track"><div class="fbt-thumb" data-fbt-thumb="trio-1"></div></div>
+
+          <div class="fbt-shade" data-fbt-shade-block="trio-1">
+            <div class="fbt-shade__label">Shade</div>
+            <div class="fbt-shade__row" data-fbt-shade-row="trio-1"></div>
+            <div class="fbt-shade__hint" data-fbt-shade-hint>Select a shade</div>
+          </div>
+        </div>
+
+        <div class="fbt-pick" data-fbt-pick="trio-2">
+          <div class="fbt-pick__label">Pick 2<span class="fbt-pick__name" data-fbt-pick-name></span></div>
+          <div class="fbt-row-wrap">
+            <button
+              type="button"
+              class="fbt-arrow"
+              data-fbt-scroll="prev"
+              data-fbt-target="trio-2"
+              aria-label="Scroll left"
+            >
+              ‹
+            </button>
+            <div class="fbt-row" data-fbt-row="trio-2">
+              {%- for handle in fbt_addon_handles -%}
+                {%- assign addon = all_products[handle] -%}
+                {%- if addon != null and addon.id != blank -%}
+                  {%- assign addon_variant = addon.selected_or_first_available_variant -%}
+                  {%- assign addon_shade_slug = addon_variant.title | handleize -%}
+                  {%- assign addon_shade_url = fbt_shade_image_base
+                    | append: addon_shade_slug
+                    | append: '.'
+                    | append: fbt_shade_image_ext
+                  -%}
+                  <article
+                    class="fbt-card{% if forloop.index == 2 %} is-selected{% endif %}"
+                    data-fbt-card
+                    data-fbt-product-id="{{ addon.id }}"
+                    data-fbt-product-title="{{ addon.title | escape }}"
+                  >
+                    <span
+                      class="fbt-card__swatch"
+                      data-fbt-card-swatch
+                      style="background-image:url('{{ addon_shade_url }}');background-color:{{ fbt_shade_palette | split: ',' | first }};"
+                    ></span>
+                    <span class="fbt-card__title">{{ addon.title | truncate: 28 }}</span>
+                    <span class="fbt-card__price" data-fbt-card-price>{{ addon_variant.price | money }}</span>
+                    <select class="fbt-card__select" data-fbt-variant-select hidden>
+                      {%- for variant in addon.variants -%}
+                        {%- assign v_shade_slug = variant.title | handleize -%}
+                        {%- assign v_shade_url = fbt_shade_image_base
+                          | append: v_shade_slug
+                          | append: '.'
+                          | append: fbt_shade_image_ext
+                        -%}
+                        <option
+                          value="{{ variant.id }}"
+                          data-price="{{ variant.price }}"
+                          data-available="{{ variant.available }}"
+                          data-image="{{ v_shade_url }}"
+                          {% if variant.id == addon_variant.id %}
+                            selected
+                          {% endif %}
+                        >
+                          {{ variant.title -}}
+                          {%- unless variant.available %} · Sold out{% endunless %}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                  </article>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            <button
+              type="button"
+              class="fbt-arrow"
+              data-fbt-scroll="next"
+              data-fbt-target="trio-2"
+              aria-label="Scroll right"
+            >
+              ›
+            </button>
+          </div>
+          <div class="fbt-track"><div class="fbt-thumb" data-fbt-thumb="trio-2"></div></div>
+
+          <div class="fbt-shade" data-fbt-shade-block="trio-2">
+            <div class="fbt-shade__label">Shade</div>
+            <div class="fbt-shade__row" data-fbt-shade-row="trio-2"></div>
+            <div class="fbt-shade__hint" data-fbt-shade-hint>Select a shade</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fbt-summary">
+        <div class="fbt-summary__prices">
+          <span class="fbt-summary__total" data-fbt-total>{{ fbt_main_variant.price | money }}</span>
+          <span class="fbt-summary__strike" data-fbt-strike></span>
+        </div>
+        <button type="button" class="fbt-cta" data-fbt-cta disabled>Choose your pair</button>
+      </div>
+      <span class="fbt-summary__save" data-fbt-save></span>
+      <div class="fbt-status" data-fbt-status role="status" aria-live="polite"></div>
+    </div>
+
+    <script>
+      (function () {
+        var SHADE_PALETTE = ['#f3d9be', '#efc99f', '#dda66f', '#b88350', '#9d6a36', '#70461f', '#3e2816'];
+
+        document.querySelectorAll('[data-fbt-widget]').forEach(function (widget) {
+          if (widget.dataset.fbtReady) return;
+          widget.dataset.fbtReady = '1';
+
+          var currency = widget.dataset.currency || 'INR';
+          var mainVariantIdFallback = widget.dataset.mainVariantId;
+          var mainPrice = Number(widget.dataset.mainPrice || 0);
+          var discountPair = Number(widget.dataset.discountPair || 0);
+          var discountTrio = Number(widget.dataset.discountTrio || 0);
+
+          var optionInputs = Array.from(widget.querySelectorAll('[data-fbt-option-input]'));
+          var optionCards = Array.from(widget.querySelectorAll('[data-fbt-option-card]'));
+          var pickers = Array.from(widget.querySelectorAll('[data-fbt-picker]'));
+          var cta = widget.querySelector('[data-fbt-cta]');
+          var statusEl = widget.querySelector('[data-fbt-status]');
+          var totalEl = widget.querySelector('[data-fbt-total]');
+          var strikeEl = widget.querySelector('[data-fbt-strike]');
+          var saveEl = widget.querySelector('[data-fbt-save]');
+
+          function money(cents) {
+            try {
+              return new Intl.NumberFormat(undefined, {
+                style: 'currency',
+                currency: currency,
+                maximumFractionDigits: 0,
+              }).format(Number(cents || 0) / 100);
+            } catch (e) {
+              return '' + (Number(cents || 0) / 100).toFixed(0);
+            }
+          }
+
+          function setStatus(message, kind) {
+            statusEl.textContent = message || '';
+            statusEl.className = 'fbt-status' + (kind ? ' is-' + kind : '');
+          }
+
+          function activeOption() {
+            var checked = widget.querySelector('[data-fbt-option-input]:checked');
+            return checked ? checked.value : 'pair';
+          }
+
+          function getMainVariantId() {
+            var form = document.querySelector('form[action*="/cart/add"]');
+            var input = form && form.querySelector('select[name="id"], input[name="id"]');
+            var value = input && input.value;
+            return value || mainVariantIdFallback;
+          }
+
+          function rowCards(rowKey) {
+            var row = widget.querySelector('[data-fbt-row="' + rowKey + '"]');
+            return row ? Array.from(row.querySelectorAll('[data-fbt-card]')) : [];
+          }
+
+          function selectedCard(rowKey) {
+            return (
+              rowCards(rowKey).find(function (card) {
+                return card.classList.contains('is-selected');
+              }) || null
+            );
+          }
+
+          function cardVariant(card) {
+            var select = card && card.querySelector('[data-fbt-variant-select]');
+            if (!select) return null;
+            var option = select.options[select.selectedIndex];
+            if (!option) return null;
+            return {
+              id: option.value,
+              price: Number(option.getAttribute('data-price') || 0),
+              available: option.getAttribute('data-available') === 'true',
+              image: option.getAttribute('data-image') || '',
+            };
+          }
+
+          function refreshCardPrice(card) {
+            var variant = cardVariant(card);
+            var priceEl = card.querySelector('[data-fbt-card-price]');
+            var swatchEl = card.querySelector('[data-fbt-card-swatch]');
+            if (variant && priceEl) priceEl.textContent = money(variant.price);
+            if (variant && swatchEl) {
+              var idx = Array.prototype.indexOf.call(card.parentNode.children, card);
+              swatchEl.style.backgroundImage = variant.image ? 'url(' + variant.image + ')' : '';
+              swatchEl.style.backgroundColor = SHADE_PALETTE[idx % SHADE_PALETTE.length];
+            }
+          }
+
+          /* Build the shared "Shade" strip for a row from whichever card is
+             currently picked there, and show the picked shade's name.
+             Rebuilt fresh on every selection change. */
+          function renderShadeBlock(rowKey) {
+            var pickBlock = widget.querySelector('[data-fbt-pick="' + rowKey + '"]');
+            if (!pickBlock) return;
+            var nameEl = pickBlock.querySelector('[data-fbt-pick-name]');
+            var shadeBlock = pickBlock.querySelector('[data-fbt-shade-block]');
+            var shadeRow = pickBlock.querySelector('[data-fbt-shade-row]');
+            var hintEl = pickBlock.querySelector('[data-fbt-shade-hint]');
+            var card = selectedCard(rowKey);
+
+            if (!card) {
+              if (nameEl) nameEl.textContent = '';
+              if (shadeRow) shadeRow.innerHTML = '';
+              if (hintEl) hintEl.textContent = 'Select a shade';
+              if (shadeBlock) shadeBlock.classList.add('fbt-is-hidden');
+              return;
+            }
+
+            if (nameEl) nameEl.textContent = ' — ' + (card.dataset.fbtProductTitle || '');
+
+            var select = card.querySelector('[data-fbt-variant-select]');
+            if (!shadeRow || !select) return;
+            shadeRow.innerHTML = '';
+
+            if (select.options.length <= 1) {
+              if (shadeBlock) shadeBlock.classList.add('fbt-is-hidden');
+              return;
+            }
+            if (shadeBlock) shadeBlock.classList.remove('fbt-is-hidden');
+
+            var selectedOption = select.options[select.selectedIndex];
+            if (hintEl) hintEl.textContent = selectedOption ? selectedOption.textContent.trim() : 'Select a shade';
+
+            Array.prototype.forEach.call(select.options, function (option, index) {
+              var swatch = document.createElement('button');
+              swatch.type = 'button';
+              swatch.className = 'fbt-shade__swatch' + (option.selected ? ' is-selected' : '');
+              var image = option.getAttribute('data-image');
+              swatch.style.backgroundImage = image ? 'url(' + image + ')' : '';
+              swatch.style.backgroundColor = SHADE_PALETTE[index % SHADE_PALETTE.length];
+              swatch.title = option.textContent.trim();
+              swatch.setAttribute('aria-label', option.textContent.trim());
+              swatch.disabled = option.getAttribute('data-available') === 'false';
+
+              swatch.addEventListener('click', function () {
+                select.value = option.value;
+                shadeRow.querySelectorAll('.fbt-shade__swatch').forEach(function (item) {
+                  item.classList.remove('is-selected');
+                });
+                swatch.classList.add('is-selected');
+                if (hintEl) hintEl.textContent = option.textContent.trim();
+                refreshCardPrice(card);
+                recalc();
+              });
+
+              shadeRow.appendChild(swatch);
+            });
+          }
+
+          /* [ASSUMPTION-2] keep Pick 1 / Pick 2 distinct in the trio option */
+          function enforceDistinctTrio() {
+            var pick1 = selectedCard('trio-1');
+            var pick2 = selectedCard('trio-2');
+            var pick1Id = pick1 && pick1.dataset.fbtProductId;
+            var pick2Id = pick2 && pick2.dataset.fbtProductId;
+
+            rowCards('trio-2').forEach(function (card) {
+              var clash = pick1Id && card.dataset.fbtProductId === pick1Id;
+              card.classList.toggle('is-disabled', !!clash);
+              if (clash && card.classList.contains('is-selected')) card.classList.remove('is-selected');
+            });
+            rowCards('trio-1').forEach(function (card) {
+              var clash = pick2Id && card.dataset.fbtProductId === pick2Id;
+              card.classList.toggle('is-disabled', !!clash);
+              if (clash && card.classList.contains('is-selected')) card.classList.remove('is-selected');
+            });
+          }
+
+          function selectCard(card, rowKey) {
+            rowCards(rowKey).forEach(function (sibling) {
+              sibling.classList.toggle('is-selected', sibling === card);
+            });
+            if (rowKey === 'trio-1' || rowKey === 'trio-2') enforceDistinctTrio();
+            renderShadeBlock('trio-1');
+            renderShadeBlock('trio-2');
+            renderShadeBlock('pair-1');
+            recalc();
+          }
+
+          function recalc() {
+            var option = activeOption();
+            pickers.forEach(function (picker) {
+              picker.classList.toggle('fbt-is-hidden', picker.dataset.fbtPicker !== option);
+            });
+            optionCards.forEach(function (card) {
+              card.classList.toggle('is-selected', card.dataset.fbtOptionCard === option);
+            });
+
+            var addons = [];
+            var valid = true;
+            var missingMessage = '';
+
+            if (option === 'pair') {
+              var pairCard = selectedCard('pair-1');
+              var pairVariant = pairCard && cardVariant(pairCard);
+              if (!pairCard || !pairVariant || !pairVariant.available) {
+                valid = false;
+                missingMessage = 'Pick an available shade for your 2nd product.';
+              } else {
+                addons.push(pairVariant);
+              }
+              if (cta) cta.textContent = valid ? 'Add to cart' : 'Choose your pair';
+            } else {
+              var p1 = selectedCard('trio-1');
+              var p2 = selectedCard('trio-2');
+              var v1 = p1 && cardVariant(p1);
+              var v2 = p2 && cardVariant(p2);
+              if (!p1 || !v1 || !v1.available || !p2 || !v2 || !v2.available) {
+                valid = false;
+                missingMessage = 'Pick 2 different products (with an available shade each).';
+              } else {
+                addons.push(v1, v2);
+              }
+              if (cta) cta.textContent = valid ? 'Add to cart' : 'Choose 2 products';
+            }
+
+            var discountRate = option === 'pair' ? discountPair : discountTrio;
+            var subtotal =
+              mainPrice +
+              addons.reduce(function (sum, v) {
+                return sum + v.price;
+              }, 0);
+            var discountAmount = Math.round((subtotal * discountRate) / 100);
+            var total = subtotal - discountAmount;
+
+            if (totalEl) totalEl.textContent = money(total);
+            if (strikeEl) strikeEl.textContent = discountAmount > 0 ? money(subtotal) : '';
+            if (saveEl)
+              saveEl.textContent =
+                discountAmount > 0 ? 'You save ' + money(discountAmount) + ' (' + discountRate + '% off)' : '';
+
+            if (cta) cta.disabled = !valid;
+            setStatus(valid ? '' : missingMessage, valid ? '' : 'error');
+
+            return { valid: valid, addons: addons };
+          }
+
+          function wireRow(rowKey) {
+            var row = widget.querySelector('[data-fbt-row="' + rowKey + '"]');
+            var thumb = widget.querySelector('[data-fbt-thumb="' + rowKey + '"]');
+            if (!row) return;
+
+            function updateThumb() {
+              if (!thumb) return;
+              var track = thumb.parentElement;
+              var trackWidth = track.clientWidth;
+              var ratio = row.clientWidth / row.scrollWidth;
+              var thumbWidth = Math.max(trackWidth * Math.min(ratio, 1), 24);
+              var maxScroll = row.scrollWidth - row.clientWidth;
+              var progress = maxScroll > 0 ? row.scrollLeft / maxScroll : 0;
+              thumb.style.width = thumbWidth + 'px';
+              thumb.style.left = progress * (trackWidth - thumbWidth) + 'px';
+            }
+
+            row.addEventListener('scroll', updateThumb);
+            widget.querySelectorAll('[data-fbt-scroll][data-fbt-target="' + rowKey + '"]').forEach(function (button) {
+              button.addEventListener('click', function () {
+                var amount = row.clientWidth * 0.7 * (button.dataset.fbtScroll === 'prev' ? -1 : 1);
+                row.scrollBy({ left: amount, behavior: 'smooth' });
+              });
+            });
+
+            row.querySelectorAll('[data-fbt-card]').forEach(function (card) {
+              card.addEventListener('click', function () {
+                selectCard(card, rowKey);
+              });
+            });
+
+            var cardCount = row.querySelectorAll('[data-fbt-card]').length;
+            if (cardCount <= 1) {
+              widget.querySelectorAll('[data-fbt-scroll][data-fbt-target="' + rowKey + '"]').forEach(function (button) {
+                button.style.display = 'none';
+              });
+              if (thumb && thumb.parentElement) thumb.parentElement.style.display = 'none';
+            } else {
+              updateThumb();
+            }
+          }
+
+          ['pair-1', 'trio-1', 'trio-2'].forEach(wireRow);
+          renderShadeBlock('pair-1');
+          renderShadeBlock('trio-1');
+          renderShadeBlock('trio-2');
+
+          optionInputs.forEach(function (input) {
+            input.addEventListener('change', recalc);
+          });
+
+          if (cta) {
+            cta.addEventListener('click', function () {
+              var result = recalc();
+              if (!result.valid) return;
+
+              var mainId = getMainVariantId();
+              if (!mainId) {
+                setStatus('Could not find the selected product variant.', 'error');
+                return;
+              }
+
+              var bundleToken = 'fbt-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+              var sharedProps = { _fbt_bundle: bundleToken, _fbt_bundle_option: activeOption() };
+
+              var items = [
+                { id: Number(mainId), quantity: 1, properties: Object.assign({}, sharedProps, { _fbt_role: 'main' }) },
+              ];
+              result.addons.forEach(function (variant, index) {
+                items.push({
+                  id: Number(variant.id),
+                  quantity: 1,
+                  properties: Object.assign({}, sharedProps, { _fbt_role: 'addon-' + (index + 1) }),
+                });
+              });
+
+              cta.disabled = true;
+              var originalLabel = cta.textContent;
+              cta.textContent = 'Adding...';
+              setStatus('Adding your bundle...', '');
+
+              var shopRoot = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+
+              fetch(shopRoot + 'cart/add.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body: JSON.stringify({ items: items }),
+              })
+                .then(function (response) {
+                  return response.json().then(function (data) {
+                    if (!response.ok) throw new Error(data.description || data.message || 'Unable to add bundle.');
+                    return data;
+                  });
+                })
+                .then(function (data) {
+                  setStatus('Bundle added to cart.', 'success');
+                  ['cart:refresh', 'cart:updated', 'cart:build', 'cart-drawer:updated'].forEach(function (name) {
+                    document.dispatchEvent(new CustomEvent(name, { detail: data }));
+                  });
+                  var trigger = document.querySelector(
+                    '.js-drawer-open-cart, #cart-icon-bubble, .header__icon--cart, [data-cart-drawer-trigger], [data-fastrr-cart]'
+                  );
+                  if (trigger) {
+                    trigger.click();
+                  } else {
+                    document.dispatchEvent(new CustomEvent('cart:open'));
+                  }
+                })
+                .catch(function (error) {
+                  setStatus(error.message || 'Something went wrong. Please try again.', 'error');
+                })
+                .finally(function () {
+                  window.setTimeout(function () {
+                    cta.textContent = originalLabel;
+                    recalc();
+                  }, 1200);
+                });
+            });
+          }
+
+          recalc();
+        });
+      })();
+    </script>
+  {%- endif -%}
+{%- endif -%}

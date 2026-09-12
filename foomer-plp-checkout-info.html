@@ -1,0 +1,98 @@
+<div class="plp-checkout-offer-note">
+  <div class="plp-checkout-offer-note__pulse"></div>
+  <div class="plp-checkout-offer-note__content">
+    <span class="plp-checkout-offer-note__label">Offer Applied at Checkout</span>
+    <p class="plp-checkout-offer-note__text">
+      End of Season Sale is auto-applied at checkout. Flat 20% OFF Sitewide for a limited time.
+    </p>
+  </div>
+</div>
+
+<style>
+  .plp-checkout-offer-note {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #b8e3c4;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #f4fff7 0%, #ebfff1 100%);
+    overflow: hidden;
+  }
+
+  .plp-checkout-offer-note__pulse {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #1d9b4f;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 rgba(29, 155, 79, 0.4);
+    animation: plp-offer-pulse 1.8s infinite;
+  }
+
+  .plp-checkout-offer-note__pulse::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(29, 155, 79, 0.24);
+  }
+
+  .plp-checkout-offer-note__content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .plp-checkout-offer-note__label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #11753a;
+  }
+
+  .plp-checkout-offer-note__text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+    font-weight: 600;
+    color: #1b4d2b;
+  }
+
+  @keyframes plp-offer-pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(29, 155, 79, 0.35);
+    }
+    70% {
+      transform: scale(1.08);
+      box-shadow: 0 0 0 10px rgba(29, 155, 79, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(29, 155, 79, 0);
+    }
+  }
+
+  @media (max-width: 749px) {
+    .plp-checkout-offer-note {
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 12px;
+    }
+
+    .plp-checkout-offer-note__label {
+      font-size: 9px;
+    }
+
+    .plp-checkout-offer-note__text {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  }
+</style>

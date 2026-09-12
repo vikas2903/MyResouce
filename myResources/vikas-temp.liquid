@@ -1,0 +1,481 @@
+{% unless template contains 'index' %}
+<style>
+    @font-face {
+        font-family: 'Cinzel Custom';
+        src: url('https://cdn.shopify.com/s/files/1/0818/7107/7663/files/Cinzel-VariableFont_wght.ttf') format('truetype');
+        font-weight: 400 900;
+        font-style: normal;
+    }
+
+    :root {
+        --bg-dark: #220003;
+        --bg-mid: #4b0006;
+        --bg-glow: #7d000b;
+        --gold: #f4ddb0;
+        --gold-strong: #ffe5a2;
+        --gold-line: rgba(244, 221, 176, 0.78);
+        --strike: #c93d33;
+        --timer-bg: rgba(22, 0, 3, 0.72);
+        --fonts: 'Cinzel Custom';
+    }
+
+    .suddati-offer-widget,
+    .suddati-offer-widget * {
+        box-sizing: border-box;
+    }
+
+    .suddati-offer-widget {
+        width: 100%;
+    }
+
+    .suddati-offer-widget .plp-timer-wrapper {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        max-width: 760px;
+        margin: 0 auto;
+        min-height: auto;
+        padding: 28px 16px 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: url('https://cdn.shopify.com/s/files/1/0818/7107/7663/files/Bg.png?v=1778589583');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .suddati-offer-widget .offer-card {
+        position: relative;
+        z-index: 1;
+        width: min(100%, 620px);
+        text-align: center;
+        text-transform: uppercase;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    }
+
+    .suddati-offer-widget .offer-block {
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .suddati-offer-widget .offer-block + .offer-block {
+        margin-top: 24px;
+    }
+
+    .suddati-offer-widget .offer-title {
+        margin: 0;
+        color: var(--gold);
+        font-weight: 400;
+        font-size: clamp(1.45rem, 4vw, 3.8rem);
+        letter-spacing: 0.05em;
+        line-height: 1.1;
+    }
+
+    .suddati-offer-widget .offer-title.tight {
+        letter-spacing: 0.03em;
+        font-family: var(--fonts);
+    }
+
+    .suddati-offer-widget .offer-subtext {
+        margin: 8px 0 0;
+        color: var(--gold-strong);
+        font-size: clamp(0.95rem, 2.3vw, 2.6rem);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        line-height: 1.1;
+        font-family: var(--fonts);
+    }
+
+    .suddati-offer-widget .divider {
+        width: min(78%, 360px);
+        height: 2px;
+        margin: 18px auto 0;
+        background: linear-gradient(90deg, transparent, var(--gold-line) 18%, var(--gold-line) 82%, transparent);
+    }
+
+    .suddati-offer-widget .timer-panel {
+        margin: 26px auto 0;
+        width: min(100%, 440px);
+        padding: 12px 10px 14px;
+        border: 1px solid rgba(244, 221, 176, 0.34);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(2px);
+        border-radius: 6px;
+    }
+
+    .suddati-offer-widget .plp-timer-title {
+        margin: 0 0 10px;
+        color: var(--gold-strong);
+        font-size: clamp(0.72rem, 1.5vw, 1.2rem);
+        letter-spacing: 0.18em;
+        line-height: 1.2;
+        font-family: var(--fonts);
+    }
+
+    .suddati-offer-widget .timer-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .suddati-offer-widget .timer-unit {
+        min-width: 62px;
+    }
+
+    .suddati-offer-widget .timer-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        padding: 6px 8px;
+        border: 1px solid rgba(255, 229, 162, 0.42);
+        background: transparent;
+        color: var(--gold-strong);
+        font-size: clamp(1.2rem, 3vw, 3rem);
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: 0.06em;
+        border-radius: 4px;
+        font-family: var(--fonts);
+    }
+
+    .suddati-offer-widget .timer-label {
+        margin-top: 6px;
+        color: rgba(244, 221, 176, 0.92);
+        font-size: 0.9rem;
+        letter-spacing: 0.14em;
+        font-family: var(--fonts);
+    }
+
+    .suddati-offer-widget .timer-separator {
+        margin-top: -10px;
+        color: var(--gold-strong);
+        font-size: clamp(1rem, 2vw, 1.45rem);
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    @media (max-width: 767px) {
+        .suddati-offer-widget .plp-timer-wrapper {
+            padding: 22px 12px 18px;
+        }
+
+        .suddati-offer-widget .offer-block + .offer-block {
+            margin-top: 20px;
+        }
+
+        .suddati-offer-widget .divider {
+            width: min(86%, 280px);
+            margin-top: 14px;
+        }
+
+        .suddati-offer-widget .timer-panel {
+            margin-top: 22px;
+            padding: 10px 8px 12px;
+        }
+
+        .suddati-offer-widget .timer-wrapper {
+            gap: 5px;
+        }
+
+        .suddati-offer-widget .timer-unit {
+            min-width: 56px;
+        }
+
+        .suddati-offer-widget .timer-box {
+            min-height: 42px;
+            font-size: 20px;
+        }
+
+        .suddati-offer-widget .timer-label {
+            font-size: 0.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .suddati-offer-widget .timer-separator {
+            font-size: 0.95rem;
+            margin-top: -8px;
+        }
+
+        .suddati-offer-widget .offer-title.tight {
+            font-size: 28px;
+        }
+
+        .suddati-offer-widget .offer-subtext {
+            font-size: 18px;
+        }
+
+        .suddati-offer-widget .plp-timer-title {
+            font-size: 16px;
+        }
+
+        .suddati-offer-widget .timer-label {
+            font-size: 14px;
+        }
+    }
+</style>
+
+<div class="suddati-offer-widget" data-ist-countdown>
+    <div class="plp-timer-wrapper">
+        <div class="offer-card">
+            <div class="offer-block">
+                <h2 class="offer-title tight">Buy 2 Get 1 Free</h2>
+                <div class="offer-subtext">Limited Time Offer</div>
+                <div class="divider"></div>
+            </div>
+
+            <div class="timer-panel">
+                <div class="plp-timer-title">Sale Ends In</div>
+                <div class="timer-wrapper">
+                    <div class="timer-unit">
+                        <div class="timer-box" data-hour>00</div>
+                        <div class="timer-label">Hours</div>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-unit">
+                        <div class="timer-box" data-minute>00</div>
+                        <div class="timer-label">Minutes</div>
+                    </div>
+                    <div class="timer-separator">:</div>
+                    <div class="timer-unit">
+                        <div class="timer-box" data-second>00</div>
+                        <div class="timer-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endunless %}
+
+{% if template contains 'index' %}
+<style>
+    @font-face {
+        font-family: 'Cinzel Custom';
+        src: url('https://cdn.shopify.com/s/files/1/0818/7107/7663/files/Cinzel-VariableFont_wght.ttf') format('truetype');
+        font-weight: 400 900;
+        font-style: normal;
+    }
+
+    .suddati-home-timer,
+    .suddati-home-timer * {
+        box-sizing: border-box;
+    }
+
+    .suddati-home-timer {
+        width: 100%;
+        font-family: 'Cinzel Custom', serif;
+    }
+
+    .suddati-home-timer .timer-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        width: 100%;
+        padding: 14px 18px;
+        border: 1px solid rgba(244, 221, 176, 0.32);
+        border-radius: 6px;
+        background:
+            linear-gradient(180deg, rgba(31, 0, 2, 0.28), rgba(31, 0, 2, 0.42)),
+            url('https://cdn.shopify.com/s/files/1/0818/7107/7663/files/Bg.png?v=1778589583');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+        color: #f4ddb0;
+    }
+
+    .suddati-home-timer .timer-text {
+        margin: 0;
+        color: #ffe5a2;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+        flex: 0 0 auto;
+    }
+
+    .suddati-home-timer .timer-values {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 6px;
+        white-space: nowrap;
+        flex: 0 0 auto;
+    }
+
+    .suddati-home-timer .timer-unit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .suddati-home-timer .timer-box {
+        min-width: 48px;
+        padding: 8px 7px;
+        border: 1px solid rgba(255, 229, 162, 0.36);
+        border-radius: 6px;
+        background: rgba(255, 229, 162, 0.1);
+        color: #ffe5a2;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+    }
+
+    .suddati-home-timer .timer-label {
+        color: #f4ddb0;
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .suddati-home-timer .timer-separator {
+        color: #ffe5a2;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    @media (max-width: 767px) {
+        .suddati-home-timer .timer-bar {
+            padding: 8px 10px;
+            gap: 12px;
+            border-radius: 0;
+        }
+
+        .suddati-home-timer .timer-text {
+            font-size: 16px;
+        }
+
+        .suddati-home-timer .timer-box {
+            font-size: 18px;
+            min-width: 42px;
+            padding: 6px;
+        }
+
+        .suddati-home-timer .timer-label {
+            font-size: 9px;
+            letter-spacing: 0.08em;
+        }
+    }
+</style>
+
+<div class="suddati-home-timer" data-ist-countdown>
+    <div class="timer-bar">
+        <p class="timer-text">Unlocking in:</p>
+        <div class="timer-values" aria-label="Countdown timer">
+            <span class="timer-unit">
+                <span class="timer-box" data-hour>00</span>
+                <span class="timer-label">HRS</span>
+            </span>
+            <span class="timer-separator">:</span>
+            <span class="timer-unit">
+                <span class="timer-box" data-minute>00</span>
+                <span class="timer-label">MIN</span>
+            </span>
+            <span class="timer-separator">:</span>
+            <span class="timer-unit">
+                <span class="timer-box" data-second>00</span>
+                <span class="timer-label">SEC</span>
+            </span>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    (function () {
+        function updateCountdown(widget) {
+            const hourEl = widget.querySelector('[data-hour]');
+            const minuteEl = widget.querySelector('[data-minute]');
+            const secondEl = widget.querySelector('[data-second]');
+
+            if (!hourEl || !minuteEl || !secondEl) {
+                return;
+            }
+
+            const now = new Date();
+            const nowIST = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+            const nextMidnightIST = new Date(nowIST);
+            nextMidnightIST.setHours(24, 0, 0, 0);
+
+            const diff = nextMidnightIST.getTime() - nowIST.getTime();
+
+            if (diff <= 0) {
+                hourEl.textContent = '00';
+                minuteEl.textContent = '00';
+                secondEl.textContent = '00';
+                return;
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            hourEl.textContent = String(hours).padStart(2, '0');
+            minuteEl.textContent = String(minutes).padStart(2, '0');
+            secondEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        function initCountdown(widget) {
+            if (!widget || widget.dataset.countdownReady === 'true') {
+                return;
+            }
+
+            widget.dataset.countdownReady = 'true';
+            updateCountdown(widget);
+
+            const timerId = window.setInterval(function () {
+                if (!document.body.contains(widget)) {
+                    window.clearInterval(timerId);
+                    return;
+                }
+
+                updateCountdown(widget);
+            }, 1000);
+
+            widget._countdownTimerId = timerId;
+        }
+
+        function initAllCountdowns(root) {
+            const scope = root && root.querySelectorAll ? root : document;
+            scope.querySelectorAll('[data-ist-countdown]').forEach(initCountdown);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                initAllCountdowns(document);
+            });
+        } else {
+            initAllCountdowns(document);
+        }
+
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                mutation.addedNodes.forEach(function (node) {
+                    if (node.nodeType !== 1) {
+                        return;
+                    }
+
+                    if (node.matches && node.matches('[data-ist-countdown]')) {
+                        initCountdown(node);
+                    } else {
+                        initAllCountdowns(node);
+                    }
+                });
+            });
+        });
+
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+    })();
+</script>

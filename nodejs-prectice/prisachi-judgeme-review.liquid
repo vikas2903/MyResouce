@@ -1,0 +1,132 @@
+{% assign judgeme_badge = product.metafields.judgeme.badge %}
+{% assign has_zero_reviews = false %}
+
+{% if judgeme_badge contains 'data-number-of-reviews="0"' or judgeme_badge contains "data-number-of-reviews='0'" %}
+  {% assign has_zero_reviews = true %}
+{% endif %}
+
+{% if product != blank and judgeme_badge != blank and has_zero_reviews == false %}
+  <div class="vs-custom-judgeme-review">
+    {{ judgeme_badge }}
+  </div>
+{% endif %}
+
+<style>
+  .vs-custom-judgeme-review,
+  .vs-custom-judgeme-review .jdgm-prev-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-family: inherit;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge__stars {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+    color: #ffa900 !important;
+    order: 1;
+  }
+
+  .vs-custom-judgeme-review .jdgm-star {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    flex: 0 0 16px;
+    font-size: 16px;
+    color: #ffa900 !important;
+    opacity: 1 !important;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge__text,
+  .vs-custom-judgeme-review [data-rating-display]::after {
+    font-size: 15px;
+    font-weight: 500;
+    color: #4b4b55;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge {
+    visibility: visible !important;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge[data-rating-display]::after {
+    content: attr(data-rating-display);
+    display: inline-block;
+    order: 2;
+    margin-left: 2px;
+    color: #000006ff;
+    font-weight: 800;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge__text {
+    order: 3;
+    margin: 0 !important;
+    color: #5b5b63 !important;
+    text-transform: capitalize;
+    font-size: 16px !important;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge__text::before {
+    content: "";
+    display: inline-block;
+    width: 25px;
+    height: 16px;
+    margin: 0;
+    vertical-align: middle;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 1px 14px, 16px 16px;
+    background-position: left center, right center;
+    background-image:
+      linear-gradient(#d9d9df, #d9d9df),
+      url("https://cdn.shopify.com/s/files/1/0796/1814/6613/files/tick_icon_c18d7cf1-3aa0-4bd3-a2c3-250bf6868f96.png?v=1780469752");
+  }
+
+  @media screen and (max-width: 749px) {
+    .vs-custom-judgeme-review,
+    .vs-custom-judgeme-review .jdgm-prev-badge {
+      gap: 6px !important;
+      white-space: nowrap;
+    }
+
+    .vs-custom-judgeme-review .jdgm-star {
+      width: 16px;
+      height: 16px;
+      flex-basis: 16px;
+      font-size: 16px;
+    }
+
+    .vs-custom-judgeme-review .jdgm-prev-badge__text,
+    .vs-custom-judgeme-review [data-rating-display]::after {
+      font-size: 16px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var badges = document.querySelectorAll('.vs-custom-judgeme-review .jdgm-prev-badge[data-average-rating]');
+    badges.forEach(function (badge) {
+      var rawRating = parseFloat(badge.getAttribute('data-average-rating') || '0');
+      var reviewCount = parseInt(
+        badge.getAttribute('data-number-of-reviews') ||
+        badge.getAttribute('data-review-count') ||
+        '0',
+        10
+      );
+
+      if (!Number.isNaN(reviewCount) && reviewCount === 0) {
+        var wrapper = badge.closest('.vs-custom-judgeme-review');
+        if (wrapper) {
+          wrapper.style.display = 'none';
+        }
+        return;
+      }
+
+      if (!Number.isNaN(rawRating)) {
+        badge.setAttribute('data-rating-display', rawRating.toFixed(1));
+      }
+    });
+  })();
+</script>

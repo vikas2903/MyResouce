@@ -1,0 +1,157 @@
+
+<div class="offer-banner" data-offer-banner>
+  <div class="offer-banner__inner">
+    <div class="offer-banner__text">
+      <span class="offer-banner__headline">Get 10% off your first order</span>
+      <span class="offer-banner__sub">Use code <strong class="offer-banner__code-text">RESHAFIRST</strong> at checkout.</span>
+    </div>
+    <button
+      class="offer-banner__copy"
+      type="button"
+      data-offer-copy
+      data-code="RESHAFIRST"
+    >
+      <span class="offer-banner__copy-label">Copy code</span>
+      <span class="offer-banner__copy-done">Copied</span>
+    </button>
+  </div>
+</div>
+
+<style>
+.offer-banner {
+  width: 100%;
+  background: #f8f4ec;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+}
+
+.offer-banner__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.offer-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.offer-banner__headline {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #222;
+}
+
+.offer-banner__sub {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4b433a;
+}
+
+.offer-banner__code-text {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px dashed rgba(0,0,0,0.2);
+}
+
+.offer-banner__copy {
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 130px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.offer-banner__copy-label,
+.offer-banner__copy-done {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.offer-banner__copy-done {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.offer-banner__copy.is-copied .offer-banner__copy-label {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+.offer-banner__copy.is-copied .offer-banner__copy-done {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.offer-banner__copy:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 749px) {
+  .offer-banner__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .offer-banner__copy {
+    width: 100%;
+  }
+}
+</style>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-offer-banner]');
+    if (!root) return;
+    var btn = root.querySelector('[data-offer-copy]');
+    if (!btn) return;
+
+    var code = btn.getAttribute('data-code') || 'RESHAFIRST';
+
+    btn.addEventListener('click', function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(showCopied, showCopied);
+      } else {
+        // Fallback for older browsers
+        var temp = document.createElement('textarea');
+        temp.value = code;
+        temp.setAttribute('readonly', '');
+        temp.style.position = 'absolute';
+        temp.style.left = '-9999px';
+        document.body.appendChild(temp);
+        temp.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(temp);
+        showCopied();
+      }
+    });
+
+    function showCopied() {
+      btn.classList.add('is-copied');
+      setTimeout(function () {
+        btn.classList.remove('is-copied');
+      }, 1500);
+    }
+  })();
+</script>

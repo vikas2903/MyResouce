@@ -1,0 +1,465 @@
+{% comment %} 
+<div class="msg-slider"> 
+  {% if cart.item_count == 1 or cart.item_count == 2 %}
+    {% if cart.item_count == 1 %}
+        <div class="msg">Yay! You’ve availed 5% off</div>
+    {% elsif cart.item_count == 2 %}
+         <div class="msg">ADD 1 MORE TO UNLOCK THE OFFER</div>
+    {% endif %}
+    <div class="msg">BUY 2 GET 1 FREE</div>
+  {% elsif cart.item_count >= 3 and cart.item_count <= 6 %}
+    <div class="msg">BUY 3 GET 2 FREE</div>
+     {% if cart.item_count == 3 %}
+        <div class="msg">ADD 2 MORE TO UNLOCK THE OFFER</div>
+    {% elsif cart.item_count == 4 %}
+         <div class="msg">ADD 1 MORE TO UNLOCK THE OFFER</div>
+    {% elsif cart.item_count >= 5 %}
+         <div class="msg">CONGRATULATIONS 🎉🎉</div>
+    {% endif %}
+  {% endif %}
+</div>
+
+<style>
+.msg-slider {
+  position: relative;
+  width: 100%;
+  padding: 15px 10px;
+  overflow: hidden;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  color: #fff;
+}
+
+/* All messages stacked */
+.msg-slider .msg {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  opacity: 0;
+  animation: fadeSlide 6s infinite;
+
+  @media(max-width: 768px){
+    font-size: 13px;
+  }
+}
+
+/* Each message starts at different time */
+.msg-slider .msg:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.msg-slider .msg:nth-child(2) {
+  animation-delay: 3s;
+}
+
+/* Keyframes for fade in/out */
+@keyframes fadeSlide {
+  0% { opacity: 0; }
+  10% { opacity: 1; }   /* fade in */
+  40% { opacity: 1; }   /* stay visible */
+  50% { opacity: 0; }   /* fade out */
+  100% { opacity: 0; }
+}
+
+</style>
+ {% endcomment %}
+
+ <style>
+  .message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    background: #000;
+    color: #fff;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+  </style>
+
+
+{% comment %} 
+ <img style="width: 100%; display: block; border-radius: 6px; margin-bottom: 10px; border: 1px solid #eee; padding: 3px;" src="https://cdn.shopify.com/s/files/1/0830/2719/8240/files/WhatsApp_Image_2026-06-19_at_16.53.38.jpg?v=1781868786">
+
+<div class="container-r">
+    <div class="message">Offer will be automatically applied at checkout.</div>
+  </div> {% endcomment %}
+
+
+
+  <style>
+  :root {
+    --brand-gold: #c6a56b;
+    --brand-gold-dark: #9f7b42;
+    --brand-gold-light: #f4ecdf;
+    --brand-gold-soft: #e8d5b2;
+    --brand-text-muted: #7f6740;
+  }
+
+  div#cart-progress-container1 {
+    text-align: center;
+    align-content: center;
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: sticky;
+    z-index: 1;
+    top: 4px;
+    border-radius: 0;
+
+    margin: 0px 10px 18px;
+    gap: 0px;
+  }
+
+  #cart-progress-bar1 {
+    display: block !important;
+    position: relative;
+    height: 6px;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+    background: linear-gradient(
+      90deg,
+      var(--brand-gold-dark),
+      var(--brand-gold),
+      #dec490
+    );
+    box-shadow: 0 2px 8px rgba(159, 123, 66, 0.18);
+  }
+
+  .pro-wrap {
+    height: 6px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(198, 165, 107, 0.18),
+      rgba(198, 165, 107, 0.1)
+    );
+    border: 0;
+    border-radius: 999px;
+    position: relative;
+    overflow: visible;
+    margin-top: 12px;
+  }
+
+  span.step-1,
+  span.step-2,
+  span.step-3 {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    top: -11px;
+    background: #ffffff;
+    padding: 5px;
+    border: 1px solid rgba(198, 165, 107, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(159, 123, 66, 0.12);
+  }
+
+  span.step-1 {
+    left: 33%;
+    transform: translateX(-50%);
+  }
+
+  span.step-2 {
+    left: 66%;
+    transform: translateX(-50%);
+  }
+
+  span.step-3 {
+    right: 0;
+  }
+
+  span.step-1 svg,
+  span.step-2 svg,
+  span.step-3 svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--brand-gold-dark);
+  }
+
+  .step-complete {
+    background: var(--brand-gold) !important;
+    border-color: var(--brand-gold-dark) !important;
+    box-shadow: 0 4px 10px rgba(159, 123, 66, 0.24) !important;
+  }
+
+  .step-complete svg {
+    stroke: #ffffff !important;
+  }
+
+  .progress-offer-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--brand-gold-dark);
+    text-align: center;
+    line-height: 1.2;
+    padding-bottom:4px;
+  }
+
+  p#progress-messagee1 {
+    text-align: center;
+    display: block;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--brand-text-muted);
+    letter-spacing: 0;
+    margin: 0;
+    line-height: 1.4;
+    text-transform: none;
+  }
+
+  @media (max-width: 768px) {
+    div#cart-progress-container1 {
+      gap: 0px;
+    }
+
+    .pro-wrap {
+      height: 6px;
+      margin-top: 10px;
+    }
+
+    #cart-progress-bar1 {
+      height: 6px;
+    }
+
+    span.step-1,
+    span.step-2,
+    span.step-3 {
+      width: 28px;
+      height: 28px;
+      top: -11px;
+      padding: 5px;
+    }
+
+    .progress-offer-title {
+      font-size: 14px;
+    }
+
+    p#progress-messagee1 {
+      font-size: 12px;
+      letter-spacing: 0;
+      margin: 0;
+    }
+  }
+</style>
+
+{% if false %}
+
+  {%- assign target_items = 3 -%}
+  {%- assign remaining_items = target_items | minus: cart.item_count -%}
+  {%- assign step1_filled = false -%}
+  {%- assign step2_filled = false -%}
+  {%- assign step3_filled = false -%}
+  {%- assign progress_width = 0 -%}
+  {%- assign progress_message = '' -%}
+
+  {%- if cart.item_count >= 1 -%}
+    {%- assign step1_filled = true -%}
+  {%- endif -%}
+
+  {%- if cart.item_count >= 2 -%}
+    {%- assign step2_filled = true -%}
+  {%- endif -%}
+
+  {%- if cart.item_count >= 3 -%}
+    {%- assign step3_filled = true -%}
+  {%- endif -%}
+
+  {%- if cart.item_count >= target_items -%}
+    {%- assign progress_width = 100 -%}
+    {%- assign progress_message = 'Congratulations! Your Buy 2 Get 1 offer is unlocked.' -%}
+  {%- elsif cart.item_count == 2 -%}
+    {%- assign progress_width = 66 -%}
+    {%- assign progress_message = 'Add 1 more item to get 1 free.' -%}
+  {%- elsif cart.item_count == 1 -%}
+    {%- assign progress_width = 33 -%}
+    {%- assign progress_message = 'Add 2 more items to unlock your free item.' -%}
+  {%- else -%}
+    {%- assign progress_width = 0 -%}
+    {%- assign progress_message = 'Add 3 items to activate the Buy 2 Get 1 offer.' -%}
+  {%- endif -%}
+
+  <div id="cart-progress-container1">
+    <p class="progress-offer-title">Buy 2, Get 1 Free</p>
+    <p id="progress-messagee1">{{ progress_message }}</p>
+
+    <div class="pro-wrap">
+      <div
+        id="cart-progress-bar1"
+        style="width: {{ progress_width }}%;">
+      </div>
+
+      <span class="step-1 {% if step1_filled %}step-complete{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+      </span>
+
+      <span class="step-2 {% if step2_filled %}step-complete{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+      </span>
+
+      <span class="step-3 {% if step3_filled %}step-complete{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+      </span>
+    </div>
+  </div>
+
+{% endif %}
+
+{%- comment -%} Tag-based Buy 2 offers {%- endcomment -%}
+{%- assign lucky_1299_count = 0 -%}
+{%- assign lucky_1999_count = 0 -%}
+{%- for item in cart.items -%}
+  {%- if item.product.tags contains 'Lucky1299' -%}
+    {%- assign lucky_1299_count = lucky_1299_count | plus: item.quantity -%}
+  {%- endif -%}
+  {%- if item.product.tags contains 'Lucky1999' -%}
+    {%- assign lucky_1999_count = lucky_1999_count | plus: item.quantity -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<div class="lucky-offers-root" data-lucky-1299-count="{{ lucky_1299_count }}" data-lucky-1999-count="{{ lucky_1999_count }}"></div>
+
+<style>
+  .lucky-offer-progress { margin: 0 10px 18px; text-align: center; }
+  .lucky-offer-progress__title { color: var(--brand-gold-dark, #9f7b42); font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+  .lucky-offer-progress__message { color: var(--brand-text-muted, #7f6740); font-size: 13px; font-weight: 500; margin: 0; }
+  .lucky-offer-progress__track { background: rgba(198,165,107,.18); border-radius: 999px; height: 6px; margin-top: 12px; position: relative; }
+  .lucky-offer-progress__fill { background: linear-gradient(90deg, #9f7b42, #c6a56b, #dec490); border-radius: 999px; height: 6px; transition: width .4s ease; }
+  .lucky-offer-progress__step { align-items: center; background: #fff; border: 1px solid rgba(198,165,107,.35); border-radius: 50%; box-shadow: 0 2px 6px rgba(159,123,66,.12); color: #9f7b42; display: flex; font-size: 12px; font-weight: 700; height: 28px; justify-content: center; position: absolute; top: -11px; width: 28px; }
+  .lucky-offer-progress__step--one { left: 50%; transform: translateX(-50%); }
+  .lucky-offer-progress__step--two { right: 0; }
+  .lucky-offer-progress__step.is-complete { background: #c6a56b; border-color: #9f7b42; color: #fff; }
+</style>
+
+<script>
+  (function () {
+    const offers = [
+      { tag: 'Lucky1299', price: '₹1,299' },
+      { tag: 'Lucky1999', price: '₹1,999' }
+    ];
+    const productTags = new Map();
+
+    function offerMarkup(offer, quantity) {
+      if (!quantity) return '';
+      const unlocked = quantity >= 2;
+      const progress = unlocked ? 100 : 50;
+      const message = unlocked
+        ? `Congratulations! Buy 2 at ${offer.price} is unlocked.`
+        : `Add 1 more eligible product to unlock Buy 2 at ${offer.price}.`;
+
+      return `<div class="lucky-offer-progress">
+        <p class="lucky-offer-progress__title">Buy 2 at ${offer.price}</p>
+        <p class="lucky-offer-progress__message">${message}</p>
+        <div class="lucky-offer-progress__track">
+          <div class="lucky-offer-progress__fill" style="width:${progress}%"></div>
+          <span class="lucky-offer-progress__step lucky-offer-progress__step--one is-complete">1</span>
+          <span class="lucky-offer-progress__step lucky-offer-progress__step--two ${unlocked ? 'is-complete' : ''}">2</span>
+        </div>
+      </div>`;
+    }
+
+    async function getProductTags(handle) {
+      if (!handle) return [];
+      if (productTags.has(handle)) return productTags.get(handle);
+      try {
+        const response = await fetch(`/products/${encodeURIComponent(handle)}.js`);
+        const product = await response.json();
+        const tags = Array.isArray(product.tags) ? product.tags : String(product.tags || '').split(',').map(tag => tag.trim());
+        productTags.set(handle, tags);
+        return tags;
+      } catch (error) {
+        return [];
+      }
+    }
+
+    async function refreshLuckyOffers() {
+      const root = document.querySelector('.lucky-offers-root');
+      if (!root) return;
+      const initialCounts = {
+        Lucky1299: Number(root.dataset.lucky1299Count || 0),
+        Lucky1999: Number(root.dataset.lucky1999Count || 0)
+      };
+      root.innerHTML = offers.map(offer => offerMarkup(offer, initialCounts[offer.tag])).join('');
+      try {
+        const response = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
+        const cart = await response.json();
+        const counts = { Lucky1299: 0, Lucky1999: 0 };
+
+        await Promise.all(cart.items.map(async item => {
+          const tags = await getProductTags(item.handle);
+          offers.forEach(offer => {
+            if (tags.includes(offer.tag)) counts[offer.tag] += item.quantity;
+          });
+        }));
+
+        root.innerHTML = offers.map(offer => offerMarkup(offer, counts[offer.tag])).join('');
+      } catch (error) {
+        // Keep the Liquid-rendered values visible if the cart refresh fails.
+      }
+    }
+
+    const triggerCartUpdate = () => setTimeout(refreshLuckyOffers, 150);
+
+    // Watch every Shopify cart API request so the progress bars update even
+    // when the cart drawer is updated by an app or custom theme script.
+    if (!window.__luckyOfferProgressPatched) {
+      window.__luckyOfferProgressPatched = true;
+      document.addEventListener('cart:updated', triggerCartUpdate);
+      document.addEventListener('cart:change', triggerCartUpdate);
+
+      const originalFetch = window.fetch;
+      window.fetch = async (...args) => {
+        const response = await originalFetch(...args);
+        try {
+          const url = typeof args[0] === 'string' ? args[0] : (args[0] && args[0].url) || '';
+          if (/\/cart\/(add|change|update)(?:\.js)?(?:[/?]|$)/i.test(url)) triggerCartUpdate();
+        } catch (error) {}
+        return response;
+      };
+
+      const originalOpen = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function (...args) {
+        this.addEventListener('load', () => {
+          const url = typeof args[1] === 'string' ? args[1] : '';
+          if (/\/cart\/(add|change|update)(?:\.js)?(?:[/?]|$)/i.test(url)) triggerCartUpdate();
+        });
+        return originalOpen.apply(this, args);
+      };
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', refreshLuckyOffers);
+    } else {
+      refreshLuckyOffers();
+    }
+  })();
+</script>

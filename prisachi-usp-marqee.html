@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prisachi USP Marquee</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --surface: #0f0f0f;
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.7);
+      --line: rgba(255, 255, 255, 0.18);
+    }
+
+
+    .vs-usp-section {
+      margin: 0;
+      background: #111111;
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      padding: 10px 0;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 42%),
+        var(--bg);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .usp-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 26s linear infinite;
+    }
+
+    .vs-usp-track {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 8px;
+    }
+
+    .vs-usp-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      white-space: nowrap;
+    }
+
+    .vs-usp-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .vs-usp-icon svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--text);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .usp-copy strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .usp-divider {
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 16px;
+      line-height: 1;
+      margin: 0 2px;
+    }
+
+    .offer-section {
+      padding: 18px 16px;
+      overflow: visible;
+    }
+
+    .offer-shell {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .offer-header {
+      display: grid;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .offer-header h2 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .offer-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .offer-type-switch,
+    .offer-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .offer-toggle,
+    .offer-choice {
+      position: relative;
+    }
+
+    .offer-toggle input,
+    .offer-choice input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .offer-toggle span,
+    .offer-choice span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .offer-choice span {
+      border-radius: 16px;
+      min-height: 58px;
+      padding: 14px 18px;
+      white-space: normal;
+      line-height: 1.35;
+    }
+
+    .offer-toggle input:checked + span,
+    .offer-choice input:checked + span {
+      background: #ffffff;
+      color: #111111;
+      border-color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .offer-summary {
+      display: grid;
+      gap: 10px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      text-align: center;
+    }
+
+    .offer-summary small {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .offer-summary strong {
+      font-size: 26px;
+      line-height: 1.2;
+    }
+
+    .offer-summary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .offer-group {
+      display: none;
+    }
+
+    .offer-group.is-active {
+      display: flex;
+    }
+
+    @keyframes marquee-scroll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .vs-usp-section {
+        padding: 8px 0;
+      }
+
+      .vs-usp-item {
+        padding: 0 10px;
+        gap: 6px;
+      }
+
+      .vs-usp-icon {
+        width: 30px;
+        height: 30px;
+      }
+
+      .usp-copy strong {
+        font-size: 12px;
+      }
+
+      .offer-header h2 {
+        font-size: 18px;
+      }
+
+      .offer-toggle span,
+      .offer-choice span {
+        width: 100%;
+      }
+
+      .offer-type-switch,
+      .offer-options {
+        flex-direction: column;
+      }
+
+      .offer-summary strong {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="vs-usp-section">
+
+    <div class="usp-marquee">
+      <div class="usp-track">
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 8v5l3 2"></path>
+              <path d="M21 12a9 9 0 1 1-2.64-6.36"></path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>24 Hour Dispatch</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z">
+              </path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>Cash On Delivery</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+              <path d="M3 4v5h5"></path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>7 Day Easy Exchange</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 7h11l3 4h4v6h-2"></path>
+              <path d="M8 17H6a2 2 0 1 1 0-4h2"></path>
+              <path d="M17 17h-5"></path>
+              <circle cx="8" cy="17" r="2"></circle>
+              <circle cx="17" cy="17" r="2"></circle>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>Free Shipping</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="3.2"></circle>
+              <path d="M5 19a7 7 0 0 1 14 0"></path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>Easy Customer Support</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M3 12h18"></path>
+              <path d="M12 3a15 15 0 0 1 0 18"></path>
+              <path d="M12 3a15 15 0 0 0 0 18"></path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>Worldwide Shipping</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+      </div>
+
+      <div class="usp-track" aria-hidden="true">
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 8v5l3 2"></path>
+              <path d="M21 12a9 9 0 1 1-2.64-6.36"></path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>24 Hour Dispatch</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z">
+              </path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>Cash On Delivery</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+              <path d="M3 4v5h5"></path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>7 Day Easy Exchange</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 7h11l3 4h4v6h-2"></path>
+              <path d="M8 17H6a2 2 0 1 1 0-4h2"></path>
+              <path d="M17 17h-5"></path>
+              <circle cx="8" cy="17" r="2"></circle>
+              <circle cx="17" cy="17" r="2"></circle>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>Free Shipping</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="3.2"></circle>
+              <path d="M5 19a7 7 0 0 1 14 0"></path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>Easy Customer Support</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+
+        <div class="vs-usp-item">
+          <div class="vs-usp-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M3 12h18"></path>
+              <path d="M12 3a15 15 0 0 1 0 18"></path>
+              <path d="M12 3a15 15 0 0 0 0 18"></path>
+            </svg>
+          </div>
+          <div class="usp-copy">
+            <strong>Worldwide Shipping</strong>
+          </div>
+        </div>
+        <span class="usp-divider">|</span>
+      </div>
+    </div>
+  </section>
+
+>
+
+</body>
+
+</html>

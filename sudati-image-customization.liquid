@@ -1,0 +1,196 @@
+{% liquid
+  assign current_product = product
+  assign trigger_tag_handle = section.settings.trigger_tag | strip | handleize
+  assign show_offer_tag = false
+
+  if section.settings.show_offer_tag and current_product and trigger_tag_handle != blank
+    for product_tag in current_product.tags
+      assign normalized_product_tag = product_tag | handleize
+      if normalized_product_tag == trigger_tag_handle
+        assign show_offer_tag = true
+        break
+      endif
+    endfor
+  endif
+%}
+
+<section
+  id="SudatiImage-{{ section.id }}"
+  class="sudati-image-section"
+  aria-label="{{ section.settings.section_label | escape }}"
+>
+  {% if section.settings.section_link != blank %}
+    <a href="{{ section.settings.section_link }}" class="sudati-image-link">
+  {% endif %}
+
+  <div class="sudati-image-media-wrap">
+    <picture>
+      {% if section.settings.mobile_image != blank %}
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ section.settings.mobile_image | image_url: width: 900 }}"
+        >
+      {% endif %}
+
+      {% if section.settings.desktop_image != blank %}
+        {{
+          section.settings.desktop_image
+          | image_url: width: 2200
+          | image_tag:
+            class: 'sudati-image-media',
+            loading: 'lazy',
+            widths: '600, 900, 1200, 1600, 2200',
+            sizes: '100vw',
+            alt: section.settings.image_alt
+        }}
+      {% elsif section.settings.mobile_image != blank %}
+        {{
+          section.settings.mobile_image
+          | image_url: width: 1200
+          | image_tag:
+            class: 'sudati-image-media',
+            loading: 'lazy',
+            widths: '400, 600, 900, 1200',
+            sizes: '100vw',
+            alt: section.settings.image_alt
+        }}
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'sudati-image-placeholder' }}
+      {% endif %}
+    </picture>
+
+    {% if show_offer_tag %}
+      <span class="sudati-image-offer-tag">
+        {{ section.settings.offer_text | default: 'Buy 3 At &#8377;1999' }}
+      </span>
+    {% endif %}
+  </div>
+
+  {% if section.settings.section_link != blank %}
+    </a>
+  {% endif %}
+</section>
+
+<style>
+  #SudatiImage-{{ section.id }} {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #SudatiImage-{{ section.id }} .sudati-image-link {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  #SudatiImage-{{ section.id }} .sudati-image-media-wrap {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #f7f4ef;
+  }
+
+  #SudatiImage-{{ section.id }} .sudati-image-media,
+  #SudatiImage-{{ section.id }} .sudati-image-placeholder {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  #SudatiImage-{{ section.id }} .sudati-image-placeholder {
+    min-height: 280px;
+    background: #f7f4ef;
+  }
+
+  #SudatiImage-{{ section.id }} .sudati-image-offer-tag {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(9, 49, 116, 0.92);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    box-shadow: 0 10px 24px rgba(9, 49, 116, 0.22);
+    z-index: 2;
+  }
+
+  @media screen and (max-width: 749px) {
+    #SudatiImage-{{ section.id }} .sudati-image-offer-tag {
+      top: 12px;
+      left: 12px;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    #SudatiImage-{{ section.id }} .sudati-image-placeholder {
+      min-height: 180px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Sudati Full Width Image",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section label",
+      "default": "Promotional image"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "default": "Promotional banner"
+    },
+    {
+      "type": "url",
+      "id": "section_link",
+      "label": "Image link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_offer_tag",
+      "label": "Show offer tag for matching products",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "trigger_tag",
+      "label": "Product tag to trigger offer",
+      "default": "buy-3-at-1999"
+    },
+    {
+      "type": "text",
+      "id": "offer_text",
+      "label": "Offer text",
+      "default": "Buy 3 At &#8377;1999"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sudati Full Width Image"
+    }
+  ]
+}
+{% endschema %}

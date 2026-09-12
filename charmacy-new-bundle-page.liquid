@@ -1,0 +1,303 @@
+{% comment %}
+Standalone page template: copy this file to templates/page.charmacy-bundle.liquid
+and assign the charmacy-bundle template to a Shopify page. No section required.
+Offer amounts are display values; configure matching automatic discounts in Shopify.
+The setting spray variant stays fixed at 48239750414593.
+{% endcomment %}
+{%- assign foundation_handles = 'cmc-matte-foundation,cmc-matte-foundation-60ml' | split: ',' -%}
+<div id="charmacy-bundle-page" class="charmacy-pair">
+  <div class="charmacy-pair__header">
+    <h1>Complete your bundle</h1>
+    <span class="charmacy-pair__badge">Bundle offer</span>
+  </div>
+  <p class="charmacy-pair__intro">Choose your foundation size and shade, paired with CMC S3 Setting and Fixing Spray.</p>
+  <div class="charmacy-pair__summary" aria-label="Your bundle offer" aria-live="polite">
+    <div><span class="charmacy-pair__eyebrow"> Matte Foundation  + Setting and Fixing Spray</span><h2>Better together. Better value.</h2><p>One foundation of your choice + one setting spray</p></div>
+    <div class="charmacy-pair__summary-pricing"><span>Bundle price</span><strong data-top-offer>{{ 199900 | money }}</strong><span>Separately <del data-regular-total></del></span><span class="charmacy-pair__saving" data-saving></span></div>
+  </div>
+  <div class="charmacy-pair__sizes" role="group" aria-label="Choose your foundation size">
+    <span class="charmacy-pair__size-label">Foundation size</span>
+    <button type="button" class="charmacy-pair__size charmacy-pair__size--active" data-size="0" aria-pressed="true">30 ML</button>
+    <button type="button" class="charmacy-pair__size" data-size="1" aria-pressed="false">60 ML</button>
+  </div>
+  <div class="charmacy-pair__products">
+    <div class="charmacy-pair__foundation">
+      {% for handle in foundation_handles %}
+        {% assign foundation = all_products[handle] %}
+        {% assign offer_price = 199900 %}
+        {% unless forloop.first %}{% assign offer_price = 249900 %}{% endunless %}
+        {% assign chosen = foundation.selected_or_first_available_variant %}
+        <div data-foundation="{{ forloop.index0 }}" {% unless forloop.first %}hidden{% endunless %}>
+          {% if foundation != blank %}
+            <div class="charmacy-pair__product">
+              {% assign foundation_image = chosen.featured_image | default: foundation.featured_image %}
+              <img class="charmacy-pair__image" data-product-image src="{{ foundation_image | image_url: width: 480 }}" alt="{{ foundation.title | escape }}" width="240" height="240">
+              <h3>{{ foundation.title | escape }}</h3>
+              <a class="charmacy-pair__details" href="https://charmacyworld.com/products/{{ handle }}">View product details <span aria-hidden="true">&rarr;</span></a>
+              <div class="charmacy-pair__prices">
+                <strong data-price>{{ chosen.price | money }}</strong>
+                <del data-compare {% unless chosen.compare_at_price > chosen.price %}hidden{% endunless %}>{{ chosen.compare_at_price | money }}</del>
+              </div>
+            </div>
+            <fieldset class="charmacy-pair__shades">
+              <legend>Choose your shade: <span data-shade-label>{{ chosen.title | escape }}</span></legend>
+              {% for variant in foundation.variants %}
+                {% assign shade_number = variant.option1 | remove: '#MF-' | plus: 0 %}
+                {% capture swatch_url %}https://cdn.shopify.com/s/files/1/0558/4584/7231/files/{{ shade_number }}_foun-60.jpg{% endcapture %}
+                {% if forloop.parentloop.first and shade_number == 8 %}
+                  {% assign swatch_url = 'https://charmacyworld.com/cdn/shop/files/mf-08_50x50.png' %}
+                {% elsif forloop.parentloop.first and shade_number == 10 %}
+                  {% assign swatch_url = 'https://charmacyworld.com/cdn/shop/files/mf-10_50x50.png' %}
+                {% endif %}
+                {% assign separate_total = variant.price | plus: 118700 %}
+                {% assign bundle_saving = separate_total | minus: offer_price | at_least: 0 %}
+                {% assign variant_image = variant.featured_image | default: foundation.featured_image %}
+                <label class="charmacy-pair__shade" title="{{ variant.title | escape }}{% unless variant.available %} - Sold out{% endunless %}">
+                  <input type="radio" name="bundle-shade-{{ foundation.id }}" value="{{ variant.id }}"
+                    data-total="{{ separate_total | money | escape }}" data-saving="{{ bundle_saving | money | escape }}" data-saving-amount="{{ bundle_saving }}"
+                    data-title="{{ variant.title | escape }}" data-price="{{ variant.price | money | escape }}"
+                    data-compare="{{ variant.compare_at_price | money | escape }}"
+                    data-has-compare="{% if variant.compare_at_price > variant.price %}true{% else %}false{% endif %}"
+                    data-image="{{ variant_image | image_url: width: 480 }}"
+                    {% if variant.id == chosen.id and variant.available %}checked{% endif %}
+                    {% unless variant.available %}disabled{% endunless %}>
+                  <span class="charmacy-pair__swatch" style="background-image:url('{{ swatch_url | strip | escape }}')"></span>
+                  <span class="charmacy-pair__shade-name">{{ variant.title | escape }}</span>
+                  {% unless variant.available %}<span class="charmacy-pair__sold-out">Sold out</span>{% endunless %}
+                </label>
+              {% endfor %}
+            </fieldset>
+          {% else %}
+            <p>This foundation is currently unavailable.</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <span class="charmacy-pair__plus" aria-label="plus">+</span>
+    <div class="charmacy-pair__product">
+      <img class="charmacy-pair__image" src="https://charmacyworld.com/cdn/shop/files/Setting_Spray_listing_1.jpg?v=1773904795&amp;width=480" alt="CMC S3 Setting and Fixing Spray" width="240" height="240">
+      <h3>CMC S3 Setting and Fixing Spray</h3>
+      <a class="charmacy-pair__details" href="https://charmacyworld.com/products/cmc-s3-setting-and-fixing-spray">View product details <span aria-hidden="true">&rarr;</span></a>
+      <div class="charmacy-pair__prices"><strong>&#8377;1,187</strong><del>&#8377;1,250</del></div>
+      <p class="charmacy-pair__fixed">Included with either size</p>
+    </div>
+  </div>
+  <div class="charmacy-pair__offer">
+    <div class="charmacy-pair__offer-price"><span>Both products for</span><strong data-offer>{{ 199900 | money }}</strong></div>
+    <button class="charmacy-pair__bundle-link" data-add type="button" disabled>Add bundle to cart &rarr;</button>
+  </div>
+  <p class="charmacy-pair__status" data-status role="status" aria-live="polite"></p>
+  <noscript>Please enable JavaScript to select your bundle and add it to cart.</noscript>
+</div>
+<style>
+  #charmacy-bundle-page, #charmacy-bundle-page * { box-sizing: border-box; }
+  #charmacy-bundle-page { width: calc(100% - 32px); max-width: 1120px; margin: 40px auto; padding: 32px; border: 1px solid #eadde2; border-radius: 20px; background: #fff; color: #292124; font-family: inherit; }
+  #charmacy-bundle-page [hidden] { display: none !important; }
+  #charmacy-bundle-page button { font: inherit; cursor: pointer; }
+  #charmacy-bundle-page .charmacy-pair__header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  #charmacy-bundle-page h1 { margin: 0; font-size: clamp(24px, 3vw, 36px); line-height: 1.2; color: inherit; letter-spacing: -.5px; }
+  #charmacy-bundle-page .charmacy-pair__badge { padding: 7px 12px; border-radius: 30px; background: #f9eef3; color: #68112f; font-size: 12px; white-space: nowrap; }
+  #charmacy-bundle-page .charmacy-pair__intro { margin: 12px 0 24px; font-size: 15px; line-height: 1.6; color: #71646a; }
+  #charmacy-bundle-page .charmacy-pair__summary { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; padding: 24px 28px; border-radius: 14px; background: #68112f; color: #fff; }
+  #charmacy-bundle-page .charmacy-pair__eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; }
+  #charmacy-bundle-page h2 { margin: 8px 0; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.3; color: inherit; }
+  #charmacy-bundle-page .charmacy-pair__summary p { margin: 0; font-size: 13px; line-height: 1.5; }
+  #charmacy-bundle-page .charmacy-pair__summary-pricing { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; font-size: 13px; }
+  #charmacy-bundle-page [data-top-offer] { font-size: 34px; line-height: 1.2; }
+  #charmacy-bundle-page .charmacy-pair__saving { background: #fff; color: #68112f; padding: 6px 10px; border-radius: 6px; font-weight: 700; }
+  #charmacy-bundle-page .charmacy-pair__sizes { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 26px 0 18px; }
+  #charmacy-bundle-page .charmacy-pair__size-label { margin-right: 10px; font-size: 15px; font-weight: 600; }
+  #charmacy-bundle-page .charmacy-pair__size { min-width: 94px; min-height: 46px; padding: 10px 18px; border: 1px solid #dac7cf; border-radius: 8px; background: #fff; color: #68112f; }
+  #charmacy-bundle-page .charmacy-pair__size--active { background: #68112f; border-color: #68112f; color: #fff; }
+  #charmacy-bundle-page .charmacy-pair__products { display: grid; grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr); gap: 16px; align-items: start; }
+  #charmacy-bundle-page .charmacy-pair__foundation, #charmacy-bundle-page .charmacy-pair__products > .charmacy-pair__product { min-width: 0; padding: 24px; border: 1px solid #eadde2; border-radius: 14px; }
+  #charmacy-bundle-page .charmacy-pair__product { text-align: center; }
+  #charmacy-bundle-page .charmacy-pair__image { display: block; width: 100%; height: 260px; object-fit: contain; margin-bottom: 18px; border-radius: 10px; }
+  #charmacy-bundle-page h3 { margin: 0 0 10px; font-size: 16px; line-height: 1.45; color: inherit; overflow-wrap: anywhere; }
+  #charmacy-bundle-page .charmacy-pair__prices { display: flex; justify-content: center; align-items: baseline; flex-wrap: wrap; gap: 8px; font-size: 18px; }
+  #charmacy-bundle-page .charmacy-pair__prices del { font-size: 14px; color: #84767d; }
+  #charmacy-bundle-page .charmacy-pair__plus { display: grid; place-items: center; width: 36px; height: 36px; margin-top: 138px; border-radius: 50%; background: #f9eef3; color: #68112f; font-size: 26px; }
+  #charmacy-bundle-page .charmacy-pair__shades { display: grid; grid-template-columns: repeat(auto-fit, minmax(56px, 1fr)); gap: 12px 6px; border: 0; border-top: 1px solid #eadde2; padding: 18px 0 0; margin: 22px 0 0; min-width: 0; }
+  #charmacy-bundle-page legend { padding: 0 8px 0 0; font-size: 14px; font-weight: 600; }
+  #charmacy-bundle-page .charmacy-pair__shade { position: relative; cursor: pointer; text-align: center; font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+  #charmacy-bundle-page .charmacy-pair__shade input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+  #charmacy-bundle-page .charmacy-pair__swatch { display: block; width: 40px; height: 40px; margin: 4px auto 8px; border-radius: 50%; background-size: cover; border: 3px solid white; box-shadow: 0 0 0 1px #dbcbd1; }
+  #charmacy-bundle-page input:checked + .charmacy-pair__swatch { box-shadow: 0 0 0 2px #68112f; }
+  #charmacy-bundle-page input:focus-visible + .charmacy-pair__swatch, #charmacy-bundle-page button:focus-visible { outline: 2px solid #68112f; outline-offset: 4px; }
+  #charmacy-bundle-page input:disabled ~ span { opacity: .45; text-decoration: line-through; }
+  #charmacy-bundle-page button:disabled { opacity: .5; cursor: not-allowed; }
+  #charmacy-bundle-page .charmacy-pair__fixed { display: inline-block; margin: 18px 0 0; padding: 8px 12px; border-radius: 6px; background: #f9eef3; font-size: 12px; color: #68112f; }
+  #charmacy-bundle-page .charmacy-pair__offer { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 24px; padding: 22px 24px; border-radius: 12px; background: #f9eef3; color: #68112f; }
+  #charmacy-bundle-page .charmacy-pair__offer-price { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+  #charmacy-bundle-page .charmacy-pair__offer-price strong { font-size: 28px; }
+  #charmacy-bundle-page .charmacy-pair__bundle-link { min-height: 50px; padding: 14px 28px; border: 0; border-radius: 8px; background: #68112f; color: #fff; font-weight: 600; }
+  #charmacy-bundle-page .charmacy-pair__bundle-link:hover { background: #4e0d23; }
+  #charmacy-bundle-page .charmacy-pair__status { margin: 12px 0 0; font-size: 14px; line-height: 1.5; }
+  #charmacy-bundle-page .charmacy-pair__status:empty { display: none; }
+  @media (max-width: 749px) {
+    #charmacy-bundle-page { padding: 20px; margin: 20px auto; }
+    #charmacy-bundle-page .charmacy-pair__products { gap: 10px; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr); }
+    #charmacy-bundle-page .charmacy-pair__foundation, #charmacy-bundle-page .charmacy-pair__products > .charmacy-pair__product { padding: 14px; }
+    #charmacy-bundle-page .charmacy-pair__image { height: 180px; }
+    #charmacy-bundle-page .charmacy-pair__plus { width: 28px; height: 28px; margin-top: 90px; }
+    #charmacy-bundle-page .charmacy-pair__summary { padding: 20px; }
+  }
+  @media (max-width: 540px) {
+    #charmacy-bundle-page { width: calc(100% - 24px); padding: 16px; border-radius: 14px; }
+    #charmacy-bundle-page .charmacy-pair__header { flex-wrap: wrap; gap: 10px; }
+    #charmacy-bundle-page .charmacy-pair__summary { grid-template-columns: 1fr; gap: 18px; }
+    #charmacy-bundle-page .charmacy-pair__summary-pricing { border-top: 1px solid #ffffff40; padding-top: 16px; }
+    #charmacy-bundle-page .charmacy-pair__products { grid-template-columns: minmax(0, 1fr); }
+    #charmacy-bundle-page .charmacy-pair__plus { margin: 0 auto; }
+    #charmacy-bundle-page .charmacy-pair__image { height: 200px; }
+    #charmacy-bundle-page .charmacy-pair__size-label { width: 100%; }
+    #charmacy-bundle-page .charmacy-pair__size { flex: 1; }
+    #charmacy-bundle-page .charmacy-pair__offer { flex-direction: column; align-items: stretch; padding: 18px; gap: 14px; }
+    #charmacy-bundle-page .charmacy-pair__bundle-link { width: 100%; }
+  }
+
+  #charmacy-bundle-page h1, #charmacy-bundle-page h2 { font-weight: 800; text-transform: none; }
+  #charmacy-bundle-page h3, #charmacy-bundle-page legend, #charmacy-bundle-page .charmacy-pair__size { font-weight: 700; }
+  #charmacy-bundle-page .charmacy-pair__details { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; margin: 0 0 6px; color: #68112f; font-size: 13px; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  #charmacy-bundle-page .charmacy-pair__details:hover { color: #381020; }
+  #charmacy-bundle-page .charmacy-pair__details:focus-visible { outline: 2px solid #68112f; outline-offset: 3px; border-radius: 4px; }
+  #charmacy-bundle-page .charmacy-pair__shades { grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 8px; }
+  #charmacy-bundle-page .charmacy-pair__shade { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border: 1px solid #e4d6dc; border-radius: 10px; background: #fff; transition: border-color .15s, background-color .15s; }
+  #charmacy-bundle-page .charmacy-pair__shade:has(input:checked) { border-color: #68112f; background: #f9eef3; box-shadow: inset 0 0 0 1px #68112f; }
+  #charmacy-bundle-page .charmacy-pair__shade:has(input:focus-visible) { outline: 2px solid #68112f; outline-offset: 3px; }
+  #charmacy-bundle-page .charmacy-pair__shade:hover:not(:has(input:disabled)) { border-color: #68112f; background: #fcf6f8; }
+  #charmacy-bundle-page .charmacy-pair__shade:has(input:disabled) { background: #f5f3f4; cursor: not-allowed; }
+  #charmacy-bundle-page .charmacy-pair__shade input:disabled { cursor: not-allowed; }
+  #charmacy-bundle-page .charmacy-pair__shade-name { font-size: 12px; font-weight: 700; }
+  #charmacy-bundle-page .charmacy-pair__sold-out { font-size: 10px; }
+  #charmacy-bundle-page .charmacy-pair__swatch { flex-shrink: 0; margin: 2px auto 7px; }
+  @media (max-width: 540px) {
+    #charmacy-bundle-page { width: calc(100% - 16px); margin: 10px auto; padding: 12px; }
+    #charmacy-bundle-page h1 { font-size: 23px; }
+    #charmacy-bundle-page h2 { font-size: 19px; margin: 5px 0; }
+    #charmacy-bundle-page h3 { font-size: 14px; margin-bottom: 2px; line-height: 1.3; }
+    #charmacy-bundle-page .charmacy-pair__header { gap: 6px; }
+    #charmacy-bundle-page .charmacy-pair__badge { padding: 5px 9px; font-size: 11px; }
+    #charmacy-bundle-page .charmacy-pair__intro { margin: 8px 0 12px; font-size: 13px; line-height: 1.4; }
+    #charmacy-bundle-page .charmacy-pair__summary { padding: 14px; gap: 10px; }
+    #charmacy-bundle-page .charmacy-pair__summary-pricing { display: grid; grid-template-columns: 1fr auto; width: 100%; gap: 4px 10px; padding-top: 10px; align-items: center; }
+    #charmacy-bundle-page [data-top-offer] { font-size: 27px; text-align: right; }
+    #charmacy-bundle-page .charmacy-pair__saving { padding: 5px 7px; font-size: 12px; text-align: center; }
+    #charmacy-bundle-page .charmacy-pair__sizes { padding: 14px 0 10px; gap: 8px; }
+    #charmacy-bundle-page .charmacy-pair__size-label { width: auto; flex: 1; margin: 0; font-size: 13px; }
+    #charmacy-bundle-page .charmacy-pair__size { flex: 0 0 auto; min-width: 66px; min-height: 44px; padding: 8px 12px; font-size: 13px; }
+    #charmacy-bundle-page .charmacy-pair__products { gap: 6px; }
+    #charmacy-bundle-page .charmacy-pair__foundation, #charmacy-bundle-page .charmacy-pair__products > .charmacy-pair__product { padding: 12px; }
+    #charmacy-bundle-page .charmacy-pair__product { display: grid; grid-template-columns: 88px minmax(0, 1fr); column-gap: 12px; text-align: left; align-items: center; }
+    #charmacy-bundle-page .charmacy-pair__image { grid-column: 1; grid-row: 1 / span 4; width: 88px; height: 112px; margin: 0; }
+    #charmacy-bundle-page .charmacy-pair__product > :not(img) { grid-column: 2; }
+    #charmacy-bundle-page .charmacy-pair__details { justify-content: flex-start; font-size: 12px; margin: 0; min-height: 44px; }
+    #charmacy-bundle-page .charmacy-pair__prices { justify-content: flex-start; font-size: 16px; gap: 6px; }
+    #charmacy-bundle-page .charmacy-pair__prices del { font-size: 12px; }
+    #charmacy-bundle-page .charmacy-pair__fixed { margin: 5px 0 0; padding: 5px 7px; font-size: 11px; }
+    #charmacy-bundle-page .charmacy-pair__shades { grid-template-columns: repeat(auto-fit, minmax(52px, 1fr)); gap: 6px; margin-top: 12px; padding-top: 10px; }
+    #charmacy-bundle-page legend { font-size: 13px; }
+    #charmacy-bundle-page .charmacy-pair__shade { padding: 6px 2px; border-radius: 7px; }
+    #charmacy-bundle-page .charmacy-pair__swatch { width: 32px; height: 32px; margin-bottom: 5px; }
+    #charmacy-bundle-page .charmacy-pair__shade-name { font-size: 11px; }
+    #charmacy-bundle-page .charmacy-pair__plus { width: 24px; height: 24px; font-size: 21px; }
+    #charmacy-bundle-page .charmacy-pair__offer { margin-top: 12px; padding: 12px; gap: 10px; }
+    #charmacy-bundle-page .charmacy-pair__offer-price { flex-direction: row; justify-content: space-between; align-items: center; font-weight: 700; }
+    #charmacy-bundle-page .charmacy-pair__offer-price strong { font-size: 24px; }
+    #charmacy-bundle-page .charmacy-pair__bundle-link { min-height: 46px; padding: 11px 14px; }
+  }
+</style>
+<script>
+(() => {
+  const root = document.getElementById('charmacy-bundle-page');
+  if (!root || root.dataset.initialized) return;
+  root.dataset.initialized = 'true';
+  const panels = [...root.querySelectorAll('[data-foundation]')];
+  const sizes = [...root.querySelectorAll('[data-size]')];
+  const add = root.querySelector('[data-add]');
+  const status = root.querySelector('[data-status]');
+  const offers = [{{ 199900 | money | json }}, {{ 249900 | money | json }}];
+  let active = 0;
+  let busy = false;
+  function render() {
+    panels.forEach((panel, index) => { panel.hidden = index !== active; });
+    sizes.forEach((button, index) => {
+      button.setAttribute('aria-pressed', String(index === active));
+      button.classList.toggle('charmacy-pair__size--active', index === active);
+      button.disabled = busy;
+    });
+    const panel = panels[active];
+    const selected = panel.querySelector('input:checked:not(:disabled)');
+    if (selected) {
+      panel.querySelector('[data-shade-label]').textContent = selected.dataset.title;
+      panel.querySelector('[data-price]').textContent = selected.dataset.price;
+      const compare = panel.querySelector('[data-compare]');
+      compare.textContent = selected.dataset.compare;
+      compare.hidden = selected.dataset.hasCompare !== 'true';
+      panel.querySelector('[data-product-image]').src = selected.dataset.image;
+    }
+    root.querySelector('[data-offer]').textContent = offers[active];
+    root.querySelector('[data-top-offer]').textContent = offers[active];
+    root.querySelector('[data-regular-total]').textContent = selected ? selected.dataset.total : '--';
+    const saving = root.querySelector('[data-saving]');
+    saving.hidden = !selected || Number(selected.dataset.savingAmount) <= 0;
+    saving.textContent = selected ? 'You save ' + selected.dataset.saving : '';
+    root.setAttribute('aria-busy', String(busy));
+    add.disabled = busy || !selected;
+    add.textContent = busy ? 'Adding to cart...' : selected ? 'Add bundle to cart' : 'Foundation unavailable';
+  }
+  sizes.forEach(button => button.addEventListener('click', () => {
+    if (busy) return;
+    active = Number(button.dataset.size);
+    status.textContent = '';
+    render();
+  }));
+  root.addEventListener('change', event => {
+    if (event.target.matches('input[type="radio"]')) { status.textContent = ''; render(); }
+  });
+  add.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const selected = panels[active].querySelector('input:checked:not(:disabled)');
+    if (busy || !selected) return;
+    busy = true;
+    status.textContent = '';
+    render();
+    const route = window.Shopify?.routes?.root || '/';
+    try {
+      const response = await fetch(route + 'cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: [
+          { id: Number(selected.value), quantity: 1 },
+          { id: 48239750414593, quantity: 1 }
+        ] })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.description || data.message || 'Unable to add this bundle. Please try again.');
+      status.textContent = 'Bundle added to your cart.';
+    } catch (error) {
+      status.textContent = error.message || 'Unable to add this bundle. Please try again.';
+      busy = false;
+      render();
+      return;
+    }
+    // Run storefront integrations only after Shopify confirms the addition.
+    // Integration failures must not suggest that adding the products failed.
+    try {
+      document.dispatchEvent(new CustomEvent('cart:build'));
+      document.querySelector('.js-drawer-open-cart')?.click();
+      document.dispatchEvent(new CustomEvent('cart:item-added'));
+      if (typeof shiprocketCheckoutEvents !== 'undefined' && typeof shiprocketCheckoutEvents.buyCart === 'function') {
+        await shiprocketCheckoutEvents.buyCart(event);
+      }
+    } catch (error) {
+      status.textContent = 'Bundle added. Please open your cart to continue.';
+      console.error('Bundle checkout integration failed:', error);
+    } finally {
+      busy = false;
+      render();
+    }
+  });
+  render();
+})();
+</script>

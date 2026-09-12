@@ -1,0 +1,298 @@
+<style>
+  .wrapper-timer {
+    margin-top: -10px;
+    padding: 10px 8px;
+  
+    border-radius: 10px;
+  }
+
+  .wrapper-timer h2  {
+    margin: 0 0 8px;
+    color: #bea236;
+    font-size: 20px;
+    line-height: 1.2;
+    font-family: "Jost", sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .timer-wrapper {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .count-down {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .flipdown {
+    height: 82px;
+    overflow: visible;
+  }
+
+  .flipdown.flipdown__theme-dark {
+    font-family: sans-serif;
+    font-weight: 700;
+  }
+
+  .flipdown.flipdown__theme-dark .rotor-group-heading:before {
+    color: #bea236;
+  }
+
+  .flipdown.flipdown__theme-dark .rotor-group:nth-child(n + 2):nth-child(-n + 3):before,
+  .flipdown.flipdown__theme-dark .rotor-group:nth-child(n + 2):nth-child(-n + 3):after {
+    background-color: #bea236;
+  }
+
+  .flipdown.flipdown__theme-dark .rotor,
+  .flipdown.flipdown__theme-dark .rotor-top,
+  .flipdown.flipdown__theme-dark .rotor-leaf-front,
+  .flipdown.flipdown__theme-dark .rotor-bottom,
+  .flipdown.flipdown__theme-dark .rotor-leaf-rear {
+    color: #fff;
+    background-color: #bea236;
+  }
+
+  .flipdown.flipdown__theme-dark .rotor:after {
+    border-top: solid 1px rgba(255, 255, 255, 0.22);
+  }
+
+  .flipdown .rotor-group {
+    position: relative;
+    float: left;
+    padding-right: 16px;
+  }
+
+  .flipdown .rotor-group:last-child {
+    padding-right: 0;
+  }
+
+  .flipdown .rotor-group-heading:before {
+    display: block;
+    height: 18px;
+    line-height: 18px;
+    font-size: 11px;
+    text-align: center;
+    content: attr(data-before);
+  }
+
+  .flipdown .rotor-group:nth-child(n + 2):nth-child(-n + 3):before,
+  .flipdown .rotor-group:nth-child(n + 2):nth-child(-n + 3):after {
+    content: "";
+    position: absolute;
+    left: 103px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .flipdown .rotor-group:nth-child(n + 2):nth-child(-n + 3):before {
+    bottom: 18px;
+  }
+
+  .flipdown .rotor-group:nth-child(n + 2):nth-child(-n + 3):after {
+    bottom: 38px;
+  }
+
+  .flipdown .rotor {
+    position: relative;
+    float: left;
+    width: 48px;
+    height: 64px;
+    margin: 0 4px 0 0;
+    border-radius: 4px;
+    font-size: 2.4rem;
+    text-align: center;
+    perspective: 200px;
+  }
+
+  .flipdown .rotor:last-child {
+    margin-right: 0;
+  }
+
+  .flipdown .rotor-top,
+  .flipdown .rotor-bottom {
+    position: absolute;
+    width: 48px;
+    height: 32px;
+    overflow: hidden;
+  }
+
+  .flipdown .rotor-leaf {
+    position: absolute;
+    z-index: 1;
+    width: 48px;
+    height: 64px;
+    transform-style: preserve-3d;
+    transition: transform 0s;
+  }
+
+  .flipdown .rotor-leaf.flipped {
+    transform: rotateX(-180deg);
+    transition: all 0.5s ease-in-out;
+  }
+
+  .flipdown .rotor-leaf-front,
+  .flipdown .rotor-leaf-rear {
+    position: absolute;
+    width: 48px;
+    height: 32px;
+    margin: 0;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .flipdown .rotor-leaf-front,
+  .flipdown .rotor-top {
+    line-height: 64px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .flipdown .rotor-leaf-rear,
+  .flipdown .rotor-bottom {
+    line-height: 0;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .flipdown .rotor-leaf-rear {
+    transform: rotateX(-180deg);
+  }
+
+  .flipdown .rotor-bottom {
+    bottom: 0;
+  }
+
+  .flipdown .rotor:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    width: 48px;
+    height: 32px;
+    border-radius: 0 0 4px 4px;
+  }
+
+  #flipdown .rotor-group:first-child,
+  #flipdown .rotor-group:nth-child(n + 5) {
+    display: none !important;
+  }
+
+  @media (max-width: 991px) {
+    .wrapper-timer h2 {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .wrapper-timer {
+      padding: 8px 6px;
+    }
+
+    .wrapper-timer h2 {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .flipdown {
+      height: 68px;
+    }
+
+    .flipdown .rotor-group {
+      padding-right: 12px;
+    }
+
+    .flipdown .rotor {
+      width: 28px;
+      height: 42px;
+      margin-right: 2px;
+      font-size: 1.6rem;
+    }
+
+    .flipdown .rotor,
+    .flipdown .rotor-leaf,
+    .flipdown .rotor-leaf-front,
+    .flipdown .rotor-leaf-rear,
+    .flipdown .rotor-top,
+    .flipdown .rotor-bottom,
+    .flipdown .rotor:after {
+      width: 28px;
+    }
+
+    .flipdown .rotor-leaf,
+    .flipdown .rotor {
+      height: 42px;
+    }
+
+    .flipdown .rotor-top,
+    .flipdown .rotor-bottom,
+    .flipdown .rotor-leaf-front,
+    .flipdown .rotor-leaf-rear,
+    .flipdown .rotor:after {
+      height: 21px;
+    }
+
+    .flipdown .rotor-leaf-front,
+    .flipdown .rotor-top {
+      line-height: 42px;
+    }
+
+    .flipdown .rotor-group-heading:before {
+      height: 16px;
+      line-height: 16px;
+      font-size: 9px;
+    }
+
+    .flipdown .rotor-group:nth-child(n + 2):nth-child(-n + 3):before,
+    .flipdown .rotor-group:nth-child(n + 2):nth-child(-n + 3):after {
+      left: 58px;
+      width: 5px;
+      height: 5px;
+    }
+
+    .flipdown .rotor-group:nth-child(n + 2):nth-child(-n + 3):before {
+      bottom: 12px;
+    }
+
+    .flipdown .rotor-group:nth-child(n + 2):nth-child(-n + 3):after {
+      bottom: 25px;
+    }
+  }
+</style>
+
+<div class="wrapper-timer">
+  <h2 class="timer-title">Sale ends in:</h2>
+  <div class="timer-wrapper">
+    <div class="count-down">
+      <div class="flipdown flipdown__theme-dark" id="flipdown"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://pbutcher.uk/flipdown/js/flipdown/flipdown.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var flipdownElement = document.getElementById("flipdown");
+
+    if (!flipdownElement || typeof FlipDown === "undefined") {
+      return;
+    }
+
+    var targetDate = new Date("july 16, 2026 23:59:59").getTime();
+
+    if (targetDate <= Date.now()) {
+      flipdownElement.innerHTML = "<p style='margin:0; color:#fff; background:#bea236; padding:8px 12px; border-radius:6px; font-weight:600;'>Sale ended</p>";
+      return;
+    }
+
+    new FlipDown(Math.floor(targetDate / 1000), "flipdown")
+      .start()
+      .ifEnded(function () {
+        flipdownElement.innerHTML = "<p style='margin:0; color:#fff; background:#bea236; padding:8px 12px; border-radius:6px; font-weight:600;'>Sale ended</p>";
+      });
+  });
+</script>

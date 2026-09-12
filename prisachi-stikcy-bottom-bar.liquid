@@ -1,0 +1,480 @@
+<div class="sticky-atc" id="StickyATC">
+  <div class="sticky-atc__top">
+    <div class="sticky-atc__viewing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M1.5 12s3.7-6.5 10.5-6.5S22.5 12 22.5 12 18.8 18.5 12 18.5 1.5 12 1.5 12Z"></path>
+        <circle cx="12" cy="12" r="3.2"></circle>
+      </svg>
+      <span>90 people are viewing this item. Don't wait!</span>
+    </div>
+
+    <button class="sticky-atc__wish" type="button" aria-label="Wishlist">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 20.8 4 13.4a4.8 4.8 0 0 1 6.8-6.8L12 7.8l1.2-1.2a4.8 4.8 0 0 1 6.8 6.8Z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="sticky-atc__buttons">
+    <button type="button" class="sticky-atc__button sticky-atc__button--buy" data-open-sheet="buy-now">
+      Buy It Now
+    </button>
+    <button type="button" class="sticky-atc__button sticky-atc__button--cart" data-open-sheet="add-to-cart">
+      Add To Cart
+    </button>
+  </div>
+
+  <p class="sticky-atc__note">Free Shipping within India* Easy Returns*</p>
+</div>
+
+<div class="sticky-atc-overlay" id="StickyATCOverlay"></div>
+
+<div class="sticky-atc-sheet" id="StickyATCSheet" aria-hidden="true">
+  <button type="button" class="sticky-atc-sheet__close" id="StickyATCClose" aria-label="Close">
+    &times;
+  </button>
+
+  <div class="sticky-atc-sheet__content">
+    <div class="sticky-atc-sheet__header">
+      <p class="sticky-atc-sheet__label">
+        {{ product.options_with_values.first.name | default: 'Size' }}:
+        <strong id="StickyATCSelectedLabel">
+          {{ product.selected_or_first_available_variant.option1 | default: product.selected_or_first_available_variant.title }}
+        </strong>
+      </p>
+      <button type="button" class="sticky-atc-sheet__guide">Size Guide</button>
+    </div>
+
+    <div class="sticky-atc-sheet__options" id="StickyATCOptions">
+      {% if product.has_only_default_variant %}
+        <button
+          type="button"
+          class="sticky-atc-sheet__option is-selected"
+          data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+          data-variant-title="{{ product.selected_or_first_available_variant.title | escape }}"
+          data-variant-available="{{ product.selected_or_first_available_variant.available }}"
+        >
+          {{ product.selected_or_first_available_variant.title }}
+        </button>
+      {% else %}
+        {% for variant in product.variants %}
+          <button
+            type="button"
+            class="sticky-atc-sheet__option{% if variant == product.selected_or_first_available_variant %} is-selected{% endif %}"
+            data-variant-id="{{ variant.id }}"
+            data-variant-title="{{ variant.title | escape }}"
+            data-variant-available="{{ variant.available }}"
+            {% unless variant.available %}
+              disabled
+            {% endunless %}
+          >
+            {{ variant.option1 | default: variant.title }}
+          </button>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="sticky-atc-sheet__meta">
+      <span>Order before 1:00 PM for same day delivery</span>
+      <span>Pincode</span>
+    </div>
+
+    <button type="button" class="sticky-atc-sheet__fit">
+      <span>Find your size</span>
+      <span>Powered by</span>
+    </button>
+
+    <div class="sticky-atc-sheet__actions">
+      <button type="button" class="sticky-atc-sheet__done" id="StickyATCDone">Done</button>
+    </div>
+  </div>
+</div>
+
+<input
+  type="hidden"
+  id="StickyATCVariantInput"
+  value="{{ product.selected_or_first_available_variant.id }}"
+>
+
+<div class="sticky-atc-toast" id="StickyATCToast"></div>
+
+<style>
+  .sticky-atc {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    display: block;
+    padding: 12px 12px 14px;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.12);
+    transition: transform 0.25s ease;
+  }
+
+  @media screen and (min-width: 750px) {
+    .sticky-atc {
+      display: none;
+    }
+  }
+
+  .sticky-atc.is-hidden {
+    transform: translateY(100%);
+  }
+
+  .sticky-atc__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 520px;
+    margin: 0 auto 10px;
+  }
+
+  .sticky-atc__viewing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #2d2d2d;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .sticky-atc__viewing svg,
+  .sticky-atc__wish svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .sticky-atc__wish {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    color: #2d2d2d;
+    cursor: pointer;
+  }
+
+  .sticky-atc__buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .sticky-atc__button {
+    min-height: 42px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .sticky-atc__button--buy {
+    border: 1px solid #172a25;
+    background: #ffffff;
+    color: #111111;
+  }
+
+  .sticky-atc__button--cart {
+    border: 1px solid #172a25;
+    background: #172a25;
+    color: #ffffff;
+  }
+
+  .sticky-atc__note {
+    margin: 10px 0 0;
+    text-align: center;
+    color: #111111;
+    font-size: 14px;
+  }
+
+  .sticky-atc-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+
+  .sticky-atc-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sticky-atc-sheet {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1001;
+    background: #ffffff;
+    border-radius: 20px 20px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.28s ease;
+    box-shadow: 0 -14px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .sticky-atc-sheet.is-active {
+    transform: translateY(0);
+  }
+
+  .sticky-atc-sheet__close {
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #1f1f1f;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #111111;
+    transform: translateX(-50%);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .sticky-atc-sheet__content {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 22px 14px 16px;
+  }
+
+  .sticky-atc-sheet__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .sticky-atc-sheet__label {
+    margin: 0;
+    font-size: 18px;
+    color: #111111;
+  }
+
+  .sticky-atc-sheet__guide {
+    border: 0;
+    background: transparent;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .sticky-atc-sheet__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .sticky-atc-sheet__option {
+    min-width: 46px;
+    min-height: 46px;
+    padding: 10px 16px;
+    border: 1px solid #d6d6dc;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #222222;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .sticky-atc-sheet__option.is-selected {
+    border-color: #2d2a44;
+    background: #2d2a44;
+    color: #ffffff;
+  }
+
+  .sticky-atc-sheet__option[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .sticky-atc-sheet__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding: 14px 0;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111111;
+  }
+
+  .sticky-atc-sheet__fit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 32px;
+    margin-bottom: 12px;
+    border: 0;
+    border-radius: 999px;
+    background: #172a25;
+    color: #ffffff;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .sticky-atc-sheet__done {
+    width: 100%;
+    min-height: 44px;
+    border: 0;
+    border-radius: 6px;
+    background: #172a25;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .sticky-atc-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 110px;
+    z-index: 1002;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: #172a25;
+    color: #ffffff;
+    font-size: 14px;
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.24s ease;
+  }
+
+  .sticky-atc-toast.is-visible {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+</style>
+
+<script>
+  (function () {
+    var bar = document.getElementById('StickyATC');
+    var overlay = document.getElementById('StickyATCOverlay');
+    var sheet = document.getElementById('StickyATCSheet');
+    var closeButton = document.getElementById('StickyATCClose');
+    var doneButton = document.getElementById('StickyATCDone');
+    var selectedLabel = document.getElementById('StickyATCSelectedLabel');
+    var options = Array.prototype.slice.call(document.querySelectorAll('.sticky-atc-sheet__option'));
+    var toast = document.getElementById('StickyATCToast');
+    var variantInput = document.getElementById('StickyATCVariantInput');
+    var currentAction = 'add-to-cart';
+    var selectedSize = selectedLabel ? selectedLabel.textContent.trim() : '';
+    var selectedVariantId = variantInput ? variantInput.value : '';
+
+    if (!bar || !overlay || !sheet || !doneButton) {
+      return;
+    }
+
+    function openSheet(action) {
+      currentAction = action || 'add-to-cart';
+      overlay.classList.add('is-active');
+      sheet.classList.add('is-active');
+      sheet.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSheet() {
+      overlay.classList.remove('is-active');
+      sheet.classList.remove('is-active');
+      sheet.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function updateSelectedOption(button) {
+      options.forEach(function (option) {
+        option.classList.remove('is-selected');
+      });
+
+      button.classList.add('is-selected');
+      selectedSize = button.textContent.trim();
+      selectedVariantId = button.getAttribute('data-variant-id') || '';
+      selectedLabel.textContent = selectedSize;
+
+      if (variantInput) {
+        variantInput.value = selectedVariantId;
+      }
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+
+      window.clearTimeout(showToast._timer);
+      showToast._timer = window.setTimeout(function () {
+        toast.classList.remove('is-visible');
+      }, 1400);
+    }
+
+    function handleDone() {
+      if (!selectedVariantId) {
+        return;
+      }
+
+      closeSheet();
+
+      if (currentAction === 'buy-now') {
+        window.location.href = '/cart/' + selectedVariantId + ':1?checkout';
+        return;
+      }
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          id: selectedVariantId,
+          quantity: 1
+        })
+      }).then(function () {
+        showToast('Added size ' + selectedSize + ' to cart');
+      }).catch(function () {
+        showToast('Unable to add to cart');
+      });
+    }
+
+    bar.querySelectorAll('[data-open-sheet]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        openSheet(button.getAttribute('data-open-sheet'));
+      });
+    });
+
+    options.forEach(function (button) {
+      button.addEventListener('click', function () {
+        if (button.disabled) return;
+        updateSelectedOption(button);
+      });
+    });
+
+    overlay.addEventListener('click', closeSheet);
+    closeButton.addEventListener('click', closeSheet);
+    doneButton.addEventListener('click', handleDone);
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 300) {
+        bar.classList.remove('is-hidden');
+      } else {
+        bar.classList.add('is-hidden');
+      }
+    });
+  })();
+</script>

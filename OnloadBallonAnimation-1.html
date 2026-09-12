@@ -1,0 +1,212 @@
+
+
+  <style>
+  #birthday-party-burst {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99999;
+    overflow: hidden;
+  }
+
+  .birthday-party-piece {
+    position: absolute;
+    bottom: -240px;
+    animation-name: birthdayRise;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+    will-change: transform, opacity;
+  }
+
+  .birthday-party-piece--balloon {
+    width: 77px;
+    height: 180px;
+    filter: drop-shadow(2px 4px 3px rgba(35, 0, 43, 0.2));
+  }
+
+  .birthday-party-piece svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .birthday-party-art {
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 25%;
+    animation: birthdaySway 2.6s ease-in-out infinite alternate;
+    animation-delay: var(--birthday-sway-delay, 0s);
+  }
+
+  .birthday-party-piece--confetti {
+    width: 24px;
+    height: 58px;
+    filter: drop-shadow(1px 2px 1px rgba(35, 0, 43, 0.18));
+  }
+
+  @keyframes birthdaySway {
+    from { transform: rotate(-9deg); }
+    to { transform: rotate(9deg); }
+  }
+
+  @keyframes birthdayRise {
+    0% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translate3d(var(--birthday-drift), calc(-100vh - 260px), 0) rotate(10deg);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #birthday-party-burst { display: none; }
+  }
+</style>
+
+
+  <div id="birthday-party-burst" aria-hidden="true"></div>
+  
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wrapper = document.getElementById('birthday-party-burst');
+    if (!wrapper) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      wrapper.remove();
+      return;
+    }
+
+    // Show once per tab session, then allow another display after 10 minutes.
+    const SESSION_KEY = 'birthday-party-last-shown';
+    const COOLDOWN_MS = 10 * 60 * 1000;
+    const now = Date.now();
+
+    try {
+      const storedTime = window.sessionStorage.getItem(SESSION_KEY);
+      const lastShown = Number(storedTime);
+      if (storedTime !== null && Number.isFinite(lastShown) &&
+          now - lastShown >= 0 && now - lastShown < COOLDOWN_MS) {
+        wrapper.remove();
+        return;
+      }
+
+      // Early reloads do not restart the timer.
+      window.sessionStorage.setItem(SESSION_KEY, String(now));
+    } catch (error) {
+      // Keep the existing effect working if session storage is unavailable.
+    }
+
+    // Only the two metallic color families from the reference.
+    const colors = [
+      { base: '#edb900', light: '#fff5ab', shine: '#fffef1', mid: '#ffd83d', dark: '#a96900', edge: '#704000' },
+      { base: '#9800c9', light: '#e99aff', shine: '#fff0ff', mid: '#c82cf0', dark: '#560078', edge: '#310044' }
+    ];
+    let pieceId = 0;
+
+    function artwork(type, color) {
+      const id = 'birthday-metal-' + pieceId++;
+      const ribbon = (x, y, scale) => `
+        <g transform="translate(${x} ${y}) scale(${scale})">
+          <path d="M 0 0 C 15 7 15 15 0 22 S -15 37 0 44 S 15 59 0 66 S -15 81 0 88"
+            fill="none" stroke="url(#${id}-ribbon)" stroke-width="4" />
+          <path d="M 0 0 C 15 7 15 15 0 22 M 0 44 C 15 51 15 59 0 66"
+            fill="none" stroke="${color.light}" stroke-width="1" opacity=".8" />
+          <path d="M 0 22 C -15 29 -15 37 0 44 M 0 66 C -15 73 -15 81 0 88"
+            fill="none" stroke="${color.dark}" stroke-width="1" opacity=".7" />
+        </g>`;
+
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${type === 'balloon' ? '0 0 100 220' : '0 0 32 94'}" focusable="false" aria-hidden="true">
+        <defs>
+          <radialGradient id="${id}-body" cx="63%" cy="28%" r="76%">
+            <stop offset="0" stop-color="${color.light}" />
+            <stop offset=".2" stop-color="${color.mid}" />
+            <stop offset=".46" stop-color="${color.base}" />
+            <stop offset=".74" stop-color="${color.dark}" />
+            <stop offset=".9" stop-color="${color.edge}" />
+            <stop offset="1" stop-color="${color.base}" />
+          </radialGradient>
+          <radialGradient id="${id}-shine">
+            <stop offset="0" stop-color="${color.shine}" stop-opacity=".98" />
+            <stop offset=".35" stop-color="${color.shine}" stop-opacity=".85" />
+            <stop offset="1" stop-color="${color.light}" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="${id}-ribbon" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="${color.edge}" />
+            <stop offset=".25" stop-color="${color.base}" />
+            <stop offset=".48" stop-color="${color.light}" />
+            <stop offset=".68" stop-color="${color.base}" />
+            <stop offset="1" stop-color="${color.dark}" />
+          </linearGradient>
+        </defs>
+        ${type === 'balloon' ? `
+          ${ribbon(50, 119, 1)}
+          <path d="M 50 5 C 24 5 6 26 6 53 C 6 80 25 103 50 115 C 75 103 94 80 94 53 C 94 26 76 5 50 5 Z"
+            fill="url(#${id}-body)" stroke="${color.dark}" stroke-width="1.2" />
+          <path d="M 47 112 L 43 122 Q 50 125 57 122 L 53 112 Z"
+            fill="url(#${id}-ribbon)" stroke="${color.dark}" stroke-width=".7" />
+          <ellipse cx="64" cy="28" rx="17" ry="21" transform="rotate(-30 64 28)" fill="url(#${id}-shine)" />
+          <ellipse cx="20" cy="51" rx="7" ry="28" transform="rotate(10 20 51)" fill="url(#${id}-shine)" opacity=".72" />
+          <path d="M 34 11 C 12 22 8 47 13 65" fill="none" stroke="${color.light}" stroke-width="1.5" opacity=".65" />
+          <path d="M 85 43 C 92 71 73 100 55 109" fill="none" stroke="${color.mid}" stroke-width="2.5" opacity=".65" />
+        ` : ribbon(16, 3, 1)}
+      </svg>`;
+    }
+
+    function createPiece(type, left, delay, duration, color, size) {
+      const el = document.createElement('span');
+      el.className = 'birthday-party-piece birthday-party-piece--' + type;
+      el.style.left = left + '%';
+      el.style.setProperty('--birthday-drift', (Math.random() * 120 - 60) + 'px');
+      el.style.animationDelay = delay + 's';
+      el.style.animationDuration = duration + 's';
+      el.style.setProperty('--birthday-sway-delay', (-Math.random() * 2.6) + 's');
+
+      if (type === 'balloon') {
+        el.style.width = size + 'px';
+        el.style.height = (size * 2.2) + 'px';
+      } else {
+        el.style.width = (size * 0.55) + 'px';
+        el.style.height = (size * 1.65) + 'px';
+      }
+
+      const art = document.createElement('span');
+      art.className = 'birthday-party-art';
+      art.style.display = 'block';
+      art.innerHTML = artwork(type, color);
+      el.appendChild(art);
+      el.addEventListener('animationend', function (event) {
+        if (event.target === el) el.remove();
+      });
+      wrapper.appendChild(el);
+    }
+
+    for (let i = 0; i < 14; i++) {
+      createPiece(
+        'balloon',
+        3 + Math.random() * 86,
+        Math.random() * 0.7,
+        3.8 + Math.random() * 1.5,
+        colors[i % colors.length],
+        68 + Math.random() * 24
+      );
+    }
+
+    for (let i = 0; i < 40; i++) {
+      createPiece(
+        'confetti',
+        Math.random() * 100,
+        Math.random() * 0.8,
+        2.8 + Math.random() * 1.8,
+        colors[i % colors.length],
+        28 + Math.random() * 12
+      );
+    }
+
+    setTimeout(function () {
+      wrapper.remove();
+    }, 6500);
+  });
+</script>

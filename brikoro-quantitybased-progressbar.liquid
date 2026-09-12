@@ -1,0 +1,302 @@
+{% if cart.item_count > 0 %}
+
+{%- assign total_qty = 0 -%}
+{%- for item in cart.items -%}
+  {%- assign total_qty = total_qty | plus: item.quantity -%}
+{%- endfor -%}
+
+{%- assign target_qty = 3 -%}
+{%- assign remaining_qty = target_qty | minus: total_qty -%}
+
+{%- if total_qty >= target_qty -%}
+  {%- assign progress_percent = 100 -%}
+  {%- assign remaining_qty = 0 -%}
+{%- elsif total_qty == 2 -%}
+  {%- assign progress_percent = 67 -%}
+{%- elsif total_qty == 1 -%}
+  {%- assign progress_percent = 34 -%}
+{%- else -%}
+  {%- assign progress_percent = 0 -%}
+{%- endif -%}
+
+<style>
+#cart-progress-container1 {
+  position: sticky;
+  top: 4px;
+  z-index: 1;
+  margin: 0 8px 10px;
+  padding: 12px 12px 10px;
+  border-radius: 14px;
+  border: 1px solid #d9d9d9;
+  background: #fff;
+}
+
+#cart-progress-container1 > * {
+  position: relative;
+  z-index: 1;
+}
+
+.progress-header1 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.progress-copy1 {
+  flex: 1;
+}
+
+.progress-kicker1 {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#progress-messagee1 {
+  margin: 0;
+  color: #111;
+  font-size: 13px;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.progress-badge1 {
+  min-width: 70px;
+  padding: 8px 8px 7px;
+  border-radius: 12px;
+  background: #111;
+  color: #fff;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.progress-badge1 strong {
+  display: block;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.progress-badge1 span {
+  display: block;
+  margin-top: 2px;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pro-wrap {
+  width: 100%;
+  position: relative;
+  padding-top: 2px;
+  margin-bottom: 8px;
+}
+
+.progress-line1 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 14px;
+  height: 6px;
+  background: #e3e3e3;
+  border-radius: 999px;
+}
+
+#cart-progress-bar1 {
+  height: 6px;
+  background: #111;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.progress-steps1 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  position: relative;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  color: #6b6b6b;
+  transition: all 0.25s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.step-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #bdbdbd;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.step-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: center;
+}
+
+.step-copy strong {
+  font-size: 11px;
+  line-height: 1.2;
+  color: #111;
+}
+
+.step-copy span {
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.step.active {
+  color: #111;
+}
+
+.step.active .step-icon {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+.step.reward {
+  position: relative;
+}
+
+.step.reward.active {
+  color: #111;
+}
+
+#confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  opacity: 0.8;
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(600px) rotate(360deg); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  #cart-progress-container1 {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .progress-header1 {
+    align-items: flex-start;
+  }
+
+  #progress-messagee1 {
+    font-size: 13px;
+  }
+}
+</style>
+
+<div id="cart-progress-container1">
+  <div class="progress-header1">
+    <div class="progress-copy1">
+      <span class="progress-kicker1">Cart Offer</span>
+      <p id="progress-messagee1">
+        {% if total_qty >= target_qty %}
+          Offer unlocked. You got 25% off on 3 items.
+        {% else %}
+          Add {{ remaining_qty }} more item{% if remaining_qty > 1 %}s{% endif %} to get 25% off.
+        {% endif %}
+      </p>
+    </div>
+    <div class="progress-badge1">
+      <strong>25%</strong>
+      <span>3 Qty</span>
+    </div>
+  </div>
+
+  <div class="pro-wrap">
+    <div class="progress-line1">
+      <div id="cart-progress-bar1" style="width: {{ progress_percent }}%;"></div>
+    </div>
+
+    <div class="progress-steps1">
+      <div class="step {% if total_qty >= 1 %}active{% endif %}">
+        <span class="step-icon">{% if total_qty >= 1 %}✓{% else %}1{% endif %}</span>
+        <span class="step-copy">
+          <strong>1 Item</strong>
+          <span>Added</span>
+        </span>
+      </div>
+
+      <div class="step {% if total_qty >= 2 %}active{% endif %}">
+        <span class="step-icon">{% if total_qty >= 2 %}✓{% else %}2{% endif %}</span>
+        <span class="step-copy">
+          <strong>2 Items</strong>
+          <span>Almost</span>
+        </span>
+      </div>
+
+      <div class="step reward {% if total_qty >= 3 %}active{% endif %}">
+        <span class="step-icon">{% if total_qty >= 3 %}✓{% else %}3{% endif %}</span>
+        <span class="step-copy">
+          <strong>3 Items</strong>
+          <span>25% Off</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if total_qty >= target_qty %}
+<div id="confetti-container"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const container = document.getElementById("confetti-container");
+  if (!container) return;
+
+  for (let i = 0; i < 40; i++) {
+    const confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+    confetti.style.left = Math.random() * 100 + "vw";
+    confetti.style.background = ["#093174", "#c9751f", "#ffcc00", "#28a745"][Math.floor(Math.random() * 4)];
+    confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    container.appendChild(confetti);
+  }
+});
+</script>
+{% endif %}
+
+{% endif %}

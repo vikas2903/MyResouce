@@ -1,0 +1,237 @@
+<style>
+    .offer-box {
+        --wine: #5b153c;
+        --berry: #941d5a;
+        --gold: #d5ad72;
+        width: 100%;
+        padding: 12px;
+        box-sizing: border-box;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        border: 1px solid rgba(91, 21, 60, 0.12);
+        border-radius: 18px;
+        background: radial-gradient(circle at 100% 0%, rgba(213, 173, 114, 0.22), transparent 32%), linear-gradient(135deg, #fffdfc, #faeef3);
+        box-shadow: 0 16px 40px rgba(91, 21, 60, 0.09);
+    }
+
+    .offer-box-header { margin: 0 0 9px; }
+    .offer-box-header span { color: var(--berry); font-size: 9px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; }
+    .offer-box-header h2 { margin: 3px 0 0; color: var(--wine); font-family: Georgia, "Times New Roman", serif; font-size: clamp(18px, 3vw, 23px); line-height: 1.1; }
+    .offer-box-header p { margin: 4px 0 0; color: #806473; font-size: 11px; }
+
+    .offer-track { display: flex; gap: 8px; min-width: max-content; padding: 1px; }
+
+    .offer {
+        position: relative;
+        display: grid;
+        grid-template-columns: 76px 1fr;
+        width: 270px;
+        min-height: max-content;
+        padding: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+        border: 1px solid rgba(91, 21, 60, 0.11);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 8px 20px rgba(91, 21, 60, 0.05);
+        transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .offer:hover { transform: translateY(-4px); border-color: rgba(148, 29, 90, .3); box-shadow: 0 16px 28px rgba(91, 21, 60, .13); }
+    .offer::before { content: ""; position: absolute; top: -8px; left: 68px; z-index: 2; width: 15px; height: 15px; border-radius: 50%; background: #faeef3; box-shadow: 0 113px 0 #faeef3; }
+    .offer::after { content: ""; position: absolute; top: 9px; bottom: 9px; left: 75px; border-left: 2px dashed rgba(91, 21, 60, .17); }
+
+    .offer-value { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 13px 7px; color: #fff; text-align: center; background: linear-gradient(155deg, var(--wine), var(--berry)); }
+    .offer-value strong { font-family: Georgia, "Times New Roman", serif; font-size: 22px; line-height: .95; }
+    .offer-value span { margin-top: 4px; font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .offer-details { display: flex; flex-direction: column; padding: 8px 11px 7px; }
+    .offer-tag { display: inline-flex; align-self: flex-start; color: var(--berry); font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .offer h3 { margin: 2px 0 1px; color: var(--wine); font-family: Georgia, "Times New Roman", serif; font-size: 14px; line-height: 1.1; }
+    .offer p { margin: 0; color: #69515f; font-size: 10px; line-height: 1.25; }
+    .offer .offer-condition { display: inline-flex; align-self: flex-start; margin-top: 4px; padding: 2px 4px; border-radius: 3px; color: #7c2452; background: #fbedf3; font-size: 8px; font-weight: 800; line-height: 1.2; }
+    .offer-bottom { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-top: 4px; }
+    .offer-code { display: inline-flex; padding: 4px 6px; border: 1px dashed rgba(148, 29, 90, .42); border-radius: 4px; color: var(--berry); background: #fffafb; font-family: monospace; font-size: 9px; font-weight: 700; letter-spacing: .04em; }
+    .copy-coupon { padding: 0; border: 0; color: var(--berry); background: transparent; font-size: 9px; font-weight: 800; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+    .copy-coupon:hover, .copy-coupon:focus-visible { color: var(--wine); }
+    .offer-status { min-height: 10px; color: #927180; font-size: 8px; font-weight: 700; letter-spacing: .04em; text-align: right; text-transform: uppercase; }
+    .offer small { display: none; }
+
+    .offer.is-best { border-color: var(--gold); background: linear-gradient(145deg, #fffdf8, #fff6ea); box-shadow: 0 13px 28px rgba(166, 111, 36, .16); }
+    .offer.is-best .offer-value { background: linear-gradient(155deg, #9a6c2f, #d5ad72); }
+    .offer.is-best .offer-status { color: var(--berry); }
+    .offer-box::-webkit-scrollbar { height: 5px; }
+    .offer-box::-webkit-scrollbar-thumb { border-radius: 20px; background: rgba(91, 21, 60, .2); }
+
+    @media (max-width: 767px) {
+        .offer-box { padding: 12px; border-radius: 18px; }
+        .offer { width: 260px;  min-height: max-content; grid-template-columns: 76px 1fr; }
+        .offer::before { left: 68px; box-shadow: 0 113px 0 #faeef3; }
+        .offer::after { left: 75px; }
+    }
+</style>
+
+<div class="offer-box" id="auto-discount-offers" data-cart-total="0" data-fabric-meters="0" data-first-order="false" data-auto-apply="false" data-redirect-path="/cart">
+    <div class="offer-box-header">
+        <span>Exclusive savings</span>
+        <!-- <h2>A little more to love</h2>
+        <p>Choose the offer that makes your order feel even better.</p> -->
+    </div>
+
+    <div class="offer-track">
+
+             <div class="offer" data-code="SAVE5" data-type="cart-value" data-threshold="799" data-percent="5">
+            <div class="offer-value"><strong>5%</strong><span>OFF</span></div>
+            <div class="offer-details">
+                <span class="offer-tag">Welcome saving</span>
+                <h3>Save on your order</h3>
+                <p class="offer-condition">On purchases above ₹799.</p>
+                <div class="offer-bottom"><div class="offer-code">SAVE5</div><button class="copy-coupon" type="button" aria-label="Copy SAVE5 coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div>
+                <small>Apply this code at checkout.</small>
+            </div>
+        </div>
+
+        <div class="offer" data-code="SAVE10" data-type="cart-value" data-threshold="999" data-percent="10">
+            <div class="offer-value"><strong>10%</strong><span>OFF</span></div>
+            <div class="offer-details">
+                <span class="offer-tag">Signature saving</span>
+                <h3>Save on your order</h3>
+                <p class="offer-condition">On purchases above ₹999.</p>
+                <div class="offer-bottom"><div class="offer-code">SAVE10</div><button class="copy-coupon" type="button" aria-label="Copy SAVE10 coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div>
+                <small>Apply this code at checkout.</small>
+            </div>
+        </div>
+
+        <div class="offer" data-code="SAVE15" data-type="cart-value" data-threshold="1499" data-percent="15">
+            <div class="offer-value"><strong>15%</strong><span>OFF</span></div>
+            <div class="offer-details">
+                <span class="offer-tag">Best value</span>
+                <h3>Save on your order</h3>
+                <p class="offer-condition">On purchases above ₹1,499.</p>
+                <div class="offer-bottom"><div class="offer-code">SAVE15</div><button class="copy-coupon" type="button" aria-label="Copy SAVE15 coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div>
+                <small>Apply this code at checkout.</small>
+            </div>
+        </div>
+        <div class="offer" data-code="B2G3THFREE">
+            <div class="offer-value"><strong>2+1</strong><span>FREE</span></div>
+            <div class="offer-details">
+                <span class="offer-tag">Bundle offer</span>
+                <h3>Buy 2, get 3rd free</h3>
+                <p class="offer-condition">Add 3 items and pay for only 2.</p>
+                <div class="offer-bottom"><div class="offer-code">B2G3THFREE</div><button class="copy-coupon" type="button" aria-label="Copy B2G3THFREE coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div>
+                <small>Apply this code at checkout.</small>
+            </div>
+        </div>
+
+        <div class="offer" data-code="B3G4THFREE">
+            <div class="offer-value"><strong>3+1</strong><span>FREE</span></div>
+            <div class="offer-details">
+                <span class="offer-tag">Bundle offer</span>
+                <h3>Buy 3, get 4th free</h3>
+                <p class="offer-condition">Add 4 items and pay for only 3.</p>
+                <div class="offer-bottom"><div class="offer-code">B3G4THFREE</div><button class="copy-coupon" type="button" aria-label="Copy B3G4THFREE coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div>
+                <small>Apply this code at checkout.</small>
+            </div>
+        </div>
+
+        <div class="offer" data-code="B4G5THFREE">
+            <div class="offer-value"><strong>4+1</strong><span>FREE</span></div>
+            <div class="offer-details">
+                <span class="offer-tag">Bundle offer</span>
+                <h3>Buy 4, get 5th free</h3>
+                <p class="offer-condition">Add 5 items and pay for only 4.</p>
+                <div class="offer-bottom"><div class="offer-code">B4G5THFREE</div><button class="copy-coupon" type="button" aria-label="Copy B4G5THFREE coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div>
+                <small>Apply this code at checkout.</small>
+            </div>
+        </div>
+        <div class="offer" data-code="B5G6THFREE">
+            <div class="offer-value"><strong>5+1</strong><span>FREE</span></div>
+            <div class="offer-details"><span class="offer-tag">Bundle offer</span><h3>Buy 5, get 6th free</h3><p class="offer-condition">Add 6 items and pay for only 5.</p><div class="offer-bottom"><div class="offer-code">B5G6THFREE</div><button class="copy-coupon" type="button" aria-label="Copy B5G6THFREE coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div></div>
+        </div>
+        <div class="offer" data-code="PATTERNFREE1299">
+            <div class="offer-value"><strong>FREE</strong><span>PATTERN</span></div>
+            <div class="offer-details"><span class="offer-tag">Special saving</span><h3>Free pattern writing</h3><p class="offer-condition">On orders above ₹1,299.</p><div class="offer-bottom"><div class="offer-code">PATTERNFREE1299</div><button class="copy-coupon" type="button" aria-label="Copy PATTERNFREE1299 coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div></div>
+        </div>
+        <div class="offer" data-code="LETTERFREE1499">
+            <div class="offer-value"><strong>FREE</strong><span>LETTERS</span></div>
+            <div class="offer-details"><span class="offer-tag">Special saving</span><h3>Free letter writing</h3><p class="offer-condition">On orders above ₹1,499.</p><div class="offer-bottom"><div class="offer-code">LETTERFREE1499</div><button class="copy-coupon" type="button" aria-label="Copy LETTERFREE1499 coupon code">Copy code</button><div class="offer-status" aria-live="polite"></div></div></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var container = document.getElementById("auto-discount-offers");
+        if (!container) return;
+
+        var query = new URLSearchParams(window.location.search);
+        var cartTotal = parseFloat(query.get("cart_total") || container.dataset.cartTotal || "0");
+        var fabricMeters = parseFloat(query.get("fabric_meters") || container.dataset.fabricMeters || "0");
+        var firstOrderValue = (query.get("first_order") || container.dataset.firstOrder || "false").toLowerCase();
+        var isFirstOrder = firstOrderValue === "true" || firstOrderValue === "1" || firstOrderValue === "yes";
+        var autoApply = (container.dataset.autoApply || "false").toLowerCase() === "true";
+        var redirectPath = container.dataset.redirectPath || "/cart";
+        var offers = Array.prototype.slice.call(container.querySelectorAll(".offer"));
+
+        function copyCoupon(code) {
+            if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(code);
+            var input = document.createElement("textarea");
+            input.value = code;
+            input.style.position = "fixed";
+            input.style.opacity = "0";
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            document.body.removeChild(input);
+            return Promise.resolve();
+        }
+
+        container.querySelectorAll(".copy-coupon").forEach(function (button) {
+            button.addEventListener("click", function () {
+                var offer = button.closest(".offer");
+                var status = offer.querySelector(".offer-status");
+                copyCoupon(offer.dataset.code).then(function () {
+                    button.textContent = "Copied!";
+                    status.textContent = "Paste in discount field";
+                    setTimeout(function () { button.textContent = "Copy code"; }, 1800);
+                }).catch(function () {
+                    status.textContent = "Please copy manually";
+                });
+            });
+        });
+
+        function getEstimatedSavings(offer) {
+            var type = offer.dataset.type;
+            var percent = parseFloat(offer.dataset.percent || "0");
+            var amount = parseFloat(offer.dataset.amount || "0");
+            if (type === "cart-value") return cartTotal > 0 ? (cartTotal * percent) / 100 : amount;
+            if (type === "first-order" || type === "fabric-meter") return cartTotal > 0 ? (cartTotal * percent) / 100 : percent;
+            return 0;
+        }
+
+        function isEligible(offer) {
+            var type = offer.dataset.type;
+            var threshold = parseFloat(offer.dataset.threshold || "0");
+            if (type === "first-order") return isFirstOrder;
+            if (type === "fabric-meter") return fabricMeters > threshold;
+            if (type === "cart-value") return cartTotal > threshold;
+            return false;
+        }
+
+        var eligibleOffers = offers.filter(isEligible);
+        offers.forEach(function (offer) {
+            if (isEligible(offer)) offer.querySelector(".offer-status").textContent = "Eligible now";
+        });
+        if (!eligibleOffers.length) return;
+
+        eligibleOffers.sort(function (a, b) { return getEstimatedSavings(b) - getEstimatedSavings(a); });
+        var bestOffer = eligibleOffers[0];
+        bestOffer.classList.add("is-best");
+        bestOffer.querySelector(".offer-status").textContent = "Best discount selected";
+
+        if (!autoApply || !bestOffer.dataset.code || !window.sessionStorage) return;
+        var appliedKey = "auto-discount-" + bestOffer.dataset.code;
+        if (sessionStorage.getItem(appliedKey)) return;
+        sessionStorage.setItem(appliedKey, "1");
+        window.location.href = "/discount/" + encodeURIComponent(bestOffer.dataset.code) + "?redirect=" + encodeURIComponent(redirectPath);
+    })();
+</script>

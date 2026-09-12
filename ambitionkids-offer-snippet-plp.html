@@ -1,0 +1,99 @@
+<style>
+  .ambitionkids-offers {
+    --offer-ink: #802778;
+    --offer-accent: #ffbf00;
+    --offer-surface: #fffaf0;
+    --offer-border: #f3dca1;
+    overflow: hidden;
+    border: 1px solid var(--offer-border);
+    border-radius: 14px;
+    background: var(--offer-surface);
+    color: var(--offer-ink);
+    font-family: inherit;
+  }
+
+  .ambitionkids-offers__title {
+    margin: 0;
+    padding: 12px 16px;
+    background: var(--offer-ink);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .ambitionkids-offers__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--offer-border);
+  }
+
+  .ambitionkids-offers__text { font-size: 14px; line-height: 1.35; }
+  .ambitionkids-offers__text strong { display: block; font-size: 15px; }
+  .ambitionkids-offers__copy {
+    flex: 0 0 auto;
+    border: 1px dashed var(--offer-accent);
+    border-radius: 8px;
+    padding: 8px 10px;
+    background: #fff;
+    color: var(--offer-ink);
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+
+  .ambitionkids-offers__copy:hover { background: #fff3cc; }
+  .ambitionkids-offers__copy:focus-visible { outline: 2px solid var(--offer-ink); outline-offset: 2px; }
+
+  @media screen and (max-width: 480px) {
+    .ambitionkids-offers__item { align-items: flex-start; }
+  }
+</style>
+
+<section class="ambitionkids-offers" aria-label="Available discount offers">
+  <h3 class="ambitionkids-offers__title">Exclusive offers</h3>
+
+  <div class="ambitionkids-offers__item">
+    <div class="ambitionkids-offers__text"><strong>Buy any 1 product &mdash; Get 5% off</strong>Use code SAVE5 &mdash; applied at checkout</div>
+    <button class="ambitionkids-offers__copy" type="button" data-code="SAVE5">Copy SAVE5</button>
+  </div>
+
+  <div class="ambitionkids-offers__item">
+    <div class="ambitionkids-offers__text"><strong>Order above ₹999 &mdash; Get 10% off</strong>Use code SAVE10 &mdash; applied at checkout</div>
+    <button class="ambitionkids-offers__copy" type="button" data-code="SAVE10">Copy SAVE10</button>
+  </div>
+
+  <div class="ambitionkids-offers__item">
+    <div class="ambitionkids-offers__text"><strong>Order above ₹1,499 &mdash; Get 15% off</strong>Use code SAVE15 &mdash; applied at checkout</div>
+    <button class="ambitionkids-offers__copy" type="button" data-code="SAVE15">Copy SAVE15</button>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.ambitionkids-offers__copy').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const code = button.dataset.code;
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch (error) {
+        const input = document.createElement('textarea');
+        input.value = code;
+        input.setAttribute('readonly', '');
+        input.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        input.remove();
+      }
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      setTimeout(() => { button.textContent = originalText; }, 1800);
+    });
+  });
+</script>

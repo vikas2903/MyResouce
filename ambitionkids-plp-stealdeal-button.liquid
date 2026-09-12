@@ -1,0 +1,314 @@
+
+{% liquid
+  assign steal_deal_min_price = 39900
+  assign steal_deal_variant = product.selected_or_first_available_variant | default: product.variants.first
+  assign steal_deal_price = steal_deal_variant.price | default: product.price
+%}
+
+{% if product and steal_deal_variant and steal_deal_price > steal_deal_min_price %}
+  <div
+    class="ak-stealdeal"
+    data-stealdeal-product-id="{{ product.id }}"
+    data-stealdeal-variant-id="{{ steal_deal_variant.id }}"
+    data-stealdeal-product-title="{{ product.title | escape }}"
+  >
+    <button
+      type="button"
+      class="ak-stealdeal__button"
+      data-stealdeal-button
+      data-default-text="Get 2nd Product @ 399"
+    >
+      Get 2nd Product @ 399
+    </button>
+    <p class="ak-stealdeal__note" data-stealdeal-note>
+      Add one product to cart to get 2nd product at 399
+    </p>
+  </div>
+
+  <style>
+    .ak-stealdeal {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .ak-stealdeal__button {
+      width: 100%;
+    border: 0;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 8px;
+    padding: 12px 16px;
+    background: #802778;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    }
+
+    .ak-stealdeal__button:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .ak-stealdeal__button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .ak-stealdeal__button.is-loading {
+      background: #444;
+    }
+
+    .ak-stealdeal__button.is-added {
+      background: #1f8a3b;
+    }
+
+    .ak-stealdeal__note {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #c2410c;
+    }
+
+    .ak-stealdeal__note.is-hidden {
+      display: none;
+    }
+  </style>
+
+  <script>
+    (function () {
+      if (window.__akStealDealInit) {
+        return;
+      }
+
+      window.__akStealDealInit = true;
+
+      const BUNDLE_TAG = 'STEAL DEAL @ RS. 399';
+      const BUTTON_SELECTOR = '[data-stealdeal-button]';
+      const WRAPPER_SELECTOR = '.ak-stealdeal';
+      const NOTE_SELECTOR = '[data-stealdeal-note]';
+      const activeButtons = new Set();
+
+      function getWrappers() {
+        return Array.from(document.querySelectorAll(WRAPPER_SELECTOR));
+      }
+
+      async function getCart() {
+        const response = await fetch('/cart.js', {
+          headers: { Accept: 'application/json' },
+          credentials: 'same-origin',
+          cache: 'no-store',
+        });
+
+        return response.json();
+      }
+
+      function hasQualifyingCartItem(cart) {
+        return (cart.items || []).some(function (item) {
+          return !item.properties || item.properties.bundle_type !== BUNDLE_TAG;
+        });
+      }
+
+      function updateWrapperState(wrapper, canUnlock) {
+        const note = wrapper.querySelector(NOTE_SELECTOR);
+
+        if (note) {
+          note.textContent = canUnlock
+            ? 'Eligible now. Click to add this product at 399'
+            : 'Add one product to cart to get 2nd product at 399';
+        }
+      }
+
+      async function syncButtons() {
+        const wrappers = getWrappers();
+        if (!wrappers.length) return;
+
+        try {
+          const cart = await getCart();
+          const canUnlock = hasQualifyingCartItem(cart);
+
+          wrappers.forEach(function (wrapper) {
+            updateWrapperState(wrapper, canUnlock);
+          });
+        } catch (error) {
+          console.error('[Steal Deal PLP] Cart sync failed:', error);
+        }
+      }
+
+      function dispatchCartRefreshEvents() {
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+        document.dispatchEvent(new CustomEvent('cart:refresh'));
+        document.dispatchEvent(new CustomEvent('cart-drawer:updated'));
+      }
+
+      function setButtonState(button, state) {
+        const defaultText = button.dataset.defaultText || 'Get 2nd Product @ 399';
+
+        if (state === 'loading') {
+          button.dataset.loading = 'true';
+          button.disabled = true;
+          button.classList.add('is-loading');
+          button.classList.remove('is-added');
+          button.textContent = 'Adding...';
+          return;
+        }
+
+        button.dataset.loading = 'false';
+        button.classList.remove('is-loading');
+        button.disabled = false;
+
+        if (state === 'added') {
+          button.classList.add('is-added');
+          button.textContent = 'Added';
+          return;
+        }
+
+        button.classList.remove('is-added');
+        button.textContent = defaultText;
+      }
+
+      async function addStealDeal(button) {
+        const wrapper = button.closest(WRAPPER_SELECTOR);
+        const variantId = wrapper && wrapper.getAttribute('data-stealdeal-variant-id');
+
+        if (!variantId || activeButtons.has(variantId)) {
+          return;
+        }
+
+        activeButtons.add(variantId);
+        setButtonState(button, 'loading');
+
+        try {
+          const cart = await getCart();
+
+          if (!hasQualifyingCartItem(cart)) {
+            const wrapperNote = wrapper && wrapper.querySelector(NOTE_SELECTOR);
+            if (wrapperNote) {
+              wrapperNote.textContent = 'Add one product to cart to get 2nd product at 399';
+            }
+            activeButtons.delete(variantId);
+            setButtonState(button, 'default');
+            window.alert('Add one product to cart to get 2nd product at 399');
+            return;
+          }
+
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+              items: [
+                {
+                  id: parseInt(variantId, 10),
+                  quantity: 1,
+                  properties: {
+                    bundle_type: BUNDLE_TAG,
+                  },
+                },
+              ],
+            }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.description || result.message || 'Unable to add product');
+          }
+
+          setButtonState(button, 'added');
+          if (window.CartDrawerPremium && typeof window.CartDrawerPremium.open === 'function') {
+            window.CartDrawerPremium.open();
+          }
+          dispatchCartRefreshEvents();
+
+          window.setTimeout(function () {
+            activeButtons.delete(variantId);
+            setButtonState(button, 'default');
+            syncButtons();
+          }, 1200);
+        } catch (error) {
+          console.error('[Steal Deal PLP] Add failed:', error);
+          activeButtons.delete(variantId);
+          setButtonState(button, 'default');
+          syncButtons();
+          window.alert(error.message || 'Unable to add product. Please try again.');
+          return;
+        }
+      }
+
+      async function handleStealDealClick(button) {
+        if (button.dataset.loading === 'true') {
+          return;
+        }
+
+        await addStealDeal(button);
+      }
+
+      document.addEventListener('click', function (event) {
+        const button = event.target.closest(BUTTON_SELECTOR);
+        if (!button) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (button.dataset.loading === 'true') {
+          return;
+        }
+
+        handleStealDealClick(button);
+      });
+
+      ['cart:updated', 'cart:refresh', 'cart-drawer:updated'].forEach(function (eventName) {
+        document.addEventListener(eventName, function () {
+          window.setTimeout(syncButtons, 250);
+        });
+      });
+
+      if (!window.__akStealDealCartPatched) {
+        window.__akStealDealCartPatched = true;
+
+        const originalFetch = window.fetch;
+        window.fetch = async function () {
+          const response = await originalFetch.apply(this, arguments);
+
+          try {
+            const request = arguments[0];
+            const url = typeof request === 'string' ? request : request && request.url;
+
+            if (url && /\/cart\/(add|change|update|clear)\.js/.test(url)) {
+              window.setTimeout(syncButtons, 250);
+            }
+          } catch (error) {
+            console.error('[Steal Deal PLP] Fetch patch failed:', error);
+          }
+
+          return response;
+        };
+
+        const originalOpen = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function () {
+          const url = arguments[1];
+
+          this.addEventListener('load', function () {
+            if (typeof url === 'string' && /\/cart\/(add|change|update|clear)\.js/.test(url)) {
+              window.setTimeout(syncButtons, 250);
+            }
+          });
+
+          return originalOpen.apply(this, arguments);
+        };
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', syncButtons);
+      } else {
+        syncButtons();
+      }
+    })();
+  </script>
+{% endif %}

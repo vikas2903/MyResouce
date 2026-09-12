@@ -1,0 +1,419 @@
+{% liquid
+  assign decimal_qty = 0
+  assign decimal_product_ids = ''
+
+  for item in cart.items
+    if item.product.tags contains 'decimal'
+      assign decimal_qty = decimal_qty | plus: item.quantity
+      assign current_product_id = item.product.id | append: ''
+
+      unless decimal_product_ids contains current_product_id
+        if decimal_product_ids != blank
+          assign decimal_product_ids = decimal_product_ids | append: ','
+        endif
+        assign decimal_product_ids = decimal_product_ids | append: current_product_id
+      endunless
+    endif
+  endfor
+%}
+
+<style>
+  .ff-meter-progress {
+    {% comment %} margin: 0px 0 10px 0;
+    padding: 18px 16px 14px;
+    border: 1px solid #ddd6c9; {% endcomment %}
+    {% comment %} border-radius: 22px; {% endcomment %}
+    {% comment %} background: linear-gradient(180deg, #f7f3ec 0%, #f3efe8 100%); {% endcomment %}
+    {% comment %} font-family: Arial, sans-serif; {% endcomment %}
+         margin-bottom: 11px;
+  }
+
+  .ff-meter-progress[hidden] {
+    display: none !important;
+  }
+
+  .ff-meter-progress__message {
+    margin: 6px 0 4px;
+    color: #1e1e1e;
+    font-size: 15px;
+    line-height: 1.45;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .ff-meter-progress__message strong {
+    font-weight: 700;
+  }
+
+  .ff-meter-progress__track-wrap {
+    position: relative;
+    padding: 0 14px;
+  }
+
+  .ff-meter-progress__track {
+    position: absolute;
+    top: 20px;
+    left: 32px;
+    right: 32px;
+    height: 5px;
+    border-radius: 999px;
+    background: #d8d2c8;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .ff-meter-progress__fill {
+    width: 0%;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #15251f 0%, #1c342b 100%);
+    transition: width 0.35s ease;
+  }
+
+  .ff-meter-progress__steps {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ff-meter-progress__step {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #8b877f;
+  }
+
+  .ff-meter-progress__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #bfb8ac;
+    background: #f7f3ec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8b877f;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .ff-meter-progress__icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+  }
+
+  .ff-meter-progress__step.is-active .ff-meter-progress__icon {
+    border-color: #233d33;
+    color: #233d33;
+    background: #fff;
+  }
+
+  .ff-meter-progress__step.is-done .ff-meter-progress__icon {
+    border-color: #233d33;
+    background: #233d33;
+    color: #fff;
+  }
+
+  .ff-meter-progress__step.is-done .ff-meter-progress__icon::before {
+    content: "\2713";
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .ff-meter-progress__step.is-done .ff-meter-progress__icon svg {
+    display: none;
+  }
+
+  .ff-meter-progress__label {
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #8b877f;
+    font-weight: 500;
+  }
+
+  .ff-meter-progress__label strong {
+    display: block;
+    margin-bottom: 2px;
+    color: #232323;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .ff-meter-progress__step.is-active .ff-meter-progress__label,
+  .ff-meter-progress__step.is-done .ff-meter-progress__label {
+    color: #232323;
+  }
+
+  @media (max-width: 749px) {
+    .ff-meter-progress {
+      {% comment %} padding: 16px 12px 12px; {% endcomment %}
+      {% comment %} border-radius: 18px; {% endcomment %}
+    }
+
+    .ff-meter-progress__message {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .ff-meter-progress__track-wrap {
+      padding: 0 4px;
+    }
+
+    .ff-meter-progress__track {
+      left: 22px;
+      right: 22px;
+    }
+
+    .ff-meter-progress__label {
+      font-size: 11px;
+    }
+
+    .ff-meter-progress__label strong {
+      font-size: 14px;
+    }
+  }
+</style>
+
+<div
+  class="ff-meter-progress"
+  id="ffMeterProgress"
+  data-decimal-qty="{{ decimal_qty }}"
+  data-decimal-product-ids="{{ decimal_product_ids }}"
+  data-milestones='[{"meters":6,"discount":"5%"},{"meters":10,"discount":"8%"},{"meters":15,"discount":"10%"}]'
+  {% if decimal_qty == 0 %}
+    hidden
+  {% endif %}
+>
+  <p class="ff-meter-progress__message" id="ffMeterProgressMessage"></p>
+
+  <div class="ff-meter-progress__track-wrap">
+    <div class="ff-meter-progress__track">
+      <div class="ff-meter-progress__fill" id="ffMeterProgressFill"></div>
+    </div>
+
+    <div class="ff-meter-progress__steps">
+      <div class="ff-meter-progress__step" data-meter="6">
+        <div class="ff-meter-progress__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+        </div>
+        <div class="ff-meter-progress__label">
+          <strong>6 Meters</strong>
+          <span>Get 5% Off</span>
+        </div>
+      </div>
+
+      <div class="ff-meter-progress__step" data-meter="10">
+        <div class="ff-meter-progress__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+        </div>
+        <div class="ff-meter-progress__label">
+          <strong>10 Meters</strong>
+          <span>Get 8% Off</span>
+        </div>
+      </div>
+
+
+      
+      <div class="ff-meter-progress__step" data-meter="15">
+        <div class="ff-meter-progress__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+        </div>
+        <div class="ff-meter-progress__label">
+          <strong>15 Meters</strong>
+          <span>Get 10% Off</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (async function () {
+    var root = document.getElementById('ffMeterProgress');
+    if (!root) return;
+
+    var fill = document.getElementById('ffMeterProgressFill');
+    var message = document.getElementById('ffMeterProgressMessage');
+    var steps = Array.prototype.slice.call(root.querySelectorAll('.ff-meter-progress__step'));
+    var milestones = JSON.parse(root.getAttribute('data-milestones') || '[]');
+    var decimalProductIds = (root.getAttribute('data-decimal-product-ids') || '')
+      .split(',')
+      .map(function (id) {
+        return String(id).trim();
+      })
+      .filter(Boolean);
+
+    function formatMeters(value) {
+      var rounded = Math.round(value * 10) / 10;
+      return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+    }
+
+    function getMetersFromQty(qty) {
+      return (Number(qty) || 0) / 2;
+    }
+
+    function getDecimalQtyFromCart(cart) {
+      if (!cart || !Array.isArray(cart.items) || !decimalProductIds.length) return 0;
+
+      return cart.items.reduce(function (total, item) {
+        var productId = item && typeof item.product_id !== 'undefined' ? String(item.product_id) : '';
+        return decimalProductIds.indexOf(productId) > -1 ? total + (Number(item.quantity) || 0) : total;
+      }, 0);
+    }
+
+    function buildMessage(currentMeters) {
+      if (!milestones.length) return '';
+
+      if (currentMeters < milestones[0].meters) {
+        return (
+          'Order <strong>' +
+          formatMeters(milestones[0].meters - currentMeters) +
+          ' more meters</strong> to get <strong>' +
+          milestones[0].discount +
+          ' off</strong>.'
+        );
+      }
+
+      if (currentMeters < milestones[1].meters) {
+        return (
+          '5% off unlocked. Order <strong>' +
+          formatMeters(milestones[1].meters - currentMeters) +
+          ' more meters</strong> to get <strong>8% off</strong>.'
+        );
+      }
+
+      if (currentMeters < milestones[2].meters) {
+        return (
+          '8% off unlocked. Order <strong>' +
+          formatMeters(milestones[2].meters - currentMeters) +
+          ' more meters</strong> to get <strong>10% off</strong>.'
+        );
+      }
+
+      return 'You unlocked <strong>10% off</strong> on fabric order above <strong>15 meters</strong>.';
+    }
+
+    function render(decimalQty) {
+      var currentQty = Number(decimalQty) || 0;
+      var currentMeters = getMetersFromQty(currentQty);
+      var maxMeters = milestones.length ? milestones[milestones.length - 1].meters : 0;
+      var progress = maxMeters > 0 ? Math.min((currentMeters / maxMeters) * 100, 100) : 0;
+
+      root.hidden = currentQty <= 0;
+      root.setAttribute('data-decimal-qty', String(currentQty));
+
+      if (root.hidden) return;
+
+      if (fill) {
+        fill.style.width = progress + '%';
+      }
+
+      if (message) {
+        message.innerHTML = buildMessage(currentMeters);
+      }
+
+      steps.forEach(function (step, index) {
+        var meterTarget = Number(step.getAttribute('data-meter')) || 0;
+        step.classList.remove('is-active', 'is-done');
+
+        if (currentMeters >= meterTarget) {
+          step.classList.add('is-done');
+          return;
+        }
+
+        var previousTarget = index > 0 ? Number(steps[index - 1].getAttribute('data-meter')) || 0 : 0;
+        if (currentMeters >= previousTarget) {
+          step.classList.add('is-active');
+        }
+      });
+    }
+
+    async function onCartUpdate() {
+      try {
+        var res = await fetch('/cart.js', {
+          headers: { Accept: 'application/json' },
+        });
+
+        var cart = await res.json();
+        var decimalQty = getDecimalQtyFromCart(cart);
+
+        console.log('cart', cart);
+        render(decimalQty);
+      } catch (err) {
+        console.error('Cart update failed:', err);
+      }
+    }
+
+    var triggerCartUpdate = function () {
+      return onCartUpdate();
+    };
+
+    render(Number(root.getAttribute('data-decimal-qty')) || 0);
+    onCartUpdate();
+
+    document.addEventListener('cart:updated', triggerCartUpdate);
+
+    if (!window.__shippingBarPatched) {
+      window.__shippingBarPatched = true;
+
+      var originalFetch = window.fetch;
+
+      window.fetch = async function () {
+        var args = Array.prototype.slice.call(arguments);
+        var response = await originalFetch.apply(window, args);
+
+        try {
+          var url = typeof args[0] === 'string' ? args[0] : args[0] && args[0].url ? args[0].url : '';
+
+          if (/\/cart\/(add|change|update)/.test(url)) {
+            triggerCartUpdate();
+          }
+        } catch (e) {}
+
+        return response;
+      };
+
+      var originalOpen = XMLHttpRequest.prototype.open;
+
+      XMLHttpRequest.prototype.open = function () {
+        var args = Array.prototype.slice.call(arguments);
+
+        this.addEventListener('load', function () {
+          var url = typeof args[1] === 'string' ? args[1] : '';
+
+          if (/\/cart\/(add|change|update)/.test(url)) {
+            triggerCartUpdate();
+          }
+        });
+
+        return originalOpen.apply(this, args);
+      };
+    }
+  })();
+</script>

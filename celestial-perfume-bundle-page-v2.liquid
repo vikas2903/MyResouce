@@ -1,0 +1,419 @@
+
+{% liquid
+  assign bundle_collection = section.settings.collection
+  if bundle_collection == blank
+    assign bundle_collection = collection
+  endif
+  assign gift_product = section.settings.gift_product
+  assign gift_variant = gift_product.selected_or_first_available_variant
+%}
+{% render 'floating-video' %}
+<section
+  id="GiftBoxBundle-{{ section.id }}"
+  class="gift-box-bundle"
+  data-section-id="{{ section.id }}"
+  data-min-items="{{ section.settings.minimum_items }}"
+  data-max-items="{{ section.settings.maximum_items }}"
+  data-cart-add-url="{{ routes.cart_add_url }}"
+  data-checkout-url="{{ routes.checkout_url }}"
+  data-currency-format="{{ shop.money_format | escape }}"
+  data-gift-variant-id="{% if gift_variant != blank %}{{ gift_variant.id }}{% else %}{{ section.settings.gift_variant_id }}{% endif %}"
+  data-gift-title="{% if gift_variant != blank %}{{ gift_variant.product.title | escape }}{% else %}{{ section.settings.gift_title | escape }}{% endif %}"
+  data-gift-price="{% if gift_variant != blank %}{{ gift_variant.price }}{% else %}{{ section.settings.gift_price }}{% endif %}"
+  data-gift-image="{% if gift_variant != blank and gift_variant.image != blank %}{{ gift_variant.image | image_url: width: 100 }}{% elsif gift_variant != blank and gift_variant.product.featured_image != blank %}{{ gift_variant.product.featured_image | image_url: width: 100 }}{% endif %}"
+>
+  <div class="gift-box-bundle__header">
+    {% if section.settings.heading != blank %}
+      <h1>{{ section.settings.heading }}</h1>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <p>{{ section.settings.subheading }}</p>
+    {% endif %}
+  </div>
+
+  <div class="gift-box-bundle__grid">
+    {% if bundle_collection != blank %}
+      {% paginate bundle_collection.products by 250 %}
+      {% for product in bundle_collection.products %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
+        <article class="gift-box-card" data-product-id="{{ product.id }}">
+          <div class="gift-box-card__image-wrap">
+
+
+            <span class="sale-lbl" product-id="{{ product.id }}">Buy 2 Get 2</span>
+            {% if product.featured_image != blank %}
+              {{
+                product.featured_image
+                | image_url: width: 900
+                | image_tag: class: 'gift-box-card__image', loading: 'lazy', widths: '360, 540, 720, 900'
+              }}
+            {% endif %}
+          </div>
+          <div class="gift-box-card__content">
+            <h2>{{ product.title | truncate: 25 }}</h2>
+            <div class="gift-box-card__prices">
+              <span>{{ current_variant.price | money }}</span>
+              {% if current_variant.compare_at_price > current_variant.price %}
+                <s>{{ current_variant.compare_at_price | money }}</s>
+                <em>
+                  {{-
+                    current_variant.compare_at_price
+                    | minus: current_variant.price
+                    | times: 100.0
+                    | divided_by: current_variant.compare_at_price
+                    | round
+                  -}}
+                  % OFF</em
+                >
+              {% endif %}
+            </div>
+            {% if product.variants.size > 1 %}
+              <label class="visually-hidden" for="BundleVariant-{{ section.id }}-{{ product.id }}"
+                >Choose {{ product.title | escape }} variant</label
+              >
+              <select id="BundleVariant-{{ section.id }}-{{ product.id }}" class="gift-box-card__variants">
+                {% for variant in product.variants %}
+                  <option
+                    value="{{ variant.id }}"
+                    data-price="{{ variant.price }}"
+                    data-title="{{ product.title | escape }}{% unless variant.title == 'Default Title' %} — {{ variant.title | escape }}{% endunless %}"
+                    data-image="{% if variant.image != blank %}{{ variant.image | image_url: width: 100 }}{% elsif product.featured_image != blank %}{{ product.featured_image | image_url: width: 100 }}{% endif %}"
+                    {% unless variant.available %}
+                      disabled
+                    {% endunless %}
+                    {% if variant.id == current_variant.id %}
+                      selected
+                    {% endif %}
+                  >
+                    {{ variant.title -}}
+                    {%- unless variant.available %} — Sold out{% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+            {% endif %}
+            <button
+              type="button"
+              class="gift-box-card__button"
+              {% unless current_variant.available %}
+                disabled
+              {% endunless %}
+              data-variant-id="{{ current_variant.id }}"
+              data-price="{{ current_variant.price }}"
+              data-title="{{ product.title | escape }}"
+              data-image="{% if current_variant.image != blank %}{{ current_variant.image | image_url: width: 100 }}{% elsif product.featured_image != blank %}{{ product.featured_image | image_url: width: 100 }}{% endif %}"
+            >
+              {% if current_variant.available %}ADD TO BOX{% else %}SOLD OUT{% endif %}
+            </button>
+          </div>
+        </article>
+      {% endfor %}
+      {% endpaginate %}
+    {% else %}
+      <p class="gift-box-bundle__empty">Select a collection in this section’s settings to display products.</p>
+    {% endif %}
+  </div>
+
+  <div class="gift-box-bundle__bar" aria-live="polite">
+    <div class="gift-box-bundle__slots"></div>
+    <div class="gift-box-bundle__summary">
+      <div class="gift-box-bundle__total"><span>Total</span><strong></strong></div>
+      <div class="bundle-gokwik-checkout" id="bundle-gokwik-checkout-{{ section.id }}">
+        <button type="button" class="button bundle-checkout-btn" id="bundle-checkout-btn-{{ section.id }}">
+          <span class="btn-text">
+            <span>{{ section.settings.gokwik_main_title | default: 'CHECKOUT' }}</span>
+            <span>{{ section.settings.gokwik_sub_title | default: 'Secure Payment' }}</span>
+          </span>
+          <span class="pay-opt-icon">
+            <img src="https://cdn.gokwik.co/v4/images/upi-icons.svg" alt="UPI">
+            <img src="https://cdn.gokwik.co/v4/images/right-arrow.svg" alt="Arrow">
+          </span>
+          <div style="display:none" class="addloadr" id="btn-loader-{{ section.id }}"><div class="cir-loader">Loading..</div></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #GiftBoxBundle-{{ section.id }} { --bundle-black:#050505; --bundle-border:#dedede; font-family: inherit; color:var(--bundle-black); }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__header { max-width:1800px; margin:30px auto 22px; padding:0 32px; text-align:center; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__header h1 { margin:0; font-size:28px; letter-spacing:.02em; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__header p { margin:8px 0 0; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; max-width:1800px; margin:auto; padding:0 32px 115px; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card { display:flex; flex-direction:column; height:100%; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__image-wrap { position: relative; aspect-ratio:1 / 1; padding:0px; background:#ededed; overflow:hidden; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__image { width:100%; height:100%; object-fit:contain; display:block; mix-blend-mode:multiply; transition:transform .25s ease; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card:hover .gift-box-card__image { transform:scale(1.025); }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__content { display:flex; flex:1; flex-direction:column; padding-top:16px; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card h2 { margin:0 0 4px; font-size:20px; line-height:1.2; font-weight:500; text-transform:uppercase; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__prices { display:flex; gap:9px; align-items:center; min-height:25px; font-size:18px; font-weight:700; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__prices s { color:#777; font-weight:500; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__prices em { color:#e43113; font-style:normal; font-weight:500; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__variants { width:100%; margin:8px 0 6px; height:38px; padding:0 10px; background:white; border:1px solid #aaa; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__button { width:100%; margin-top:auto; min-height:50px; border:1px solid var(--bundle-black); background:var(--bundle-black); color:#fff; font-weight:700; font-size:16px; cursor:pointer; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__button.is-added { background:white; color:var(--bundle-black); }
+  #GiftBoxBundle-{{ section.id }} .gift-box-card__button:disabled { opacity:.45; cursor:not-allowed; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__bar { position:fixed; z-index:20; bottom:0; left:0; right:0; display:flex; align-items:center; justify-content:center; gap:60px; min-height:91px; padding:12px 40px; background:#fff; border-top:1px solid var(--bundle-border); box-shadow:0 -2px 12px rgb(0 0 0 / 5%); }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__slots { display:flex; gap:32px; align-items:center; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-slot { width:64px; height:64px; border:1px dashed #777; display:grid; place-items:center; position:relative; background:#fff; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-slot:not(:last-child)::after { content:'+'; position:absolute; left:calc(100% + 5px); font-size:28px; font-weight:700; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-slot img { width:100%; height:100%; object-fit:contain; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-slot button { position:absolute; right:-8px; top:-8px; width:20px; height:20px; border:1px solid #111; border-radius:50%; background:#fff; cursor:pointer; line-height:1; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-slot--empty { font-size:16px; font-weight:500; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__summary { display:flex; align-items:center; gap:38px; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__total { display:flex; flex-direction:column; gap:4px; font-size:13px; text-transform:uppercase; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__total strong { font-size:18px; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__total strong.bundle-offer-message { display:flex; flex-wrap:wrap; align-items:baseline; gap:5px; color:#111; font-size:19px; line-height:1.2; }
+  #GiftBoxBundle-{{ section.id }} .bundle-original-price { color:#999; font-size:14px; font-weight:500; }
+  #GiftBoxBundle-{{ section.id }} .bundle-savings { width:100%; color:#0b8d62; font-size:12px; font-weight:700; }
+  #GiftBoxBundle-{{ section.id }} .bundle-offer-label { width:100%; color:#e43113; font-size:12px; font-weight:700; }
+  #GiftBoxBundle-{{ section.id }} .bundle-gokwik-checkout { width:210px; }
+  #GiftBoxBundle-{{ section.id }} .bundle-checkout-btn { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:50px; padding:8px 12px; border:1px solid var(--bundle-black); background:var(--bundle-black); color:#fff; cursor:pointer; }
+  #GiftBoxBundle-{{ section.id }} .bundle-checkout-btn:disabled { opacity:.45; cursor:not-allowed; }
+  #GiftBoxBundle-{{ section.id }} .bundle-checkout-btn .btn-text { display:flex; flex-direction:column; align-items:flex-start; font-size:12px; font-weight:500; line-height:1.2; }
+  #GiftBoxBundle-{{ section.id }} .bundle-checkout-btn .btn-text span:first-child { font-size:16px; font-weight:700; }
+  #GiftBoxBundle-{{ section.id }} .bundle-checkout-btn .pay-opt-icon { display:flex; align-items:center; gap:8px; }
+  #GiftBoxBundle-{{ section.id }} .bundle-checkout-btn .pay-opt-icon img { display:block; max-height:24px; max-width:66px; }
+  #GiftBoxBundle-{{ section.id }} .gift-box-bundle__empty { grid-column:1/-1; text-align:center; padding:40px; }
+
+    button[aria-label="Remove Rakshabandhan Special Gift Box"]{display:none;}
+  @media (max-width: 749px) {
+
+      #GiftBoxBundle-{{ section.id }} .gift-box-slot button {
+          position: absolute;
+          right: -8px;
+          top: -8px;
+          width: 15px;
+          height: 15px;
+          border: 1px solid #111;
+          border-radius: 50%;
+          background: #fff;
+          cursor: pointer;
+          padding: 0;
+          line-height: 1;
+      }
+    #GiftBoxBundle-{{ section.id }} .gift-box-bundle__header, #GiftBoxBundle-{{ section.id }} .gift-box-bundle__grid { padding-left:14px; padding-right:14px; } #GiftBoxBundle-{{ section.id }} .gift-box-bundle__grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding-bottom:155px; } #GiftBoxBundle-{{ section.id }} .gift-box-card h2 { min-height:34px; font-size:14px; } #GiftBoxBundle-{{ section.id }} .gift-box-card__prices { font-size:14px; gap:5px; flex-wrap:wrap; } #GiftBoxBundle-{{ section.id }} .gift-box-card__button { min-height:43px; font-size:13px; } #GiftBoxBundle-{{ section.id }} .gift-box-bundle__bar { gap:12px; justify-content:space-between; padding:10px 14px; flex-direction: column; } #GiftBoxBundle-{{ section.id }} .gift-box-bundle__slots { gap:18px; } #GiftBoxBundle-{{ section.id }} .gift-box-slot { width:48px; height:48px; } #GiftBoxBundle-{{ section.id }} .gift-box-slot:not(:last-child)::after { left:calc(100% + 6px); font-size:17px; } #GiftBoxBundle-{{ section.id }} .gift-box-bundle__summary { gap:12px; } #GiftBoxBundle-{{ section.id }} .bundle-gokwik-checkout { width:160px; } #GiftBoxBundle-{{ section.id }} .bundle-checkout-btn { min-height:44px; } }
+
+
+
+button[aria-label="Remove Special Gift Box"]{
+    visibility: hidden;
+    display: none;
+}
+
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('GiftBoxBundle-{{ section.id }}');
+    if (!root || root.dataset.initialized) return;
+    root.dataset.initialized = 'true';
+    const maxItems = Math.max(1, Number(root.dataset.maxItems) || 5);
+    const minItems = Math.min(maxItems, Math.max(1, Number(root.dataset.minItems) || 1));
+    // The gift box counts as one temporary-cart item, so customers can check out
+    // after selecting two products (three items total).
+    const checkoutMinimum = Math.min(maxItems, 3);
+    const moneyFormat = root.dataset.currencyFormat;
+    const slots = root.querySelector('.gift-box-bundle__slots');
+    const total = root.querySelector('.gift-box-bundle__total strong');
+    const checkout = root.querySelector('.bundle-checkout-btn');
+    const checkoutText = checkout.querySelector('.btn-text');
+    const checkoutLoader = root.querySelector('.addloadr');
+    const gift = {
+      id: String(root.dataset.giftVariantId || ''),
+      title: root.dataset.giftTitle || 'Special Gift Box',
+      price: Number(root.dataset.giftPrice || 19900),
+      image: root.dataset.giftImage || '',
+      locked: false,
+      removable: true,
+    };
+    let items = gift.id ? [gift] : [];
+
+    const formatMoney = (cents) => {
+      if (window.Shopify && Shopify.formatMoney) return Shopify.formatMoney(cents, moneyFormat);
+      return new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: '{{ cart.currency.iso_code | default: shop.currency }}',
+      }).format(cents / 100);
+    };
+    const render = () => {
+      slots.innerHTML = '';
+      for (let index = 0; index < maxItems; index++) {
+        const item = items[index];
+        const slot = document.createElement('div');
+        slot.className = `gift-box-slot${item ? '' : ' gift-box-slot--empty'}`;
+        if (item) {
+          slot.title = item.title;
+          slot.innerHTML = item.image
+            ? `<img src="${item.image}" alt="${item.title.replace(/"/g, '&quot;')}">`
+            : '<span>Box</span>';
+          if (item.removable) {
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.setAttribute('aria-label', `Remove ${item.title}`);
+            remove.textContent = '×';
+            remove.addEventListener('click', (event) => {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              items = items.filter((selected) => selected.id !== item.id);
+              render();
+            }, true);
+            slot.appendChild(remove);
+          }
+        } else slot.textContent = 'Add';
+        slots.appendChild(slot);
+      }
+      const cartTotal = items.reduce((sum, item) => sum + item.price, 0);
+      // The box is item one. Once two products are selected, lock the payable
+      // amount to those first three items; items four and five are free.
+      const offerApplied = maxItems === 5 && items.length >= 3;
+      const offerTotal = items.slice(0, Math.min(items.length, 3)).reduce((sum, item) => sum + item.price, 0);
+      if (offerApplied) {
+        const savings = cartTotal - offerTotal;
+        const savingsPercent = cartTotal ? Math.round((savings / cartTotal) * 100) : 0;
+        total.innerHTML = `${savings ? `<s class="bundle-original-price">${formatMoney(cartTotal)}</s>` : ''}<span>${formatMoney(offerTotal)}</span>${savings ? `<small class="bundle-savings">Save ${formatMoney(savings)} (${savingsPercent}% OFF)</small>` : ''}<small class="bundle-offer-label">BUY 2 GET 2 OFFER${items.length > 3 ? ' â€” extra products are FREE' : ''}</small>`;
+      } else {
+        total.textContent = formatMoney(cartTotal);
+      }
+      total.classList.toggle('bundle-offer-message', offerApplied);
+      checkout.disabled = items.length < checkoutMinimum;
+      root.querySelectorAll('.gift-box-card__button').forEach((button) => {
+        const added = items.some((item) => item.id === button.dataset.variantId);
+        button.classList.toggle('is-added', added);
+        button.textContent = added ? 'ADDED' : 'ADD TO BOX';
+        button.disabled = added || items.length >= maxItems;
+      });
+    };
+    root.querySelectorAll('.gift-box-card__variants').forEach((select) =>
+      select.addEventListener('change', () => {
+        const button = select.closest('.gift-box-card').querySelector('.gift-box-card__button');
+        const option = select.selectedOptions[0];
+        button.dataset.variantId = option.value;
+        button.dataset.price = option.dataset.price;
+        button.dataset.title = option.dataset.title;
+        button.dataset.image = option.dataset.image;
+        render();
+      })
+    );
+    root.querySelectorAll('.gift-box-card__button').forEach((button) =>
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (items.length >= maxItems || items.some((item) => item.id === button.dataset.variantId)) return;
+        items.push({
+          id: button.dataset.variantId,
+          title: button.dataset.title,
+          price: Number(button.dataset.price),
+          image: button.dataset.image || '',
+          removable: true,
+        });
+        render();
+      }, true)
+    );
+    checkout.addEventListener('click', async (event) => {
+      // Ignore repeat clicks while the GoKwik handoff is in progress.
+      if (checkout.dataset.bundleReady === 'true') return;
+
+      // This section owns its checkout action. Prevent theme/cart-drawer handlers
+      // from treating this first click as a regular cart button.
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if (items.length < checkoutMinimum) {
+        alert(`Please select at least ${checkoutMinimum} products to proceed.`);
+        return;
+      }
+      if (checkout.dataset.loading === 'true') return;
+      checkout.dataset.loading = 'true';
+      checkout.disabled = true;
+      if (checkoutLoader) checkoutLoader.style.display = 'block';
+      try {
+        const response = await fetch(root.dataset.cartAddUrl + '.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            items: items.map((item) => ({
+              id: Number(item.id),
+              quantity: 1,
+              properties: {
+                _Bundle: '{{ section.settings.bundle_name | escape }}',
+                _Bundle_Offer: items.length >= 3 && maxItems === 5 ? 'BUY 2 GET 2' : '',
+              },
+            })),
+          }),
+        });
+        if (!response.ok) throw new Error('Could not add items to cart');
+        checkout.dataset.bundleReady = 'true';
+        setTimeout(() => {
+          if (checkoutLoader) checkoutLoader.style.display = 'none';
+          if (typeof onCheckoutClick === 'function') {
+            onCheckoutClick(checkout);
+          } else {
+            window.location.href = '/checkout';
+          }
+        }, 200);
+      } catch (error) {
+        checkout.disabled = items.length < checkoutMinimum;
+        checkout.dataset.loading = '';
+        if (checkoutText) checkoutText.style.display = '';
+        if (checkoutLoader) checkoutLoader.style.display = 'none';
+        alert(error.message || 'Please try again.');
+      }
+    }, true);
+    render();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Gift box bundle page",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Products collection",
+      "info": "Leave blank to use the current collection page."
+    },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Build your box" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Choose up to 5 products" },
+    {
+      "type": "range",
+      "id": "minimum_items",
+      "label": "Minimum items including gift box",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "maximum_items",
+      "label": "Maximum items including gift box",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "product",
+      "id": "gift_product",
+      "label": "Gift box product",
+      "info": "Recommended: select Special Gift Box. Its first available variant is added by default."
+    },
+    {
+      "type": "number",
+      "id": "gift_variant_id",
+      "label": "Fallback gift variant ID",
+      "default": 53622874898742,
+      "info": "Used if no gift box product is selected."
+    },
+    { "type": "text", "id": "gift_title", "label": "Fallback gift title", "default": "Special Gift Box" },
+    { "type": "number", "id": "gift_price", "label": "Fallback gift price (paise/cents)", "default": 19900 },
+    { "type": "text", "id": "bundle_name", "label": "Cart bundle label", "default": "Gift Box Bundle" },
+    { "type": "text", "id": "checkout_label", "label": "Checkout label", "default": "CHECKOUT" },
+    { "type": "text", "id": "gokwik_main_title", "label": "GoKwik main title", "default": "CHECKOUT" },
+    { "type": "text", "id": "gokwik_sub_title", "label": "GoKwik subtitle", "default": "Secure Payment" }
+  ],
+  "presets": [{ "name": "Gift box bundle page" }]
+}
+{% endschema %}
+

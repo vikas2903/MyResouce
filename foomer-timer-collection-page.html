@@ -1,0 +1,242 @@
+<div
+  class="countdown-banner-content-sections--20543446286588__ss_countdown_bar_Wx9cyT"
+>
+  <div class="countdown-top-panel">
+    <div
+      class="countdown-banner-heading-sections--20543446286588__ss_countdown_bar_Wx9cyT-text_wgQ7VC"
+    >
+      SALE ENDS IN
+    </div>
+
+    <div class="timer-div-sections--20543446286588__ss_countdown_bar_Wx9cyT">
+      <div class="countdown-timer-sections--20543446286588__ss_countdown_bar_Wx9cyT-timer_7t4WyV">
+        <div class="time-block">
+          <span class="time-block__unit">Days</span>
+          <span class="time-block__num js-timer-days">00</span>
+        </div>
+
+        <span class="time-colon">:</span>
+
+        <div class="time-block">
+          <span class="time-block__unit">Hours</span>
+          <span class="time-block__num js-timer-hours">00</span>
+        </div>
+
+        <span class="time-colon">:</span>
+
+        <div class="time-block">
+          <span class="time-block__unit">Minutes</span>
+          <span class="time-block__num js-timer-minutes">00</span>
+        </div>
+
+        <span class="time-colon">:</span>
+
+        <div class="time-block">
+          <span class="time-block__unit">Seconds</span>
+          <span class="time-block__num js-timer-seconds">00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="offer-image-wrap">
+    <img
+      class="offer-image"
+      src="https://dummyimage.com/1200x1500/f5f5f5/111111&text=End+of+Season+Sale"
+      alt="End of Season Sale banner"
+    />
+  </div>
+</div>
+
+<style>
+  .countdown-banner-content-sections--20543446286588__ss_countdown_bar_Wx9cyT {
+    width: 100%;
+    margin-top: 14px;
+  }
+
+  .countdown-top-panel {
+    padding: 14px 16px 12px;
+    background: #ffffff;
+    border: 1px solid #111111;
+    border-radius: 14px;
+  }
+
+  .countdown-banner-heading-sections--20543446286588__ss_countdown_bar_Wx9cyT-text_wgQ7VC {
+    margin: 0 0 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #111111;
+    text-transform: uppercase;
+  }
+
+  .timer-div-sections--20543446286588__ss_countdown_bar_Wx9cyT {
+    display: flex;
+    justify-content: center;
+  }
+
+  .countdown-timer-sections--20543446286588__ss_countdown_bar_Wx9cyT-timer_7t4WyV {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .time-block {
+    min-width: 58px;
+    text-align: center;
+  }
+
+  .time-block__unit {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    color: #111111;
+  }
+
+  .time-block__num {
+    display: block;
+    padding: 10px 0 12px;
+    background: #111111;
+    border-radius: 6px;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #ffffff;
+  }
+
+  .time-colon {
+    padding-bottom: 12px;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+    color: #111111;
+  }
+
+  .offer-image-wrap {
+    margin-top: 10px;
+  }
+
+  .offer-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+
+  @media (max-width: 749px) {
+    .countdown-top-panel {
+      padding: 10px 10px 9px;
+      border-radius: 10px;
+    }
+
+    .countdown-banner-heading-sections--20543446286588__ss_countdown_bar_Wx9cyT-text_wgQ7VC {
+      margin-bottom: 8px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    .countdown-timer-sections--20543446286588__ss_countdown_bar_Wx9cyT-timer_7t4WyV {
+      gap: 5px;
+    }
+
+    .time-block {
+      min-width: 45px;
+    }
+
+    .time-block__unit {
+      margin-bottom: 4px;
+      font-size: 8px;
+    }
+
+    .time-block__num {
+      padding: 8px 0 9px;
+      border-radius: 5px;
+      font-size: 22px;
+    }
+
+    .time-colon {
+      padding-bottom: 9px;
+      font-size: 24px;
+    }
+
+    .offer-image-wrap {
+      margin-top: 8px;
+    }
+
+    .offer-image {
+      border-radius: 8px;
+    }
+  }
+
+  .countdown-timer-sections--20543446286588__ss_countdown_bar_Wx9cyT-timer_7t4WyV
+    .time-block:first-child,
+  .countdown-timer-sections--20543446286588__ss_countdown_bar_Wx9cyT-timer_7t4WyV
+    .time-colon:first-of-type {
+    display: none !important;
+  }
+</style>
+
+<script>
+  (function () {
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+
+    function getNextMidnight() {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      return midnight.getTime();
+    }
+
+    function initTimer() {
+      const wrapper = document.querySelector(
+        ".countdown-timer-sections--20543446286588__ss_countdown_bar_Wx9cyT-timer_7t4WyV"
+      );
+      if (!wrapper) return false;
+
+      let targetTime = getNextMidnight();
+
+      function updateTimer() {
+        const now = Date.now();
+        let remaining = targetTime - now;
+
+        if (remaining <= 0) {
+          targetTime = getNextMidnight();
+          remaining = targetTime - now;
+        }
+
+        const totalHours = Math.floor(remaining / hour);
+        const minutes = Math.floor((remaining % hour) / minute);
+        const seconds = Math.floor((remaining % minute) / second);
+
+        wrapper.querySelector(".js-timer-hours").textContent = String(
+          totalHours
+        ).padStart(2, "0");
+        wrapper.querySelector(".js-timer-minutes").textContent = String(
+          minutes
+        ).padStart(2, "0");
+        wrapper.querySelector(".js-timer-seconds").textContent = String(
+          seconds
+        ).padStart(2, "0");
+
+        const drift = second - (Date.now() % second);
+        setTimeout(updateTimer, drift);
+      }
+
+      updateTimer();
+      return true;
+    }
+
+    let attempts = 0;
+    const retry = setInterval(() => {
+      attempts++;
+      if (initTimer() || attempts > 20) clearInterval(retry);
+    }, 200);
+  })();
+</script>

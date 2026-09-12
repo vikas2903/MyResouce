@@ -1,0 +1,69 @@
+<style>
+  .ambition-marquee {
+    width: 100%;
+    overflow: hidden;
+    background: #000000;
+    padding: 10px 0;
+  }
+
+  .ambition-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: ambition-marquee-scroll 18s linear infinite;
+  }
+
+  .ambition-marquee__group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .ambition-marquee__item {
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    padding: 0 56px;
+    font-family: Arial, sans-serif;
+  }
+
+  @keyframes ambition-marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ambition-marquee {
+      padding: 8px 0;
+    }
+
+    .ambition-marquee__item {
+      font-size: 14px;
+      padding: 0 32px;
+    }
+  }
+</style>
+
+<div class="ambition-marquee" aria-label="Promotional offer marquee">
+  <div class="ambition-marquee__track">
+    <div class="ambition-marquee__group">
+            <div class="ambition-marquee__item"><strong>Flat 15% off Sitewide | Shop Now  </strong></div>
+      <div class="ambition-marquee__item"><strong>Avail COD options at checkout</strong></div>
+      <div class="ambition-marquee__item"><strong>Get express shipping across India</strong></div>
+      <div class="ambition-marquee__item"><strong>Easy 15 days return policy</strong></div>
+
+    </div>
+    <div class="ambition-marquee__group" aria-hidden="true">
+      <div class="ambition-marquee__item"><strong>Avail COD options at checkout</strong></div>
+      <div class="ambition-marquee__item"><strong>Get express shipping across India</strong></div>
+      <div class="ambition-marquee__item"><strong>Easy 15 days return policy</strong></div>
+      <div class="ambition-marquee__item"><strong>Flat 15% off Sitewide | Shop Now</strong></div>
+    </div>
+  </div>
+</div>

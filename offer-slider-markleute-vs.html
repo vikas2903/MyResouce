@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fashion offer slider</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
+    >
+    <style>
+      :root {
+        --offer-ink: #202020;
+        --offer-muted: #686868;
+        --offer-paper: #faf9f6;
+        --offer-line: #d4d3d0;
+        --offer-accent: #8c1c2d;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--offer-paper);
+        color: var(--offer-ink);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .offer-slider-section {
+        overflow: hidden;
+        padding: clamp(32px, 5vw, 72px) 0 26px;
+      }
+
+      .offer-slider {
+        position: relative;
+      }
+
+      .offer-slider .splide__track {
+        overflow: visible;
+        padding: 0 7vw !important;
+      }
+
+      .offer-slider .splide__list {
+        align-items: center;
+      }
+
+      .offer-slider .splide__slide {
+        width: min(64vw, 760px);
+        opacity: .42;
+        transform: scale(.86);
+        transform-origin: center;
+        transition: transform .45s ease, opacity .45s ease;
+      }
+
+      .offer-slider .splide__slide.is-active {
+        opacity: 1;
+        transform: scale(1);
+        z-index: 2;
+      }
+
+      .offer-banner {
+        position: relative;
+        min-height: clamp(220px, 27vw, 370px);
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+        border-radius: clamp(16px, 2vw, 28px);
+        background: #e9e9e7;
+        isolation: isolate;
+      }
+
+      .offer-banner::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(90deg, rgba(255,255,255,.78), rgba(255,255,255,.1) 68%);
+      }
+
+      .offer-banner__image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        z-index: -2;
+      }
+
+      .offer-banner__watermark {
+        position: absolute;
+        top: 11%;
+        left: 5%;
+        max-width: 90%;
+        overflow: hidden;
+        color: rgba(28, 28, 28, .07);
+        font-size: clamp(44px, 7.5vw, 110px);
+        font-weight: 800;
+        letter-spacing: -.075em;
+        line-height: .9;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .offer-banner__content {
+        max-width: 55%;
+        padding: clamp(20px, 3vw, 42px);
+      }
+
+      .offer-banner__eyebrow {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .17em;
+        text-transform: uppercase;
+      }
+
+      .offer-banner h2 {
+        margin: 0;
+        font-size: clamp(26px, 3.2vw, 48px);
+        letter-spacing: .08em;
+        line-height: .95;
+      }
+
+      .offer-banner p {
+        margin: 10px 0 0;
+        color: #424242;
+        font-size: clamp(14px, 1.4vw, 20px);
+        line-height: 1.35;
+      }
+
+      .offer-banner__link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 18px;
+        color: var(--offer-ink);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .offer-banner__link::after { content: "→"; font-size: 16px; }
+      .offer-banner__link:hover { color: var(--offer-accent); }
+
+      .offer-slider .splide__arrow {
+        width: 42px;
+        height: 42px;
+        top: 50%;
+        border: 1px solid #cbc9c5;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .9);
+        opacity: 1;
+        transform: translateY(-50%);
+      }
+
+      .offer-slider .splide__arrow svg { width: 15px; height: 15px; fill: var(--offer-ink); }
+      .offer-slider .splide__arrow--prev { left: clamp(14px, 3vw, 60px); }
+      .offer-slider .splide__arrow--next { right: clamp(14px, 3vw, 60px); }
+
+      .offer-slider .splide__pagination {
+        bottom: -28px;
+        left: 50%;
+        width: min(88vw, 1120px);
+        display: flex;
+        gap: 0;
+        padding: 0;
+        border-radius: 50px;
+        background: var(--offer-line);
+        transform: translateX(-50%);
+      }
+
+      .offer-slider .splide__pagination__page {
+        width: 33.333%;
+        height: 4px;
+        margin: 0;
+        border-radius: 50px;
+        background: transparent;
+        opacity: 1;
+      }
+
+      .offer-slider .splide__pagination__page.is-active {
+        background: var(--offer-ink);
+        transform: none;
+      }
+
+      @media (max-width: 767px) {
+        .offer-slider-section { padding-top: 28px; }
+        .offer-slider .splide__track { padding: 0 4vw !important; }
+        .offer-slider .splide__slide { width: 82vw; transform: scale(.92); }
+        .offer-banner { min-height: 300px; }
+        .offer-banner__content { max-width: 70%; padding: 20px; }
+        .offer-banner__watermark { top: 9%; left: 4%; font-size: 58px; }
+        .offer-banner h2 { font-size: 28px; }
+        .offer-banner p { font-size: 14px; }
+        .offer-slider .splide__arrow { width: 34px; height: 34px; }
+        .offer-slider .splide__arrow--prev { left: 7px; }
+        .offer-slider .splide__arrow--next { right: 7px; }
+        .offer-slider .splide__pagination { bottom: -22px; }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="offer-slider-section" aria-label="Shop collections">
+      <div class="splide offer-slider" aria-label="Featured collections">
+        <div class="splide__track">
+          <ul class="splide__list">
+            <li class="splide__slide">
+              <article class="offer-banner">
+                <img class="offer-banner__image" src="https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=1400&q=85" alt="Woman wearing modern citywear">
+                <span class="offer-banner__watermark">Citywear</span>
+                <div class="offer-banner__content">
+                  <span class="offer-banner__eyebrow">New collection</span>
+                  <h2>CITYWEAR</h2>
+                  <p>Work. Meetings. Hustle.</p>
+                  <a class="offer-banner__link" href="#citywear">Shop collection</a>
+                </div>
+              </article>
+            </li>
+            <li class="splide__slide">
+              <article class="offer-banner">
+                <img class="offer-banner__image" src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1400&q=85" alt="Models wearing denim jeans">
+                <span class="offer-banner__watermark">Zenim</span>
+                <div class="offer-banner__content">
+                  <span class="offer-banner__eyebrow">Denim reimagined</span>
+                  <h2>ZENIMS™</h2>
+                  <p>A new era of denims.</p>
+                  <a class="offer-banner__link" href="#zenims">Shop collection</a>
+                </div>
+              </article>
+            </li>
+            <li class="splide__slide">
+              <article class="offer-banner">
+                <img class="offer-banner__image" src="https://images.unsplash.com/photo-1496217590455-aa63a8350eea?auto=format&fit=crop&w=1400&q=85" alt="Woman in a flowing black dress">
+                <span class="offer-banner__watermark">Movewear</span>
+                <div class="offer-banner__content">
+                  <span class="offer-banner__eyebrow">Effortless dressing</span>
+                  <h2>MOVEWEAR</h2>
+                  <p>For life in motion.</p>
+                  <a class="offer-banner__link" href="#movewear">Shop collection</a>
+                </div>
+              </article>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script>
+      new Splide('.offer-slider', {
+        type: 'loop',
+        autoWidth: true,
+        focus: 'center',
+        gap: '-11vw',
+        perMove: 1,
+        pagination: true,
+        arrows: true,
+        autoplay: true,
+        interval: 4500,
+        pauseOnHover: true,
+        pauseOnFocus: true,
+        speed: 650,
+        breakpoints: {
+          767: { gap: '-15vw' }
+        }
+      }).mount();
+    </script>
+  </body>
+</html>

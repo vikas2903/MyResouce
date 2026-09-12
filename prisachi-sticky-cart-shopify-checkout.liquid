@@ -1,0 +1,1243 @@
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+    .Stickycart_top_info span > svg {
+      width: 21px;
+      margin-bottom: -10px;
+    }
+    p.Stickycart_top_info {
+        font-size: 12px;
+        margin: 0;
+        padding: 0 0 10px 0;
+    }
+
+    button#buybutton_custom {
+        visibility:hidden;
+        width:0;
+        height:0;
+        opacity:0;
+        display:none;
+  }
+
+  #buybutton_custom {
+    display:block;
+    width:100%;
+  }
+
+      p.stickycart_bottom_info {
+          font-size: 13px;
+          margin: 0;
+          line-height: normal;
+          text-align: center;
+          padding: 10px 0 4px 0;
+      }
+
+        button#buybutton_custom {
+          visibility: hidden;
+          width: 0;
+          height: 0;
+          opacity: 0;
+          display: none;
+        }
+
+
+          #buybutton_custom {
+              display: block;
+              width: 100%;
+          }
+
+            .ai-sticky-atc {
+              display: block;
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              background-color:#ffffff;
+              box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+              z-index: 999;
+              padding: 12px 16px;
+              transition: transform 0.3s ease;
+            }
+
+            @media screen and (min-width: 750px) {
+              .ai-sticky-atc {
+                display: none;
+              }
+            }
+
+            .ai-sticky-atc.hidden {
+              transform: translateY(100%);
+            }
+
+            .ai-sticky-atc-buttons {
+              display: flex;
+              gap: 10px;
+              align-items: center;
+            }
+
+            .ai-sticky-atc-btn {
+              flex: 1;
+              padding: 14px 20px;
+              border: none;
+              border-radius: {{section.settings.button_border_radius }}px;
+              font-size: 15px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              text-align: center;
+            }
+
+            .ai-sticky-atc-btn-cart {
+              background-color: {{section.settings.add_to_cart_bg_color }};
+              color: {{section.settings.add_to_cart_text_color }};
+            }
+
+            .ai-sticky-atc-btn-cart:hover {
+              opacity: 0.9;
+            }
+
+            .ai-sticky-atc-btn-buy {
+              background-color: {{section.settings.buy_now_bg_color }};
+              color: {{section.settings.buy_now_text_color }};
+            }
+
+            .ai-sticky-atc-btn-buy:hover {
+              opacity: 0.9;
+            }
+
+            .ai-sticky-atc-overlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: rgba(0, 0, 0, 0.5);
+              z-index: 1000;
+              opacity: 0;
+              visibility: hidden;
+              transition: opacity 0.3s ease, visibility 0.3s ease;
+            }
+
+            .ai-sticky-atc-overlay.active {
+              opacity: 1;
+              visibility: visible;
+              display:block;
+            }
+
+            .ai-sticky-atc-sheet {
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              background-color: {{section.settings.sheet_background_color }};
+              border-radius: 20px 20px 0 0;
+              z-index: 1001;
+              max-height: 80vh;
+              overflow-y: auto;
+              transform: translateY(100%);
+              transition: transform 0.3s ease;
+            }
+
+            .ai-sticky-atc-sheet.active {
+              transform: translateY(0);
+            }
+
+            .ai-sticky-atc-sheet-header {
+              position: sticky;
+              top: 0;
+              background-color: {{section.settings.sheet_background_color }};
+              padding: 6px 20px;
+              border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              z-index: 1;
+            }
+
+            .ai-sticky-atc-sheet-title {
+              font-size: 14px;
+              font-weight: 600;
+              color: {{section.settings.sheet_text_color }};
+              margin: 0;
+            }
+
+            .ai-sticky-atc-sheet-close {
+              background: none;
+              border: none;
+              font-size: 24px;
+              cursor: pointer;
+              color: {{section.settings.sheet_text_color }};
+              padding: 0;
+              width: 32px;
+              height: 32px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .ai-sticky-atc-sheet-content {
+              padding: 10px 10px;
+            }
+
+            .ai-sticky-atc-variant-group {
+              margin-bottom: 10px;
+            }
+
+            .ai-sticky-atc-variant-label {
+              font-size: 14px;
+              font-weight: 600;
+              color: {{section.settings.sheet_text_color }};
+              margin-bottom: 10px;
+              display: block;
+            }
+
+            .ai-sticky-atc-variant-options {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+            }
+
+            .ai-sticky-atc-variant-option {
+              padding: 4px 10px;
+              border: 2px solid {{section.settings.variant_border_color }};
+              border-radius: {{section.settings.variant_border_radius }}px;
+              background-color: {{section.settings.variant_bg_color }};
+              color: {{section.settings.variant_text_color }};
+              cursor: pointer;
+              font-size: 13px;
+              transition: all 0.2s ease;
+            }
+
+            .ai-sticky-atc-variant-option:hover {
+              border-color: {{section.settings.variant_hover_border_color }};
+            }
+
+            .ai-sticky-atc-variant-option.selected {
+              border-color: {{section.settings.variant_selected_border_color }};
+              background-color: {{section.settings.variant_selected_bg_color }};
+              color: {{section.settings.variant_selected_text_color }};
+            }
+
+            .ai-sticky-atc-variant-option.disabled {
+              opacity: 0.4;
+              cursor: not-allowed;
+            }
+
+            .ai-sticky-atc-sheet-actions {
+              position: sticky;
+              bottom: 0;
+              background-color: {{section.settings.sheet_background_color }};
+              padding: 16px 20px;
+              border-top: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .ai-sticky-atc-sheet-btn {
+              width: 100%;
+              padding: 16px;
+              border: none;
+              border-radius: {{section.settings.button_border_radius }}px;
+              font-size: 16px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+            }
+
+            .ai-sticky-atc-sheet-btn-cart {
+              background-color: {{section.settings.add_to_cart_bg_color }};
+              color: {{section.settings.add_to_cart_text_color }};
+              margin-bottom: 10px;
+            }
+
+            .ai-sticky-atc-sheet-btn-buy {
+              background-color: {{section.settings.buy_now_bg_color }};
+              color: {{section.settings.buy_now_text_color }};
+            }
+
+            .ai-sticky-atc-sheet-btn:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+
+            .ai-sticky-atc-error {
+              color: #d82c0d;
+              font-size: 14px;
+              margin-top: 10px;
+              text-align: center;
+            }
+{% endstyle %}
+
+<sticky-add-to-cart
+  class="ai-sticky-atc"
+  data-product-id="{{ product.id }}"
+  data-country-code="{{ localization.country.iso_code }}"
+  {{ block.shopify_attributes }}
+>
+  <p class="Stickycart_top_info">
+    <span>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 11C17.66 11 19 9.66 19 8C19 6.34 17.66 5 16 5C14.34 5 13 6.34 13 8C13 9.66 14.34 11 16 11Z" stroke="#000" stroke-width="1.5"/>
+        <path d="M8 11C9.66 11 11 9.66 11 8C11 6.34 9.66 5 8 5C6.34 5 5 6.34 5 8C5 9.66 6.34 11 8 11Z" stroke="#000" stroke-width="1.5"/>
+        <path d="M2 19C2 16.79 4.69 15 8 15C11.31 15 14 16.79 14 19" stroke="#000" stroke-width="1.5"/>
+        <path d="M14 19C14 17.34 16.24 16 19 16C21.76 16 24 17.34 24 19" stroke="#000" stroke-width="1.5"/>
+      </svg>
+    </span>
+    1 Lakh+ Happy Customers | 6 Lakh+ Followers
+  </p>
+
+  <div class="ai-sticky-atc-buttons">
+    <button
+      type="button"
+      class="ai-sticky-atc-btn ai-sticky-atc-btn-cart"
+      data-action="add-to-cart"
+    >
+      {{ section.settings.add_to_cart_text }}
+    </button>
+    <button
+      type="button"
+      class="ai-sticky-atc-btn ai-sticky-atc-btn-buy"
+      data-action="buy-now"
+    >
+      Buy Now
+    </button>
+  </div>
+  <p class="stickycart_bottom_info">Free Shipping within India* Easy Exchange*</p>
+</sticky-add-to-cart>
+
+<div class="ai-sticky-atc-overlay" data-overlay></div>
+
+<div class="ai-sticky-atc-sheet" data-sheet>
+  <div class="ai-sticky-atc-sheet-header">
+    <h3 class="ai-sticky-atc-sheet-title">{{ section.settings.sheet_title }}</h3>
+    <button
+      type="button"
+      class="ai-sticky-atc-sheet-close"
+      data-close
+      aria-label="Close"
+    >
+      ×
+    </button>
+  </div>
+
+  <div class="ai-sticky-atc-sheet-content">
+    {% if product.has_only_default_variant %}
+      <p style="text-align: center; color: {{section.settings.sheet_text_color }};">
+        This product has no variants to select.
+      </p>
+    {% else %}
+      {% for option in product.options_with_values %}
+        <div class="ai-sticky-atc-variant-group">
+          <label class="ai-sticky-atc-variant-label">
+            {{ option.name }}
+          </label>
+          <div class="ai-sticky-atc-variant-options" data-option-index="{{ forloop.index0 }}">
+            {% for value in option.values %}
+              <button
+                type="button"
+                class="ai-sticky-atc-variant-option"
+                data-option-value="{{ value | escape }}"
+                data-option-position="{{ option.position }}"
+              >
+                {{ value }}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="ai-sticky-atc-error" data-error style="display: none;"></div>
+  </div>
+
+  <div class="ai-sticky-atc-sheet-actions">
+    <button
+      type="button"
+      class="ai-sticky-atc-sheet-btn ai-sticky-atc-sheet-btn-cart"
+      data-sheet-action="add-to-cart"
+      {% if product.has_only_default_variant %}
+        disabled
+      {% endif %}
+    >
+      {{ section.settings.add_to_cart_text }}
+    </button>
+
+
+  {%- if localization.country.iso_code == 'IN' -%}  
+    <button type="button" id="buybutton_custom" class="button button--primary" data-sheet-action="buy-now">
+      Buy Now
+      <span class="sr-powered-by"
+        ><img
+          src="https://fastrr-boost-ui.pickrr.com/assets/images/boost_button/powered_by.svg "
+          alt=""
+          width=""
+          height=""
+      ></span>
+    </button>
+  {%- else -%}
+   <button type="button"  class="button button--primary" data-sheet-action="buy-now" vs-test="shopify-checkout">Buy now</button>
+  {%- endif -%}
+
+    {%- form 'product', product, id: 'product-form-installment', class: 'installment caption-large' -%}
+      <input
+        type="hidden"
+        class="custom-variant-change"
+        name="id"
+        id="variant-id"
+        value="{{ product.selected_or_first_available_variant.id }}"
+      >
+
+      {{ form | payment_terms }}
+
+      {%- if localization.country.iso_code == 'IN' -%}  
+         <div class="shiprocket-headless stkrextra" data-type="product"></div>
+      {% endif %}
+      <input type="hidden" value="true" id="fastrrCollectionPage">
+      <input type="hidden" value="{{ product.url }}" name="productUrl">
+    {%- endform -%}
+
+
+
+  </div>
+</div>
+
+{% comment %}
+  <script>
+    (function() {
+
+      const buyNowBtn = document.getElementById('buybutton_custom');
+
+      class StickyAddToCart{{ ai_gen_id }} extends HTMLElement {
+        constructor() {
+          super();
+          this.productData = {{ product | json }};
+          this.selectedOptions = {};
+          this.currentAction = null;
+        }
+
+        connectedCallback() {
+          this.overlay = document.querySelector('.ai-sticky-atc-overlay');
+          this.sheet = document.querySelector('.ai-sticky-atc-sheet');
+          this.errorElement = this.sheet.querySelector('[data-error]');
+
+          this.setupEventListeners();
+          this.initializeSelectedOptions();
+          this.updateVariantAvailability();
+          this.handleScroll();
+          window.addEventListener('scroll', () => this.handleScroll());
+        }
+
+        setupEventListeners() {
+          this.querySelectorAll('[data-action]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              this.currentAction = e.target.dataset.action;
+              this.openSheet();
+            });
+          });
+
+          this.overlay.addEventListener('click', () => this.closeSheet());
+          this.sheet.querySelector('[data-close]').addEventListener('click', () => this.closeSheet());
+
+          this.sheet.querySelectorAll('.ai-sticky-atc-variant-option').forEach(option => {
+            option.addEventListener('click', (e) => this.handleOptionClick(e));
+          });
+
+          this.sheet.querySelectorAll('[data-sheet-action]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const action = e.target.dataset.sheetAction;
+              this.handleSheetAction(action);
+            });
+          });
+        }
+
+        initializeSelectedOptions() {
+          if (this.productData.has_only_default_variant) {
+            return;
+          }
+
+          this.productData.options.forEach((option, index) => {
+            const firstValue = this.productData.options_with_values[index].values[0];
+            this.selectedOptions[option] = firstValue;
+          });
+
+          this.updateSelectedUI();
+        }
+
+        handleOptionClick(e) {
+          const button = e.target;
+          if (button.classList.contains('disabled')) return;
+
+          const optionPosition = parseInt(button.dataset.optionPosition);
+          const optionName = this.productData.options[optionPosition - 1];
+          const optionValue = button.dataset.optionValue;
+
+          this.selectedOptions[optionName] = optionValue;
+          this.updateSelectedUI();
+          this.updateVariantAvailability();
+          this.clearError();
+        }
+
+        updateSelectedUI() {
+          this.sheet.querySelectorAll('.ai-sticky-atc-variant-option').forEach(option => {
+            const optionPosition = parseInt(option.dataset.optionPosition);
+            const optionName = this.productData.options[optionPosition - 1];
+            const optionValue = option.dataset.optionValue;
+
+            if (this.selectedOptions[optionName] === optionValue) {
+              option.classList.add('selected');
+            } else {
+              option.classList.remove('selected');
+            }
+          });
+        }
+
+        updateVariantAvailability() {
+          const selectedVariant = this.getSelectedVariant();
+
+          this.sheet.querySelectorAll('.ai-sticky-atc-variant-option').forEach(option => {
+            const optionPosition = parseInt(option.dataset.optionPosition);
+            const optionName = this.productData.options[optionPosition - 1];
+            const optionValue = option.dataset.optionValue;
+
+            const testOptions = { ...this.selectedOptions, [optionName]: optionValue };
+            const variant = this.findVariantByOptions(testOptions);
+
+            if (!variant || !variant.available) {
+              option.classList.add('disabled');
+            } else {
+              option.classList.remove('disabled');
+            }
+          });
+
+          const addToCartBtns = this.sheet.querySelectorAll('[data-sheet-action]');
+          addToCartBtns.forEach(btn => {
+            if (selectedVariant && selectedVariant.available) {
+              btn.disabled = false;
+            } else {
+              btn.disabled = true;
+            }
+          });
+        }
+
+        getSelectedVariant() {
+          return this.findVariantByOptions(this.selectedOptions);
+        }
+
+        findVariantByOptions(options) {
+          return this.productData.variants.find(variant => {
+            return this.productData.options.every((option, index) => {
+              return variant.options[index] === options[option];
+            });
+          });
+        }
+
+        async handleSheetAction(action) {
+          const variant = this.getSelectedVariant();
+
+          if (!variant) {
+            this.showError('Please select all options');
+            return;
+          }
+
+          if (!variant.available) {
+            this.showError('This variant is out of stock');
+            return;
+          }
+
+          if (action === 'add-to-cart') {
+            await this.addToCart(variant.id);
+          } else if (action === 'buy-now') {
+            await this.buyNow(variant.id);
+          }
+        }
+
+        async addToCart(variantId) {
+          try {
+            const response = await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id: variantId,
+                quantity: 1
+              })
+            });
+
+            if (response.ok) {
+              this.closeSheet();
+
+              setTimeout(() => {
+                  if (window.CartDrawerPremium?.open) {
+                    window.CartDrawerPremium.open();
+                  }
+                }, 800);
+
+
+            } else {
+              this.showError('Failed to add to cart');
+            }
+          } catch (error) {
+            this.showError('An error occurred');
+          }
+        }
+
+        async buyNow(variantId) {
+          try {
+            const response = await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                id: variantId,
+                quantity: 1
+              })
+            });
+
+            if (response.ok) {
+
+             window.location.href= '/checkout'
+            } else {
+              {% comment %} this.showError('Failed to proceed to checkout'); {% endcomment %}
+            }
+          } catch (error) {
+            this.showError('An error occurred');
+          }
+        }
+
+        openSheet() {
+          this.overlay.classList.add('active');
+          this.sheet.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+
+        closeSheet() {
+          this.overlay.classList.remove('active');
+          this.sheet.classList.remove('active');
+          document.body.style.overflow = '';
+          this.clearError();
+        }
+
+        showError(message) {
+          this.errorElement.textContent = message;
+          this.errorElement.style.display = 'block';
+        }
+
+        clearError() {
+          this.errorElement.textContent = '';
+          this.errorElement.style.display = 'none';
+        }
+
+        handleScroll() {
+          const scrollPosition = window.scrollY;
+          if (scrollPosition > 300) {
+            this.classList.remove('hidden');
+          } else {
+            this.classList.add('hidden');
+          }
+        }
+      }
+
+      customElements.define('sticky-add-to-cart', StickyAddToCart{{ ai_gen_id }});
+
+
+
+    })();
+  </script>
+{% endcomment %}
+
+<script>
+(function () {
+
+  class StickyAddToCart extends HTMLElement {
+
+    constructor() {
+      super();
+
+      this.productData = {{ product | json }};
+      this.selectedOptions = {};
+      this.currentVariant = null;
+      this.countryCode = (this.dataset.countryCode || '').toUpperCase();
+    }
+
+    connectedCallback() {
+
+      this.overlay = document.querySelector('[data-overlay]');
+      this.sheet = document.querySelector('[data-sheet]');
+      this.errorElement = this.sheet.querySelector('[data-error]');
+      this.variantInput = document.querySelector('#variant-id');
+
+      this.setupEventListeners();
+      this.setDefaultVariant();
+      this.handleScroll();
+
+      window.addEventListener('scroll', () => this.handleScroll());
+
+      document.addEventListener('variant:change', (event) => {
+
+        if (!event.detail.variant) return;
+
+        const variant = event.detail.variant;
+
+        this.currentVariant = variant;
+
+        this.productData.options.forEach((optionName, index) => {
+
+          this.selectedOptions[optionName] = variant.options[index];
+
+        });
+
+        this.updateSelectedUI();
+        this.updateAvailability();
+        this.updateVariantId(variant.id);
+
+      });
+
+    }
+
+    setupEventListeners() {
+
+      this.querySelectorAll('[data-action]').forEach(button => {
+
+        button.addEventListener('click', (e) => {
+
+          this.currentAction = e.currentTarget.dataset.action;
+
+          this.openSheet();
+
+        });
+
+      });
+
+      this.overlay.addEventListener('click', () => {
+
+        this.closeSheet();
+
+      });
+
+      this.sheet.querySelector('[data-close]').addEventListener('click', () => {
+
+        this.closeSheet();
+
+      });
+
+      this.sheet.querySelectorAll('.ai-sticky-atc-variant-option').forEach(button => {
+
+        button.addEventListener('click', (e) => {
+
+          this.handleVariantClick(e);
+
+        });
+
+      });
+
+      this.sheet.querySelectorAll('[data-sheet-action]').forEach(button => {
+
+        button.addEventListener('click', (e) => {
+
+          const action = e.currentTarget.dataset.sheetAction;
+
+          this.handleAction(action);
+
+        });
+
+      });
+
+    }
+
+    setDefaultVariant() {
+
+      const variant = this.productData.selected_or_first_available_variant;
+
+      if (!variant) return;
+
+      this.currentVariant = variant;
+
+      this.productData.options.forEach((optionName, index) => {
+
+        this.selectedOptions[optionName] = variant.options[index];
+
+      });
+
+      this.updateSelectedUI();
+      this.updateAvailability();
+      this.updateVariantId(variant.id);
+
+    }
+
+    handleVariantClick(e) {
+
+      const button = e.currentTarget;
+
+      if (button.classList.contains('disabled')) return;
+
+      const position = Number(button.dataset.optionPosition);
+
+      const optionName = this.productData.options[position - 1];
+
+      const value = button.dataset.optionValue;
+
+      this.selectedOptions[optionName] = value;
+
+      const group = button.closest('.ai-sticky-atc-variant-options');
+
+      group.querySelectorAll('.ai-sticky-atc-variant-option').forEach(btn => {
+
+        btn.classList.remove('selected');
+
+      });
+
+      button.classList.add('selected');
+
+      const selectedVariant = this.getSelectedVariant();
+
+      if (selectedVariant) {
+
+        this.currentVariant = selectedVariant;
+
+        this.updateVariantId(selectedVariant.id);
+
+      }
+
+      this.updateAvailability();
+
+      this.clearError();
+
+    }
+
+    updateSelectedUI() {
+
+      this.sheet.querySelectorAll('.ai-sticky-atc-variant-option').forEach(option => {
+
+        const position = Number(option.dataset.optionPosition);
+
+        const optionName = this.productData.options[position - 1];
+
+        const optionValue = option.dataset.optionValue;
+
+        if (this.selectedOptions[optionName] === optionValue) {
+
+          option.classList.add('selected');
+
+        } else {
+
+          option.classList.remove('selected');
+
+        }
+
+      });
+
+    }
+
+    updateAvailability() {
+
+      this.sheet.querySelectorAll('.ai-sticky-atc-variant-option').forEach(option => {
+
+        const position = Number(option.dataset.optionPosition);
+
+        const optionName = this.productData.options[position - 1];
+
+        const optionValue = option.dataset.optionValue;
+
+        const testOptions = {
+          ...this.selectedOptions,
+          [optionName]: optionValue
+        };
+
+        const variant = this.findVariant(testOptions);
+
+        if (!variant || !variant.available) {
+
+          option.classList.add('disabled');
+
+        } else {
+
+          option.classList.remove('disabled');
+
+        }
+
+      });
+
+    }
+
+    findVariant(options) {
+
+      return this.productData.variants.find(variant => {
+
+        return this.productData.options.every((option, index) => {
+
+          return !options[option] || variant.options[index] === options[option];
+
+        });
+
+      });
+
+    }
+
+    getSelectedVariant() {
+
+      return this.productData.variants.find(variant => {
+
+        return this.productData.options.every((option, index) => {
+
+          return variant.options[index] === this.selectedOptions[option];
+
+        });
+
+      });
+
+    }
+
+    updateVariantId(variantId) {
+
+      if (this.variantInput) {
+
+        this.variantInput.value = variantId;
+
+      }
+
+      document.querySelectorAll('input[name="id"]').forEach(input => {
+
+        input.value = variantId;
+
+      });
+
+    }
+
+    async handleAction(action) {
+
+      const variant = this.getSelectedVariant();
+
+      if (!variant) {
+
+        this.showError('Please select all variant options');
+
+        return;
+
+      }
+
+      if (!variant.available) {
+
+        this.showError('Selected variant is out of stock');
+
+        return;
+
+      }
+
+      this.updateVariantId(variant.id);
+
+      if (action === 'add-to-cart') {
+
+        await this.addToCart(variant.id);
+
+      }
+
+      if (action === 'buy-now') {
+
+        await this.buyNow(variant.id);
+
+      }
+
+    }
+
+    async addToCart(variantId) {
+
+      try {
+
+        const response = await fetch('/cart/add.js', {
+
+          method: 'POST',
+
+          headers: {
+            'Content-Type': 'application/json'
+          },
+
+          body: JSON.stringify({
+            id: variantId,
+            quantity: 1
+          })
+
+        });
+
+        if (!response.ok) {
+
+          throw new Error('Cart Error');
+
+        }
+
+        this.closeSheet();
+
+        document.dispatchEvent(new CustomEvent('cart:refresh', {
+          bubbles: true
+        }));
+
+        setTimeout(() => {
+
+          if (window.CartDrawerPremium?.open) {
+
+            window.CartDrawerPremium.open();
+
+          }
+
+        }, 500);
+
+      } catch (error) {
+
+        this.showError('Failed to add product');
+
+      }
+
+    }
+
+    async buyNow(variantId) {
+      if (this.countryCode === 'IN') {
+        window.location.href = `/cart/${variantId}:1`;
+        return;
+      }
+
+      try {
+
+        const response = await fetch('/cart/add.js', {
+
+          method: 'POST',
+
+          headers: {
+            'Content-Type': 'application/json'
+          },
+
+          body: JSON.stringify({
+            id: variantId,
+            quantity: 1
+          })
+
+        });
+
+        if (!response.ok) {
+
+          throw new Error('Checkout Error');
+
+        }
+
+        window.location.href = '/checkout';
+
+      } catch (error) {
+
+        this.showError('Failed to proceed to checkout');
+
+      }
+
+    }
+
+
+    openSheet() {
+
+      this.overlay.classList.add('active');
+
+      this.sheet.classList.add('active');
+
+      document.body.style.overflow = 'hidden';
+
+    }
+
+    closeSheet() {
+
+      this.overlay.classList.remove('active');
+
+      this.sheet.classList.remove('active');
+
+      document.body.style.overflow = '';
+
+      this.clearError();
+
+    }
+
+    showError(message) {
+
+      this.errorElement.textContent = message;
+
+      this.errorElement.style.display = 'block';
+
+    }
+
+    clearError() {
+
+      this.errorElement.textContent = '';
+
+      this.errorElement.style.display = 'none';
+
+    }
+
+    handleScroll() {
+
+      if (window.scrollY > 300) {
+
+        this.classList.remove('hidden');
+
+      } else {
+
+        this.classList.add('hidden');
+
+      }
+
+    }
+
+  }
+
+  if (!customElements.get('sticky-add-to-cart')) {
+
+    customElements.define('sticky-add-to-cart', StickyAddToCart);
+
+  }
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Sticky add to cart",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sticky bar"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add to cart text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "buy_now_text",
+      "label": "Buy now text",
+      "default": "Buy Now"
+    },
+    {
+      "type": "color",
+      "id": "bar_background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "color",
+      "id": "add_to_cart_bg_color",
+      "label": "Add to cart background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "add_to_cart_text_color",
+      "label": "Add to cart text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "buy_now_bg_color",
+      "label": "Buy now background",
+      "default": "#000f9f"
+    },
+    {
+      "type": "color",
+      "id": "buy_now_text_color",
+      "label": "Buy now text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Bottom sheet"
+    },
+    {
+      "type": "text",
+      "id": "sheet_title",
+      "label": "Sheet title",
+      "default": "Select Options"
+    },
+    {
+      "type": "color",
+      "id": "sheet_background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "sheet_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Variant swatches"
+    },
+    {
+      "type": "color",
+      "id": "variant_bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "variant_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "variant_border_color",
+      "label": "Border color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "variant_hover_border_color",
+      "label": "Hover border color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "variant_selected_bg_color",
+      "label": "Selected background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "variant_selected_text_color",
+      "label": "Selected text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "variant_selected_border_color",
+      "label": "Selected border",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "variant_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky add to cart"
+    }
+  ]
+}
+{% endschema %}

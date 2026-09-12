@@ -1,0 +1,183 @@
+{% if product %}
+  {% assign initial_variant = product.selected_or_first_available_variant %}
+  {% assign whatsapp_number = '919971146242' %}
+  {% assign product_url = shop.url | append: product.url %}
+  {% if section.id %}
+    {% assign enquiry_block_id = 'vs-whatsapp-enquiry-' | append: section.id %}
+  {% else %}
+    {% assign enquiry_block_id = 'vs-whatsapp-enquiry-' | append: product.id %}
+  {% endif %}
+
+  <div
+    id="{{ enquiry_block_id }}"
+    class="vs-whatsapp-enquiry"
+    data-whatsapp-number="{{ whatsapp_number }}"
+    data-product-title="{{ product.title | escape }}"
+    data-product-url="{{ product_url | escape }}"
+    data-initial-variant-id="{{ initial_variant.id }}"
+  >
+    <a
+      class="vs-whatsapp-enquiry__button"
+      href="https://wa.me/{{ whatsapp_number }}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Enquire on WhatsApp about {{ product.title | escape }}"
+    >
+      <span class="vs-whatsapp-enquiry__icon" aria-hidden="true">
+
+
+   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 48 48" version="1.1">
+    
+    <title>Whatsapp-color</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+
+</defs>
+    <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Color-" transform="translate(-700.000000, -360.000000)" fill="#67C15E">
+            <path d="M723.993033,360 C710.762252,360 700,370.765287 700,383.999801 C700,389.248451 701.692661,394.116025 704.570026,398.066947 L701.579605,406.983798 L710.804449,404.035539 C714.598605,406.546975 719.126434,408 724.006967,408 C737.237748,408 748,397.234315 748,384.000199 C748,370.765685 737.237748,360.000398 724.006967,360.000398 L723.993033,360.000398 L723.993033,360 Z M717.29285,372.190836 C716.827488,371.07628 716.474784,371.034071 715.769774,371.005401 C715.529728,370.991464 715.262214,370.977527 714.96564,370.977527 C714.04845,370.977527 713.089462,371.245514 712.511043,371.838033 C711.806033,372.557577 710.056843,374.23638 710.056843,377.679202 C710.056843,381.122023 712.567571,384.451756 712.905944,384.917648 C713.258648,385.382743 717.800808,392.55031 724.853297,395.471492 C730.368379,397.757149 732.00491,397.545307 733.260074,397.27732 C735.093658,396.882308 737.393002,395.527239 737.971421,393.891043 C738.54984,392.25405 738.54984,390.857171 738.380255,390.560912 C738.211068,390.264652 737.745308,390.095816 737.040298,389.742615 C736.335288,389.389811 732.90737,387.696673 732.25849,387.470894 C731.623543,387.231179 731.017259,387.315995 730.537963,387.99333 C729.860819,388.938653 729.198006,389.89831 728.661785,390.476494 C728.238619,390.928051 727.547144,390.984595 726.969123,390.744481 C726.193254,390.420348 724.021298,389.657798 721.340985,387.273388 C719.267356,385.42535 717.856938,383.125756 717.448104,382.434484 C717.038871,381.729275 717.405907,381.319529 717.729948,380.938852 C718.082653,380.501232 718.421026,380.191036 718.77373,379.781688 C719.126434,379.372738 719.323884,379.160897 719.549599,378.681068 C719.789645,378.215575 719.62006,377.735746 719.450874,377.382942 C719.281687,377.030139 717.871269,373.587317 717.29285,372.190836 Z" id="Whatsapp">
+
+</path>
+        </g>
+    </g>
+</svg>
+
+
+      </span>
+      <span class="vs-whatsapp-enquiry__text">Enquire on WhatsApp</span>
+    </a>
+
+    <script type="application/json" class="vs-whatsapp-enquiry__variants">
+      [
+        {% for variant in product.variants %}
+          {
+            "id": {{ variant.id | json }},
+            "title": {{ variant.title | json }},
+            "sku": {{ variant.sku | default: product.handle | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    </script>
+  </div>
+
+  <style>
+    .vs-whatsapp-enquiry {
+      width: 100%;
+    }
+
+    .vs-whatsapp-enquiry__button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 52px;
+      padding: 14px 20px;
+      border-radius: 10px;
+      background: #111111;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      border: 1px solid #111111;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .vs-whatsapp-enquiry__button:hover {
+      background: #1f1f1f;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+      transform: translateY(-1px);
+    }
+
+    .vs-whatsapp-enquiry__icon {
+      display: inline-flex;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .vs-whatsapp-enquiry__icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    @media (max-width: 749px) {
+      .vs-whatsapp-enquiry__button {
+        min-height: 48px;
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      var container = document.getElementById('{{ enquiry_block_id }}');
+      if (!container) return;
+
+      var button = container.querySelector('.vs-whatsapp-enquiry__button');
+      var variantsNode = container.querySelector('.vs-whatsapp-enquiry__variants');
+      if (!button || !variantsNode) return;
+
+      var number = container.dataset.whatsappNumber;
+      var productTitle = container.dataset.productTitle || '';
+      var productUrl = container.dataset.productUrl || window.location.href;
+      var initialVariantId = String(container.dataset.initialVariantId || '');
+      var variants = [];
+
+      try {
+        variants = JSON.parse(variantsNode.textContent);
+      } catch (error) {
+        variants = [];
+      }
+
+      var variantMap = {};
+      variants.forEach(function (variant) {
+        variantMap[String(variant.id)] = variant;
+      });
+
+      function buildMessage(variant) {
+        var variantTitle = variant && variant.title && variant.title !== 'Default Title' ? variant.title : 'Default';
+        var sku = variant && variant.sku ? variant.sku : 'N/A';
+
+        return [
+          'Hello Prisachi Team, I would like to enquire about this product.',
+          '',
+          'Product: ' + productTitle,
+          'Variant: ' + variantTitle,
+          'SKU: ' + sku,
+          'Product URL: ' + productUrl
+        ].join('\n');
+      }
+
+      function updateButton(variantId) {
+        var activeVariant = variantMap[String(variantId)] || variantMap[initialVariantId] || variants[0] || null;
+        var message = buildMessage(activeVariant);
+        button.href = 'https://wa.me/' + number + '?text=' + encodeURIComponent(message);
+      }
+
+      function getSelectedVariantId() {
+        var productForm = container.closest('product-info, .product, .product__info-wrapper, section') || document;
+        var variantInput = productForm.querySelector('form[action*="/cart/add"] [name="id"]');
+        return variantInput && variantInput.value ? String(variantInput.value) : initialVariantId;
+      }
+
+      document.addEventListener('change', function (event) {
+        var target = event.target;
+        if (!target) return;
+        if (target.name === 'id') {
+          updateButton(target.value);
+        }
+      });
+
+      document.addEventListener('variant:change', function (event) {
+        if (event.detail && event.detail.variant && event.detail.variant.id) {
+          updateButton(event.detail.variant.id);
+        }
+      });
+
+      updateButton(getSelectedVariantId());
+    })();
+  </script>
+{% endif %}

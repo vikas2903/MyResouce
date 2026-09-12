@@ -1,0 +1,273 @@
+<style>
+  .plp-timer-wrapper {
+    font-family: sans-serif;
+    border: 1px solid #d7dce5;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+    padding: 10px 12px 12px;
+    max-width: 100%;
+    box-shadow: 0 8px 22px rgba(0, 24, 57, 0.08);
+  }
+
+  .timer-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 2px 0 20px;
+    background-color: transparent;
+  }
+
+  .timer-box {
+    background: linear-gradient(180deg, #133c82 0%, #082857 100%);
+    color: #ffffff;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 6px 14px rgba(11, 53, 122, 0.18);
+  }
+
+  .timer-separator {
+    color: #16335e;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
+    margin-top: -6px;
+  }
+
+  .timer-box-hr::before {
+    content: 'Hours';
+    position: absolute;
+    font-size: 10px;
+    top: 100%;
+    margin-top: 5px;
+    color: #41526f;
+    letter-spacing: 0.03em;
+  }
+
+  .timer-box-mn::before {
+    content: 'Minutes';
+    position: absolute;
+    font-size: 10px;
+    top: 100%;
+    margin-top: 5px;
+    color: #41526f;
+    letter-spacing: 0.03em;
+  }
+
+  .timer-box-sec::before {
+    content: 'Seconds';
+    position: absolute;
+    font-size: 10px;
+    top: 100%;
+    margin-top: 5px;
+    color: #41526f;
+    letter-spacing: 0.03em;
+  }
+
+  .plp-timer-title {
+    text-align: center;
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #0d274b;
+  }
+
+  .sale-info-box {
+    {% comment %} background: #111; {% endcomment %}
+    color: #fff;
+    text-align: center;
+    padding-bottom: 0;
+  }
+
+  .sale-info-box h3 {
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: 0px;
+    padding-top: 18px;
+    margin-bottom: 10px;
+  }
+
+  .sale-info-box p {
+    text-transform: uppercase;
+    font-size: 13px;
+    margin-top: 0px;
+  }
+
+  .code-ff {
+    text-transform: uppercase;
+    font-size: 16px;
+    background: #fff;
+    color: #111;
+    border-radius: 20px;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 7px 25px;
+    line-height: 1;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s ease;
+    position: relative;
+  }
+
+  /* Copy Animation */
+  .code-ff.copied {
+    background: #2ecc71;
+    color: #fff;
+  }
+
+  .code-ff.copied::after {
+    content: "Copied!";
+    position: absolute;
+    top: -28px;
+    background: #2ecc71;
+    color: white;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    animation: fade 1.2s ease forwards;
+  }
+
+  .plp-timer-top.collection\.sale {
+    display: none;
+}
+  @keyframes fade {
+    0% {opacity: 0; transform: translateY(5px);}
+    50% {opacity: 1;}
+    100% {opacity: 0; transform: translateY(-5px);}
+  }
+
+  .sale-info-box img {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  @media(max-width: 768px){
+    .plp-timer-wrapper {
+      border-radius: 12px;
+      padding: 8px 10px 10px;
+    }
+
+    .plp-timer-title {
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .timer-wrapper{
+      gap: 6px;
+      padding: 0 0 16px;
+    }
+
+    .timer-box{
+      width: 34px;
+      height: 34px;
+      font-size: 18px;
+      border-radius: 8px;
+    }
+
+    .timer-separator {
+      font-size: 14px;
+      margin-top: -5px;
+    }
+
+    .timer-box-hr::before,
+    .timer-box-mn::before,
+    .timer-box-sec::before {
+      font-size: 8px;
+      margin-top: 4px;
+    }
+
+    .sale-info-box p {
+      font-size: 10px;
+    }
+
+    .sale-info-box .code-ff{
+      font-size: 12px;
+      padding: 6px 16px;
+    }
+  }
+
+  @media(min-width: 769px){
+    .plp-timer-wrapper {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+}
+</style>
+
+<div class="plp-timer-wrapper">
+  <div class="plp-timer-title">Sale Ends In</div>
+  <div class="plp-timer-top">
+    <div class="timer-wrapper">
+      <div class="timer-box timer-box-hr" id="hour">00</div>
+      <div class="timer-separator">:</div>
+      <div class="timer-box timer-box-mn" id="minute">00</div>
+      <div class="timer-separator">:</div>
+      <div class="timer-box timer-box-sec" id="second">00</div>
+    </div>
+  </div>
+{% if template.name == 'product' %}
+  <div class="plp-timer-top">
+     <div class="sale-info-box">
+      <img src="https://cdn.shopify.com/s/files/1/0818/7107/7663/files/BUY_2_GET_1_FREE_-new.png?v=1750915212" width="100%" alt="Buy 2 Get 1 Offer Banner" />
+     </div>
+  </div>
+{% endif %}
+
+
+</div>
+
+<script>
+function start24HrISTCountdown() {
+  const hourEl = document.getElementById("hour");
+  const minuteEl = document.getElementById("minute");
+  const secondEl = document.getElementById("second");
+
+  function updateCountdown() {
+    const now = new Date();
+
+    // Convert current time to IST
+    const nowIST = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+    );
+
+    // Next midnight IST
+    const nextMidnightIST = new Date(nowIST);
+    nextMidnightIST.setHours(24, 0, 0, 0);
+
+    const diff = nextMidnightIST - nowIST;
+
+    if (diff <= 0) {
+      hourEl.textContent = "00";
+      minuteEl.textContent = "00";
+      secondEl.textContent = "00";
+      return;
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    hourEl.textContent = String(hours).padStart(2, '0');
+    minuteEl.textContent = String(minutes).padStart(2, '0');
+    secondEl.textContent = String(seconds).padStart(2, '0');
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+}
+
+// Start the timer
+start24HrISTCountdown();
+</script>
+
+

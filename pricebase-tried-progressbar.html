@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sticky Add To Cart Demo</title>
+  <style>
+    :root {
+      --bg: #f6f4ef;
+      --surface: #ffffff;
+      --surface-soft: #f8f6f1;
+      --text: #161616;
+      --muted: #6b6b6b;
+      --line: #e7e2d8;
+      --accent: #172a25;
+      --accent-2: #2d2a44;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 16px 140px;
+      background:
+        radial-gradient(circle at top right, rgba(23, 42, 37, 0.08), transparent 28%),
+        linear-gradient(180deg, #faf7f2 0%, #f3efe8 100%);
+      color: var(--text);
+      font-family: "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .page-shell {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .product-preview {
+      overflow: hidden;
+      border: 1px solid rgba(22, 22, 22, 0.06);
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: 0 18px 60px rgba(18, 24, 27, 0.08);
+    }
+
+    .product-preview__gallery {
+      height: 320px;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05)),
+        url("https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80") center/cover;
+    }
+
+    .product-preview__content {
+      padding: 20px 18px 24px;
+    }
+
+    .product-preview__eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .product-preview__title {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .product-preview__subtitle {
+      margin: 10px 0 14px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .product-preview__price-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .product-preview__price {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .product-preview__compare {
+      color: #8b8b8b;
+      text-decoration: line-through;
+      font-size: 15px;
+    }
+
+    .milestone-progress {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--surface-soft);
+    }
+
+    .milestone-progress__message {
+      margin: 0 0 8px;
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .milestone-progress__track-wrap {
+      position: relative;
+      padding: 0 10px;
+    }
+
+    .milestone-progress__track {
+      position: absolute;
+      top: 15px;
+      left: calc(10px + 22px);
+      right: calc(10px + 22px);
+      height: 5px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #ddd9cf;
+    }
+
+    .milestone-progress__fill {
+      width: 0;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #161616 0%, #172a25 100%);
+      transition: width 0.35s ease;
+    }
+
+    .milestone-progress__steps {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .milestone-progress__step {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .milestone-progress__icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #d0ccc1;
+      border-radius: 50%;
+      background: #f5f2eb;
+      transition: all 0.25s ease;
+    }
+
+    .milestone-progress__icon svg {
+      width: 18px;
+      height: 18px;
+      color: #8c8a84;
+      transition: color 0.25s ease;
+    }
+
+    .milestone-progress__label {
+      color: #8c8a84;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .milestone-progress__label small {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      font-weight: 400;
+    }
+
+    .milestone-progress__step.is-active .milestone-progress__icon {
+      border-color: #161616;
+      background: #ffffff;
+    }
+
+    .milestone-progress__step.is-active .milestone-progress__icon svg,
+    .milestone-progress__step.is-active .milestone-progress__label {
+      color: #161616;
+    }
+
+    .milestone-progress__step.is-complete .milestone-progress__icon {
+      border-color: #172a25;
+      background: #172a25;
+      box-shadow: 0 6px 18px rgba(23, 42, 37, 0.24);
+    }
+
+    .milestone-progress__step.is-complete .milestone-progress__icon svg {
+      display: none;
+    }
+
+    .milestone-progress__step.is-complete .milestone-progress__icon::after {
+      content: "\2713";
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .milestone-progress__step.is-complete .milestone-progress__label {
+      color: #161616;
+    }
+
+    .sticky-atc {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 -10px 35px rgba(17, 24, 39, 0.12);
+    }
+
+    .sticky-atc__inner {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 14px 12px 16px;
+    }
+
+    .sticky-atc__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: #2f2f2f;
+      font-size: 14px;
+    }
+
+    .sticky-atc__viewing {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sticky-atc__viewing svg,
+    .sticky-atc__wish svg {
+      width: 19px;
+      height: 19px;
+      stroke: currentColor;
+    }
+
+    .sticky-atc__buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .sticky-atc__button {
+      min-height: 42px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .sticky-atc__button--ghost {
+      border: 1px solid var(--accent);
+      background: #fff;
+      color: #111;
+    }
+
+    .sticky-atc__button--solid {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .sticky-atc__shipping {
+      margin: 10px 0 0;
+      text-align: center;
+      font-size: 14px;
+      color: #161616;
+    }
+
+    .variant-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.24s ease;
+    }
+
+    .variant-drawer.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .variant-drawer__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(20, 25, 29, 0.32);
+    }
+
+    .variant-drawer__panel {
+      position: relative;
+      width: min(100%, 520px);
+      border-radius: 20px 20px 0 0;
+      background: #fff;
+      transform: translateY(100%);
+      transition: transform 0.28s ease;
+      box-shadow: 0 -18px 42px rgba(17, 24, 39, 0.18);
+    }
+
+    .variant-drawer.is-open .variant-drawer__panel {
+      transform: translateY(0);
+    }
+
+    .variant-drawer__close {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      width: 44px;
+      height: 44px;
+      border: 1px solid #222;
+      border-radius: 50%;
+      background: #fff;
+      color: #111;
+      transform: translateX(-50%);
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .variant-drawer__body {
+      padding: 22px 14px 14px;
+    }
+
+    .variant-drawer__header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .variant-drawer__title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .variant-drawer__title strong {
+      font-weight: 700;
+      color: var(--accent-2);
+    }
+
+    .variant-drawer__guide {
+      border: 0;
+      background: transparent;
+      color: #1d4ed8;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .variant-drawer__options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .variant-chip {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 10px 14px;
+      border: 1px solid #d7d8de;
+      border-radius: 999px;
+      background: #fff;
+      color: #222;
+      font-size: 20px;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .variant-chip.is-selected {
+      border-color: var(--accent-2);
+      background: var(--accent-2);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(45, 42, 68, 0.24);
+    }
+
+    .variant-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding: 10px 0 14px;
+      border-top: 1px solid #ece9e2;
+      border-bottom: 1px solid #ece9e2;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .variant-info__spacer {
+      flex: 1;
+    }
+
+    .variant-fit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 30px;
+      margin-bottom: 12px;
+      border: 0;
+      border-radius: 999px;
+      background: #172a25;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .variant-drawer__done {
+      width: 100%;
+      min-height: 44px;
+      border: 0;
+      border-radius: 6px;
+      background: #172a25;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 110px;
+      z-index: 80;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #172a25;
+      color: #fff;
+      font-size: 14px;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.24s ease;
+    }
+
+    .toast.is-visible {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <section class="product-preview">
+      <div class="product-preview__gallery"></div>
+
+      <div class="product-preview__content">
+        <p class="product-preview__eyebrow">Premium Tee</p>
+        <h1 class="product-preview__title">Anarkali Y/S Therapist</h1>
+        <p class="product-preview__subtitle">
+          Demo product page with a sticky add to cart bar and bottom-up size selector.
+        </p>
+
+        <div class="product-preview__price-row">
+          <span class="product-preview__price" id="productPrice">Rs. 2,499</span>
+          <span class="product-preview__compare" id="productCompare">Rs. 3,299</span>
+        </div>
+
+        <div class="milestone-progress">
+          <p class="milestone-progress__message" id="milestoneProgressMessage">
+            Spend <strong>Rs. 2,000</strong> to unlock <strong>Free Gift product</strong>.
+          </p>
+
+          <div class="milestone-progress__track-wrap">
+            <div class="milestone-progress__track">
+              <div class="milestone-progress__fill" id="milestoneProgressFill"></div>
+            </div>
+
+            <div class="milestone-progress__steps" id="milestoneProgressSteps"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="sticky-atc" id="stickyAtc">
+    <div class="sticky-atc__inner">
+      <div class="sticky-atc__top">
+        <div class="sticky-atc__viewing">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+            <path d="M1.5 12s3.7-6.5 10.5-6.5S22.5 12 22.5 12 18.8 18.5 12 18.5 1.5 12 1.5 12Z"></path>
+            <circle cx="12" cy="12" r="3.2"></circle>
+          </svg>
+          <span><strong id="viewingCount">90</strong> people are viewing this item. Don't wait!</span>
+        </div>
+
+        <button class="sticky-atc__wish" type="button" aria-label="Wishlist" style="border:0;background:transparent;padding:0;color:#2f2f2f;cursor:pointer;">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+            <path d="M12 20.8 4 13.4a4.8 4.8 0 0 1 6.8-6.8L12 7.8l1.2-1.2a4.8 4.8 0 0 1 6.8 6.8Z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="sticky-atc__buttons">
+        <button class="sticky-atc__button sticky-atc__button--ghost" id="buyNowButton" type="button">Buy It Now</button>
+        <button class="sticky-atc__button sticky-atc__button--solid" id="addToCartButton" type="button">Add To Cart</button>
+      </div>
+
+      <p class="sticky-atc__shipping">Free Shipping within India* Easy Returns*</p>
+    </div>
+  </div>
+
+  <div class="variant-drawer" id="variantDrawer" aria-hidden="true">
+    <div class="variant-drawer__backdrop" data-close-drawer></div>
+
+    <div class="variant-drawer__panel">
+      <button class="variant-drawer__close" type="button" aria-label="Close" data-close-drawer>&times;</button>
+
+      <div class="variant-drawer__body">
+        <div class="variant-drawer__header">
+          <h2 class="variant-drawer__title">Size: <strong id="selectedVariantLabel">38</strong></h2>
+          <button class="variant-drawer__guide" type="button">Size Guide</button>
+        </div>
+
+        <div class="variant-drawer__options" id="variantOptions"></div>
+
+        <div class="variant-info">
+          <span>Order before 1:00 PM for same day delivery</span>
+          <span class="variant-info__spacer"></span>
+          <span>Pincode</span>
+        </div>
+
+        <button class="variant-fit" type="button">
+          <span>Find your size</span>
+          <span>Powered by</span>
+        </button>
+
+        <button class="variant-drawer__done" id="drawerDoneButton" type="button">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Variant added to cart</div>
+
+  <script>
+    const MILESTONES = [
+      { price: 2000, text: "Free Gift product" },
+      { price: 5000, text: "Exclusive Discount" },
+      { price: 10000, text: "VIP Support Access" }
+    ];
+
+    const MILESTONE_ICONS = [
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>',
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>',
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path></svg>'
+    ];
+
+    const VARIANTS = [
+      { id: 101, label: "36", price: 2499, compareAt: 3299, available: true },
+      { id: 102, label: "38", price: 2499, compareAt: 3299, available: true },
+      { id: 103, label: "40", price: 2499, compareAt: 3299, available: true },
+      { id: 104, label: "42", price: 2499, compareAt: 3299, available: true },
+      { id: 105, label: "44", price: 2599, compareAt: 3299, available: true },
+      { id: 106, label: "46", price: 2599, compareAt: 3299, available: true },
+      { id: 107, label: "48", price: 2699, compareAt: 3399, available: true }
+    ];
+
+    let selectedVariantId = 102;
+
+    function formatPrice(price) {
+      return "Rs. " + Number(price || 0).toLocaleString("en-IN");
+    }
+
+    function renderMilestones() {
+      const stepsContainer = document.getElementById("milestoneProgressSteps");
+      stepsContainer.innerHTML = MILESTONES.map(function (milestone, index) {
+        return (
+          '<div class="milestone-progress__step" id="milestoneStep' + index + '">' +
+            '<div class="milestone-progress__icon">' +
+              (MILESTONE_ICONS[index] || MILESTONE_ICONS[MILESTONE_ICONS.length - 1]) +
+            "</div>" +
+            '<span class="milestone-progress__label">' +
+              formatPrice(milestone.price) +
+              "<small>" + milestone.text + "</small>" +
+            "</span>" +
+          "</div>"
+        );
+      }).join("");
+    }
+
+    function updateMilestoneProgress(currentPrice) {
+      const fill = document.getElementById("milestoneProgressFill");
+      const message = document.getElementById("milestoneProgressMessage");
+      const maxPrice = MILESTONES[MILESTONES.length - 1].price;
+      const pct = Math.min((currentPrice / maxPrice) * 100, 100);
+
+      fill.style.width = pct + "%";
+
+      MILESTONES.forEach(function (milestone, index) {
+        const stepNode = document.getElementById("milestoneStep" + index);
+        stepNode.classList.remove("is-active", "is-complete");
+
+        if (currentPrice >= milestone.price) {
+          stepNode.classList.add("is-complete");
+        } else if (index === 0 || currentPrice >= MILESTONES[index - 1].price) {
+          stepNode.classList.add("is-active");
+        }
+      });
+
+      const nextMilestone = MILESTONES.find(function (milestone) {
+        return currentPrice < milestone.price;
+      });
+
+      if (!nextMilestone) {
+        message.innerHTML = "You have unlocked <strong>all milestone rewards</strong> for this order.";
+        return;
+      }
+
+      const remaining = nextMilestone.price - currentPrice;
+      message.innerHTML = "Spend <strong>" + formatPrice(remaining) + " more</strong> to unlock <strong>" + nextMilestone.text + "</strong>.";
+    }
+
+    function getSelectedVariant() {
+      return VARIANTS.find(function (variant) {
+        return variant.id === selectedVariantId;
+      }) || VARIANTS[0];
+    }
+
+    function renderVariantOptions() {
+      const optionsNode = document.getElementById("variantOptions");
+      optionsNode.innerHTML = VARIANTS.map(function (variant) {
+        return (
+          '<button class="variant-chip' + (variant.id === selectedVariantId ? " is-selected" : "") + '" data-variant-id="' + variant.id + '" type="button">' +
+            variant.label +
+          "</button>"
+        );
+      }).join("");
+    }
+
+    function syncVariantUI() {
+      const variant = getSelectedVariant();
+      document.getElementById("selectedVariantLabel").textContent = variant.label;
+      document.getElementById("productPrice").textContent = formatPrice(variant.price);
+      document.getElementById("productCompare").textContent = formatPrice(variant.compareAt);
+
+      renderVariantOptions();
+      updateMilestoneProgress(variant.price);
+    }
+
+    function openDrawer() {
+      const drawer = document.getElementById("variantDrawer");
+      drawer.classList.add("is-open");
+      drawer.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDrawer() {
+      const drawer = document.getElementById("variantDrawer");
+      drawer.classList.remove("is-open");
+      drawer.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+
+      window.clearTimeout(showToast._timer);
+      showToast._timer = window.setTimeout(function () {
+        toast.classList.remove("is-visible");
+      }, 1400);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMilestones();
+      syncVariantUI();
+
+      document.getElementById("addToCartButton").addEventListener("click", function () {
+        openDrawer();
+      });
+
+      document.getElementById("buyNowButton").addEventListener("click", function () {
+        const variant = getSelectedVariant();
+        showToast("Buy now with size " + variant.label);
+      });
+
+      document.getElementById("drawerDoneButton").addEventListener("click", function () {
+        const variant = getSelectedVariant();
+        closeDrawer();
+        showToast("Added size " + variant.label + " to cart");
+      });
+
+      document.querySelectorAll("[data-close-drawer]").forEach(function (trigger) {
+        trigger.addEventListener("click", closeDrawer);
+      });
+
+      document.addEventListener("click", function (event) {
+        const chip = event.target.closest(".variant-chip");
+        if (!chip) {
+          return;
+        }
+
+        selectedVariantId = Number(chip.getAttribute("data-variant-id"));
+        syncVariantUI();
+      });
+    });
+  </script>
+</body>
+</html>

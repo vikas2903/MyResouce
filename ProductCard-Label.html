@@ -1,0 +1,50 @@
+<!-- Place this inside the product-image wrapper so it appears over the image. -->
+<div class="sale-badge" aria-label="Buy 1: 20% off. Buy 2: 25% off.">
+  <div class="sale-badge__offers" aria-hidden="true">
+    <span>Buy 1 &rarr; 20% Off</span>
+    <span>Buy 2 &rarr; 25% Off</span>
+  </div>
+</div>
+
+<style>
+  .sale-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    box-sizing: border-box;
+    height: 26px;
+    min-width: 122px;
+    color: #fff;
+    background: #d7a91b;
+    border-radius: 20px;
+    box-shadow: none;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    line-height: 26px;
+    text-align: center;
+    text-transform: uppercase;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .sale-badge__offers {
+    animation: sale-badge-slide 6s ease-in-out infinite;
+  }
+
+  .sale-badge__offers span {
+    display: block;
+    height: 26px;
+    white-space: nowrap;
+  }
+
+  @keyframes sale-badge-slide {
+    0%, 42% { transform: translateY(0); }
+    50%, 92% { transform: translateY(-26px); }
+    100% { transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sale-badge__offers { animation: none; }
+  }
+</style>

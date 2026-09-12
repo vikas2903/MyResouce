@@ -1,0 +1,161 @@
+<!-- Add this once in your Shopify theme, ideally before </body>. -->
+<style>
+  #vs_partyWrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  #vs_partyWrapper canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 250ms ease;
+  }
+</style>
+
+<div id="vs_partyWrapper" aria-hidden="true"></div>
+
+<script>
+  (() => {
+    if (window.__vsPartyCartListenerInstalled) return;
+    window.__vsPartyCartListenerInstalled = true;
+
+    const TARGET_ITEM_COUNT = 3;
+    let lastItemCount = null;
+    let updateTimer;
+
+    function vs_partwrapper() {
+      const wrapper = document.querySelector('#vs_partyWrapper');
+      if (!wrapper || wrapper.querySelector('canvas')) return;
+
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const colors = ['#f43f5e', '#facc15', '#22c55e', '#38bdf8', '#a855f7'];
+      const particles = [];
+      const startedAt = performance.now();
+
+      wrapper.append(canvas);
+      requestAnimationFrame(() => { canvas.style.opacity = '1'; });
+
+      function resize() {
+        const scale = window.devicePixelRatio || 1;
+        canvas.width = wrapper.clientWidth * scale;
+        canvas.height = wrapper.clientHeight * scale;
+        context.setTransform(scale, 0, 0, scale, 0, 0);
+      }
+
+      for (let index = 0; index < 120; index += 1) {
+        particles.push({
+          x: wrapper.clientWidth / 2,
+          y: wrapper.clientHeight,
+          vx: (Math.random() - 0.5) * 14,
+          vy: -5 - Math.random() * 12,
+          size: 5 + Math.random() * 8,
+          rotation: Math.random() * Math.PI,
+          spin: (Math.random() - 0.5) * 0.24,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          delay: Math.random() * 220,
+          life: 2300 + Math.random() * 700
+        });
+      }
+
+      function animate(now) {
+        context.clearRect(0, 0, wrapper.clientWidth, wrapper.clientHeight);
+
+        const activeParticles = particles.filter((particle) => {
+          const age = now - startedAt - particle.delay;
+          if (age < 0) return true;
+          if (age >= particle.life) return false;
+
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          // Gravity brings the confetti back down after its upward burst.
+          particle.vy += 0.15;
+          particle.vx *= 0.994;
+          particle.rotation += particle.spin;
+
+          const fadeIn = Math.min(1, age / 120);
+          const fadeOut = Math.min(1, (particle.life - age) / 500);
+
+          context.save();
+          context.translate(particle.x, particle.y);
+          context.rotate(particle.rotation);
+          context.fillStyle = particle.color;
+          context.globalAlpha = fadeIn * fadeOut;
+          context.fillRect(-particle.size / 2, -particle.size / 2, particle.size, particle.size * 0.6);
+          context.restore();
+          return true;
+        });
+
+        particles.length = 0;
+        particles.push(...activeParticles);
+
+        if (particles.length) {
+          requestAnimationFrame(animate);
+        } else {
+          canvas.style.opacity = '0';
+          canvas.addEventListener('transitionend', () => canvas.remove(), { once: true });
+        }
+      }
+
+      resize();
+      requestAnimationFrame(animate);
+    }
+
+    async function onCartUpdate() {
+      try {
+        const response = await fetch('/cart.js', {
+          headers: { Accept: 'application/json' }
+        });
+        if (!response.ok) throw new Error(`Cart request failed: ${response.status}`);
+
+        const cart = await response.json();
+        const itemCount = Number(cart.item_count) || 0;
+
+        // Runs on page load if the cart contains 3 items, then only when it returns to 3.
+        if (itemCount === TARGET_ITEM_COUNT && lastItemCount !== TARGET_ITEM_COUNT) {
+          vs_partwrapper();
+        }
+        lastItemCount = itemCount;
+      } catch (error) {
+        console.error('Unable to read Shopify cart:', error);
+      }
+    }
+
+    function scheduleCartUpdate() {
+      clearTimeout(updateTimer);
+      updateTimer = setTimeout(onCartUpdate, 100);
+    }
+
+    document.addEventListener('cart:updated', scheduleCartUpdate);
+
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      const response = await originalFetch(...args);
+      const url = typeof args[0] === 'string' ? args[0] : args[0]?.url || '';
+
+      if (/\/cart\/(?:add|change|update|clear)(?:\.js)?(?:[/?#]|$)/.test(url)) {
+        scheduleCartUpdate();
+      }
+      return response;
+    };
+
+    const originalOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (...args) {
+      const url = typeof args[1] === 'string' ? args[1] : '';
+      this.addEventListener('loadend', () => {
+        if (/\/cart\/(?:add|change|update|clear)(?:\.js)?(?:[/?#]|$)/.test(url)) {
+          scheduleCartUpdate();
+        }
+      });
+      return originalOpen.apply(this, args);
+    };
+
+    onCartUpdate();
+  })();
+</script>

@@ -1,0 +1,348 @@
+{% comment %}
+  Pinned product ordering by URL query.
+  Use ?pinned=handle1,handle2 to pin matching collection items to the top.
+  - pinned_output: rendered HTML for pinned products
+  - non_pinned_output: rendered HTML for all other products
+{% endcomment %}
+{% assign pinned_handles = request.parameters.pinned | remove: ' ' | split: ',' %}
+{% assign pinned_output = '' %}
+{% assign non_pinned_output = '' %}
+{%- for product in collection.products -%}
+         
+         
+    {%- capture product_render_block -%}
+                {%- assign product_index = forloop.index -%}
+                {%- liquid
+                  assign lazy_load = true
+                  if forloop.first
+                    assign lazy_load = false 
+                  endif
+                -%}
+                {% comment %} ################# vs:start Ready To Wear Saree  ################# {% endcomment %}
+                {% assign ready_to_wear_saree = false %}
+                {% for collection in product.collections %}
+                  {% if collection.handle == 'pre-drapped-saree' %}
+                    {% assign ready_to_wear_saree = true %}
+                  {% endif %}
+                {% endfor %}
+                {% unless ready_to_wear_saree and collection.handle == 'pre-drapped-saree' %}
+                  <script>
+                    let checkInterval = setInterval(() => {
+                      const grid = document.querySelector('.product-grid');
+                      if (!grid) return; 
+
+                      const items = grid.querySelectorAll('.grid__item');
+                      if (items.length === 0) return; 
+
+                      items.forEach((item) => {
+                        const titleElement = item.querySelector('.card-information__text');
+                        if (!titleElement) return;
+
+                        const title = titleElement.innerText.trim();
+                        const match =
+                          title.includes('Ready To Wear') || title.includes('Ready') || title.includes('Wear');
+
+                        if (match && !item.querySelector('.ready-label')) {
+                          const label = document.createElement('span');
+                          label.className = 'ready-label';
+                          label.innerText = 'Ready To Wear';
+                          label.style.cssText = `
+                          position: absolute;
+                          top: 8px;
+                          left: 8px;
+                          background: #000;
+                          color: #fff;
+                          font-size: 10px;
+                          padding: 4px 8px;
+                          border-radius: 4px;
+                          z-index: 5;
+                        `;
+                          item.style.position = 'relative';
+                          item.appendChild(label);
+                        }
+                      });
+                      clearInterval(checkInterval);
+                    }, 1000);
+                  </script>
+                {% endunless %}
+                {% comment %} ################# start Ready To Wear Saree  ################# {% endcomment %}
+                <li data-product-handle="{{ product.handle }}" class="grid__item{% if ready_to_wear_saree %} wear-colelction-product {% else %}{% endif %}">
+                  {% render 'card-product',
+                    card_product: product,
+                    card_collection: collection,
+                    media_size: section.settings.image_ratio,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_quick_buy: section.settings.show_quick_buy,
+                    show_vendor: section.settings.show_vendor,
+                    show_rating: section.settings.show_rating,
+                    enable_quick_view: section.settings.enable_quick_view,
+                    enable_color_swatches: section.settings.enable_color_swatches,
+                    enable_countdown: section.settings.enable_countdown,
+                    enable_image_fill: section.settings.enable_image_fill,
+                    lazy_load: lazy_load
+                  %}
+                </li>
+
+                
+                {%- comment -%}Check if any static images should appear after this product{%- endcomment -%}
+                {%- for block in static_image_blocks -%}
+                  {%- if block.settings.position == product_index -%}
+                    <li
+                      id="Slide-{{ section.id }}-{{ forloop.index }}"
+                      class="
+                        multicolumn-list__item grid__item
+                        grid__item-width--{{ block.settings.width }}
+                        {% if section.settings.swipe_on_mobile %} slider__slide{% endif %}
+                        {{ section.settings.text_alignment }}
+                        {% if block.settings.hide_on_mobile %} hidden-mobile{% endif %}
+                        {% if block.settings.hide_on_desktop %} hidden-desktop{% endif %}
+                      "
+                      {{ block.shopify_attributes }}
+                    >
+                      <div class="multicolumn-card">
+                        {%- if block.settings.image != blank -%}
+                          <use-animate
+                            data-animate="zoom-fade"
+                            class="media-wrapper multicolumn-card__image-wrapper multicolumn-card__image-wrapper--{{ section.settings.image_width }}-width{% if section.settings.image_width != 'full' %} multicolumn-card-spacing{% endif %}"
+                          >
+                            <div
+                              class="image-animate media media--adapt"
+                              style="--image-ratio-percent: {{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%;"
+                            >
+                              {%- liquid
+                                assign number_of_columns = section.settings.columns_desktop
+                                assign number_of_columns_mobile = section.settings.columns_mobile
+                                assign grid_space_desktop = number_of_columns | minus: 1 | times: 30 | plus: 100 | append: 'px'
+                                assign grid_space_tablet = number_of_columns_mobile | minus: 1 | times: 30 | plus: 100 | append: 'px'
+                                assign grid_space_mobile = number_of_columns_mobile | minus: 1 | times: 30 | divided_by: 2 | plus: 30 | append: 'px'
+                                if section.settings.image_width == 'half'
+                                  assign image_width = 0.5
+                                elsif section.settings.image_width == 'third'
+                                  assign image_width = 0.33
+                                else
+                                  assign image_width = 1
+                                endif
+                              -%}
+                              {% capture sizes %}
+                                (min-width: {{ settings.page_width }}px) calc(({{ settings.page_width }}px - {{ grid_space_desktop }}) * {{ image_width }} /  {{ number_of_columns }}),
+                                (min-width: 990px) calc((100vw - {{ grid_space_desktop }}) * {{ image_width }} / {{ number_of_columns }}),
+                                (min-width: 750px) calc((100vw - {{ grid_space_tablet }}) * {{ image_width }} / {{ number_of_columns_mobile }}),
+                                calc((100vw - {{ grid_space_mobile }}) * {{ image_width }} / {{ number_of_columns_mobile }})
+                              {% endcapture %}
+                              {{
+                                block.settings.image
+                                | image_url: width: 3200
+                                | image_tag:
+                                  loading: 'lazy',
+                                  widths: '50, 75, 100, 150, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3200',
+                                  sizes: sizes,
+                                  class: 'multicolumn-card__image',
+                                  is: 'lazy-image'
+                              }}
+                            </div>
+                            {%- if block.settings.button_link != blank -%}
+                              <a
+                                {% if section.settings.open_in_new_tab == true %}
+                                  target="_blank"
+                                {% endif %}
+                                href="{{ block.settings.button_link }}"
+                                class="full-unstyled-link"
+                                >&nbsp;</a
+                              >
+                            {%- endif -%}
+                          </use-animate>
+                        {%- endif -%}
+                        {%- if block.settings.title != blank
+                          or block.settings.text != blank
+                          or block.settings.button_label != blank
+                        -%}
+                          <div class="multicolumn-card__info">
+                            <p class="multicolumn-card__title {{ block.settings.title_size }}">
+                              {{ block.settings.title | escape }}
+                            </p>
+                            <div class="rte typeset">{{ block.settings.text }}</div>
+                            {%- if block.settings.button_label != blank -%}
+                              {%- if block.settings.button_style_secondary -%}
+                                <a
+                                  {% if section.settings.open_in_new_tab == true %}
+                                    target="_blank"
+                                  {% endif %}
+                                  class="button button--cta"
+                                  {% if block.settings.button_link != blank %}
+                                    href="{{ block.settings.button_link }}"
+                                  {% else %}
+                                    role="link" aria-disabled="true"
+                                  {% endif %}
+                                >
+                                  <span class="label">{{ block.settings.button_label | escape }}</span>
+                                  {% render 'icon', icon: 'arrow' %}
+                                </a>
+                              {%- else -%}
+                                <a
+                                  {% if section.settings.open_in_new_tab == true %}
+                                    target="_blank"
+                                  {% endif %}
+                                  class="button button--tertiary"
+                                  {% if block.settings.button_link != blank %}
+                                    href="{{ block.settings.button_link }}"
+                                  {% else %}
+                                    role="link" aria-disabled="true"
+                                  {% endif %}
+                                >
+                                  {{ block.settings.button_label | escape }}
+                                </a>
+                              {%- endif -%}
+                            {%- endif -%}
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- for block in featured_collection_blocks -%}
+                  {%- if block.settings.position == product_index -%}
+                    <li
+                      id="Featured-Collection-{{ section.id }}-{{ forloop.index }}"
+                      class="
+                        grid__item grid__item-width--full featured-collection-container
+                        {% if block.settings.hide_on_mobile %} hidden-mobile{% endif %}
+                        {% if block.settings.hide_on_desktop %} hidden-desktop{% endif %}
+                      "
+                      {{ block.shopify_attributes }}
+                      style="background-color: {{ block.settings.background_color }};"
+                    >
+                      {% assign featured_collection = block.settings.collection %}
+                      {% if featured_collection != blank %}
+                        <div class="featured-collection-slider">
+                          <h2 class="featured-collection-title">{{ collections[featured_collection].title }}</h2>
+                          <div class="slider-mobile-gutter">
+                            <ul class="product-grid grid grid--2-col{% if section.settings.columns_mobile == '1' %} grid--1-col-mobile{% endif %} grid--3-col-tablet grid--4-col-desktop slider{% if block.settings.swipe_on_mobile %} slider--tablet{% endif %}">
+                              {%- for product in collections[featured_collection].products
+                                limit: block.settings.products_to_show
+                              -%}
+                                <li class="grid__item slider__slide">
+                                  {% render 'card-product',
+                                    card_product: product,
+                                    card_collection: collections[featured_collection],
+                                    media_size: section.settings.image_ratio,
+                                    show_secondary_image: section.settings.show_secondary_image,
+                                    show_quick_buy: section.settings.show_quick_buy,
+                                    show_vendor: section.settings.show_vendor,
+                                    show_rating: section.settings.show_rating,
+                                    enable_quick_view: section.settings.enable_quick_view,
+                                    enable_color_swatches: section.settings.enable_color_swatches,
+                                    enable_countdown: section.settings.enable_countdown,
+                                    enable_image_fill: section.settings.enable_image_fill
+                                  %}
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                            {% if block.settings.swipe_on_mobile
+                              and collections[featured_collection].products.size > 2
+                            %}
+                              <div class="slider-buttons no-js-hidden">
+                                <button
+                                  type="navigation"
+                                  class="slider-button slider-button--prev small-hide"
+                                  name="previous"
+                                  aria-label="{{ 'general.slider.previous_slide' | t }}"
+                                >
+                                  {% render 'icon', icon: 'arrow-left-wide-line' %}
+                                </button>
+                                <div class="indicator-wrapper">
+                                  {%- for block in section.blocks -%}
+                                    <button
+                                      class="indicator{% if forloop.index0 == 0 %} -active{% endif %}"
+                                      data-index="{{ forloop.index0 }}"
+                                    >
+                                      <span class="visually-hidden">slide_{{ forloop.index0 }}</span>
+                                      {% if forloop.index0 == 0 %}
+                                        <span class="visually-hidden current-indicator">slide_current</span>
+                                      {% endif %}
+                                    </button>
+                                  {% endfor %}
+                                </div>
+                                <button
+                                  type="navigation"
+                                  class="slider-button slider-button--next small-hide"
+                                  name="next"
+                                  aria-label="{{ 'general.slider.next_slide' | t }}"
+                                >
+                                  {% render 'icon', icon: 'arrow-right-wide-line' %}
+                                </button>
+                              </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+  {%- endcapture -%}
+  {% if pinned_handles contains product.handle %}
+    {% assign pinned_output = pinned_output | append: product_render_block %}
+  {% else %}
+    {% assign non_pinned_output = non_pinned_output | append: product_render_block %}
+  {% endif %}
+              {%- endfor -%}
+
+{{ pinned_output }}
+{{ non_pinned_output }}
+
+{% comment %}
+  Browser fallback reorder:
+  If pinned query handles are present, move matching rendered product items
+  to the top of the product grid after the page finishes loading.
+  This helps if Liquid order is not enough or the runtime output is handled
+  by a different section template.
+{% endcomment %}
+
+
+
+
+<script>
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    var pinned = params.get('pinned');
+    if (!pinned) return;
+
+    // If the URL is malformed like ...?pinned=... ?pr_prod_strat,
+    // strip off any extra ? or & parts from the pinned value.
+    pinned = pinned.split(/[?&]/)[0];
+
+    var handles = pinned.split(',').map(function(handle) {
+      return handle.trim();
+    }).filter(function(handle) {
+      return handle.length;
+    });
+
+    if (!handles.length) return;
+
+    var items = document.querySelectorAll('li.grid__item[data-product-handle]');
+    if (!items.length) return;
+
+    var grid = items[0].parentElement;
+    if (!grid) return;
+
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('li.grid__item[data-product-handle]'));
+
+    var orderMap = {};
+    handles.forEach(function(handle, index) {
+      orderMap[handle] = index;
+    });
+
+    cards.sort(function(a, b) {
+      var aHandle = a.getAttribute('data-product-handle');
+      var bHandle = b.getAttribute('data-product-handle');
+      var aIndex = orderMap.hasOwnProperty(aHandle) ? orderMap[aHandle] : Number.MAX_SAFE_INTEGER;
+      var bIndex = orderMap.hasOwnProperty(bHandle) ? orderMap[bHandle] : Number.MAX_SAFE_INTEGER;
+      return aIndex - bIndex;
+    });
+
+    cards.forEach(function(card) {
+      grid.appendChild(card);
+    });
+  })();
+</script>
+
+  

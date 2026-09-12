@@ -1,0 +1,734 @@
+{% comment %}
+  Snippet: shade-finder.liquid
+
+  Use on product page:
+  {% render 'shade-finder', product: product, shade_finder_id: 'main-shade-finder' %}
+
+  Variant matching:
+  Product variant title / SKU should contain shade code like MF-01, MF-02, MF-03 etc.
+{% endcomment %}
+
+{% assign sf_id = shade_finder_id | default: product.id | default: 'shade-finder' %}
+
+<div id="ShadeFinder-{{ sf_id }}" class="sf-wrap">
+  <div class="sf-card">
+    <div class="sf-left">
+      <p class="sf-eyebrow">03 - 15-Second Shade Finder</p>
+
+      <h2 class="sf-heading">
+        Find <em>your</em> match.
+      </h2>
+
+      <p class="sf-subtext">
+        Two taps. We read your depth and undertone and point you to your shade, so you order once and love it.
+      </p>
+
+      <div class="sf-step">
+        <p class="sf-step-title">1 · How deep is your skin?</p>
+
+        <div class="sf-options" data-depth-options>
+          <button type="button" class="sf-pill is-active" data-depth="light">Light</button>
+          <button type="button" class="sf-pill" data-depth="medium">Medium</button>
+          <button type="button" class="sf-pill" data-depth="deep">Deep</button>
+        </div>
+      </div>
+
+      <div class="sf-step">
+        <p class="sf-step-title">2 · Your undertone</p>
+
+        <div class="sf-options" data-undertone-options>
+          <button type="button" class="sf-pill sf-pill-wide is-active" data-undertone="warm">
+            Warm 
+          </button>
+
+          <button type="button" class="sf-pill sf-pill-wide" data-undertone="neutral">
+            Neutral
+          </button>
+
+          <button type="button" class="sf-pill sf-pill-wide" data-undertone="cool">
+            Cool
+          </button>
+        </div>
+      </div>
+
+      <p class="sf-tip">
+        Tip: check your wrist veins, green = warm, blue = cool, both = neutral.
+      </p>
+    </div>
+
+    <div class="sf-right">
+      <div class="sf-result-box">
+        <div class="sf-swatch" data-shade-swatch></div>
+
+        <p class="sf-match-label" data-shade-code>Your Match · #MF-06</p>
+
+        <h3 class="sf-name" data-shade-name>Soft Sand</h3>
+
+        <p class="sf-description" data-shade-description>
+          Light depth, warm undertone. Tap below to preview it and add to cart.
+        </p>
+
+        <div class="sf-shades-list" data-shade-options></div>
+
+        <button type="button" class="sf-select-btn" data-shade-add>
+          Add to Cart
+        </button>
+
+        <p class="sf-status" data-shade-status aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-product-variants>
+    {% if product %}
+      {{ product.variants | json }}
+    {% else %}
+      []
+    {% endif %}
+  </script>
+</div>
+
+<style>
+  #ShadeFinder-{{ sf_id }} {
+    padding: 40px 20px;
+    background: #fbf8f2;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-card {
+    max-width: 1280px;
+    margin: 0 auto;
+    border-radius: 28px;
+    padding: 64px 60px;
+    background:
+      radial-gradient(circle at 75% 28%, rgba(255,255,255,0.18), transparent 28%),
+      linear-gradient(135deg, #650024 0%, #7a1735 52%, #54001f 100%);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 54px;
+    align-items: center;
+    box-shadow: 0 22px 60px rgba(61, 0, 22, 0.18);
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-eyebrow {
+    margin: 0 0 14px;
+    color: #e7c38f;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-heading {
+    margin: 0;
+    color: #fffaf4;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(32px, 4vw, 58px);
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-heading em {
+    color: #e7c38f;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-subtext {
+    max-width: 560px;
+    margin: 18px 0 32px;
+    color: rgba(255,255,255,0.88);
+    font-size: 16px;
+    line-height: 1.65;
+    font-weight: 600;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-step {
+    margin-top: 26px;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-step-title {
+    margin: 0 0 12px;
+    color: #e7c38f;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-pill {
+    min-height: 45px;
+    padding: 0 21px;
+    border: 1px solid rgba(255,255,255,0.32);
+    border-radius: 999px;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.22s ease;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-pill span {
+    color: rgba(255,255,255,0.55);
+    font-weight: 700;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-pill:hover {
+    border-color: #e7c38f;
+    transform: translateY(-1px);
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-pill.is-active {
+    background: #e7c38f;
+    color: #65001f;
+    border-color: #e7c38f;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-pill.is-active span {
+    color: rgba(101,0,31,0.55);
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-tip {
+    margin: 16px 0 0;
+    color: rgba(255,255,255,0.58);
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-result-box {
+    min-height: 360px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 18px;
+    padding: 30px 34px;
+    background:
+      radial-gradient(circle at 55% 20%, rgba(255,255,255,0.12), transparent 26%),
+      linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.09));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-swatch {
+    width: 122px;
+    height: 122px;
+    border-radius: 50%;
+    background: #efc197;
+    border: 4px solid rgba(255,239,215,0.9);
+    box-shadow: 0 16px 30px rgba(0,0,0,0.28);
+    margin-bottom: 24px;
+    transition: 0.25s ease;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-match-label {
+    margin: 0 0 10px;
+    color: #e7c38f;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-name {
+    margin: 0;
+    color: #fffaf4;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 31px;
+    line-height: 1.15;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-description {
+    max-width: 340px;
+    margin: 15px 0 24px;
+    color: rgba(255,255,255,0.72);
+    font-size: 14px;
+    line-height: 1.55;
+    font-weight: 700;
+
+    @media(max-width: 900px) {
+      margin: 10px 0 5px;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-select-btn {
+    min-height: 48px;
+    padding: 0 30px;
+    border: 0;
+    border-radius: 999px;
+    background: #a7753f;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: 0.2s ease;
+    
+    @media(max-width: 900px) {
+      min-height: 35px;
+      padding: 0 20px;
+      font-size: 13px;
+    }
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-select-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-select-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-status {
+    min-height: 18px;
+    margin: 13px 0 0;
+    color: rgba(255,255,255,0.72);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-shades-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin: 0 0 16px;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-shade-option {
+    min-height: 34px;
+    padding: 0 14px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-shade-option:hover {
+    border-color: #e7c38f;
+    transform: translateY(-1px);
+  }
+
+  #ShadeFinder-{{ sf_id }} .sf-shade-option.is-active {
+    background: #e7c38f;
+    color: #65001f;
+    border-color: #e7c38f;
+  }
+
+  @media screen and (max-width: 900px) {
+    #ShadeFinder-{{ sf_id }} {
+      padding: 32px 14px;
+    }
+
+    #ShadeFinder-{{ sf_id }} .sf-card {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 20px;
+      border-radius: 22px;
+    }
+
+    #ShadeFinder-{{ sf_id }} .sf-eyebrow {
+      letter-spacing: 4px;
+    }
+
+    #ShadeFinder-{{ sf_id }} .sf-subtext {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    #ShadeFinder-{{ sf_id }} .sf-options {
+      gap: 8px;
+    }
+
+    #ShadeFinder-{{ sf_id }} .sf-pill {
+      min-height: 32px;
+      padding: 0 17px;
+      font-size: 13px;
+      font-weight: 100;
+    }
+
+    #ShadeFinder-{{ sf_id }} .sf-result-box {
+      min-height: auto;
+      padding: 10px;
+    }
+
+    #ShadeFinder-{{ sf_id }} .sf-swatch {
+      width: 80px;
+      height: 80px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const root = document.getElementById('ShadeFinder-{{ sf_id }}');
+    if (!root || root.dataset.loaded === 'true') return;
+    root.dataset.loaded = 'true';
+
+    const variantJson = root.querySelector('[data-product-variants]');
+    const variants = variantJson ? JSON.parse(variantJson.textContent || '[]') : [];
+
+    /*
+      9 different shade combinations:
+      3 skin depths x 3 undertones.
+
+      To connect exact Shopify variants:
+      Option 1: Add shade code in variant title or SKU, example MF-04, MF-05.
+      Option 2: Add your real variant ID in variantId below.
+    */
+
+    const shadeData = {
+      'light|cool': {
+        code: '07',
+        name: '07',
+        color: '#cea378',
+        description: 'Light depth, cool undertone. Best for light skin with a soft pink beige finish.',
+        variantId: 43959401120001
+      },
+      'light|neutral': [
+        {
+          code: '02',
+          name: '02',
+          color: '#f1d5b3',
+          description: 'Light depth, neutral undertone. Best for light skin with a balanced beige tone.',
+          variantId: 43027890929921
+        },
+        {
+          code: '06',
+          name: '06',
+          color: '#d4a473',
+          description: 'Light depth, neutral undertone. Best for light skin with a slightly warmer balanced tone.',
+          variantId: 43027894993153
+        }
+      ],
+      'light|warm': {
+        code: '03',
+        name: '03',
+        color: '#efba8e',
+        description: 'Light depth, warm undertone. Best for light skin with a golden beige tone.',
+        variantId: 43027890962689
+      },
+
+      'medium|cool': [
+        {
+          code: '04',
+          name: '04',
+          color: '#bd824e',
+          description: 'Medium depth, cool undertone. Best for medium skin with a rosy beige base.',
+          variantId: 43027890995457
+        },
+        {
+          code: '08',
+          name: '08',
+          color: '#bc9874',
+          description: 'Medium depth, cool undertone. Best for medium skin with a deeper cool beige finish.',
+          variantId: 43959401152769
+        }
+      ],
+      'medium|neutral': {
+        code: '01',
+        name: '01',
+        color: '#dfa46c',
+        description: 'Medium depth, neutral undertone. Best for medium skin with balanced warmth.',
+        variantId: 43027890897153
+      },
+      'medium|warm': {
+        code: '09',
+        name: '09',
+        color: '#b7885e',
+        description: 'Medium depth, warm undertone. Best for medium skin with golden warmth.',
+        variantId: 43959401185537
+      },
+
+      'deep|cool': 
+        {
+          code: '10',
+          name: '10',
+          color: '#bc9973',
+          description: 'Deep depth, cool undertone. Best for deep skin with a warm cocoa finish.',
+          variantId: 43959401251073
+        },
+      
+      'deep|neutral': {
+        code: '11',
+        name: '11',
+        color: '#a07950',
+        description: 'Deep depth, neutral undertone. Best for deep skin with a balanced mocha tone.',
+        variantId: 43959401283841
+      },
+      'deep|warm': [
+        {
+          code: '05',
+          name: '05',
+          color: '#bd793a',
+          description: 'Deep depth, warm undertone. Best for deep skin with a rich golden brown tone.',
+          variantId: 43027894960385
+        },
+        {
+          code: '12',
+          name: '12',
+          color: '#906845',
+          description: 'Deep depth, warm undertone. Best for deep skin with a deep bronze finish.',
+          variantId: 43959401316609
+        }
+      ]
+    };
+
+    let selectedDepth = 'light';
+    let selectedUndertone = 'warm';
+    let selectedShadeIndex = 0;
+
+    const swatch = root.querySelector('[data-shade-swatch]');
+    const codeEl = root.querySelector('[data-shade-code]');
+    const nameEl = root.querySelector('[data-shade-name]');
+    const descEl = root.querySelector('[data-shade-description]');
+    const addBtn = root.querySelector('[data-shade-add]');
+    const statusEl = root.querySelector('[data-shade-status]');
+    const optionsList = root.querySelector('[data-shade-options]');
+    const depthButtons = root.querySelectorAll('[data-depth]');
+    const undertoneButtons = root.querySelectorAll('[data-undertone]');
+
+    function cleanText(value) {
+      return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+
+    function normaliseShadeOptions(shade) {
+      if (!shade) return [];
+      return Array.isArray(shade) ? shade : [shade];
+    }
+
+    function getShadeOptionsForSelection() {
+      const key = selectedDepth + '|' + selectedUndertone;
+      return normaliseShadeOptions(shadeData[key]);
+    }
+
+    function getActiveShade() {
+      const shadeOptions = getShadeOptionsForSelection();
+      if (!shadeOptions.length) return null;
+
+      if (selectedShadeIndex >= shadeOptions.length) {
+        selectedShadeIndex = 0;
+      }
+
+      return shadeOptions[selectedShadeIndex] || shadeOptions[0];
+    }
+
+    function renderShadeOptions(shadeOptions, activeShade) {
+      if (!optionsList) return;
+      optionsList.innerHTML = '';
+
+      if (!shadeOptions || shadeOptions.length < 2) return;
+
+      shadeOptions.forEach(function (shade, index) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'sf-shade-option' + (activeShade && shade.code === activeShade.code ? ' is-active' : '');
+        button.textContent = shade.name;
+        button.dataset.shadeOptionIndex = String(index);
+        button.addEventListener('click', function () {
+          selectedShadeIndex = index;
+          updateShade(true);
+        });
+        optionsList.appendChild(button);
+      });
+    }
+
+    function getVariantForShade(shade) {
+      if (!shade) return null;
+
+      if (shade.variantId) {
+        return variants.find(function (variant) {
+          return String(variant.id) === String(shade.variantId);
+        }) || null;
+      }
+
+      const targetCode = cleanText(shade.code);
+      const targetName = cleanText(shade.name);
+
+      return variants.find(function (variant) {
+        const haystack = cleanText([
+          variant.title,
+          variant.public_title,
+          variant.sku,
+          variant.option1,
+          variant.option2,
+          variant.option3
+        ].join(' '));
+
+        return haystack.includes(targetCode) || haystack.includes(targetName);
+      }) || null;
+    }
+
+    function syncProductFormVariant(variant) {
+      if (!variant) return;
+
+      const productForms = document.querySelectorAll('form[action*="/cart/add"]');
+
+      productForms.forEach(function (form) {
+        const idInput = form.querySelector('[name="id"]');
+
+        if (idInput) {
+          idInput.value = variant.id;
+          idInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+
+      {% comment %} v_test {% endcomment %}
+      const variantUrl = new URL(window.location.href);
+      variantUrl.searchParams.set('variant', variant.id);
+      window.history.replaceState({}, '', variantUrl.toString());
+    }
+
+    function setActiveButtons() {
+      depthButtons.forEach(function (button) {
+        button.classList.toggle('is-active', button.dataset.depth === selectedDepth);
+      });
+
+      undertoneButtons.forEach(function (button) {
+        button.classList.toggle('is-active', button.dataset.undertone === selectedUndertone);
+      });
+    }
+
+    // Only sync the product form and URL after a visitor chooses a shade option.
+    // The initial render must not replace the product's currently selected variant.
+    function updateShade(shouldSyncVariant) {
+      const key = selectedDepth + '|' + selectedUndertone;
+      const shadeOptions = getShadeOptionsForSelection();
+
+      if (!shadeOptions.length) return;
+
+      if (selectedShadeIndex >= shadeOptions.length) {
+        selectedShadeIndex = 0;
+      }
+
+      const shade = shadeOptions[selectedShadeIndex] || shadeOptions[0];
+
+      swatch.style.background = shade.color;
+      codeEl.textContent = 'Your Match · ' + shade.code;
+      nameEl.textContent = shade.name;
+      descEl.textContent = shade.description;
+      addBtn.textContent = 'Add to cart';
+      addBtn.dataset.selectedKey = key;
+      addBtn.dataset.selectedShadeIndex = String(selectedShadeIndex);
+      statusEl.textContent = '';
+
+      setActiveButtons();
+      renderShadeOptions(shadeOptions, shade);
+
+      const matchedVariant = getVariantForShade(shade);
+
+      if (matchedVariant) {
+        if (shouldSyncVariant) {
+          syncProductFormVariant(matchedVariant);
+        }
+
+        if (matchedVariant.available === false) {
+          addBtn.textContent = shade.code + ' Sold Out';
+          addBtn.disabled = true;
+          statusEl.textContent = 'This shade is currently unavailable.';
+        } else {
+          addBtn.disabled = false;
+        }
+      } else {
+        addBtn.disabled = false;
+      }
+    }
+
+    depthButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        selectedDepth = button.dataset.depth;
+        selectedShadeIndex = 0;
+        updateShade(true);
+      });
+    });
+
+    undertoneButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        selectedUndertone = button.dataset.undertone;
+        selectedShadeIndex = 0;
+        updateShade(true);
+      });
+    });
+
+    addBtn.addEventListener('click', function () {
+      const key = addBtn.dataset.selectedKey;
+      const shadeOptions = normaliseShadeOptions(shadeData[key]);
+      const shadeIndex = Number(addBtn.dataset.selectedShadeIndex || 0);
+      const shade = shadeOptions[shadeIndex] || shadeOptions[0];
+
+      if (!shade) return;
+
+      const variant = getVariantForShade(shade);
+
+      if (!variant) {
+        statusEl.textContent = 'Variant not found. Add ' + shade.code.replace('#', '') + ' in variant SKU/title or add variantId in snippet code.';
+        return;
+      }
+
+      if (variant.available === false) {
+        statusEl.textContent = 'This shade is currently unavailable.';
+        return;
+      }
+
+      addBtn.disabled = true;
+      addBtn.textContent = 'Adding...';
+      statusEl.textContent = '';
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          id: variant.id,
+          quantity: 1
+        })
+      })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Cart add failed');
+        }
+
+        return response.json();
+      })
+      .then(function () {
+        addBtn.textContent = 'Added';
+        statusEl.textContent = shade.name + ' added to cart.';
+
+        document.dispatchEvent(new CustomEvent('cart:refresh'));
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+        document.dispatchEvent(new CustomEvent('cart:build'));
+
+        setTimeout(function () {
+          addBtn.disabled = false;
+          addBtn.textContent = 'Select ' + shade.code;
+          document.querySelector(".js-drawer-open-cart").click();
+        }, 1400);
+      })
+      .catch(function () {
+        addBtn.disabled = false;
+        addBtn.textContent = 'Select ' + shade.code;
+        statusEl.textContent = 'Could not add this shade. Please try again.';
+      });
+    });
+
+    updateShade();
+  })();
+</script>

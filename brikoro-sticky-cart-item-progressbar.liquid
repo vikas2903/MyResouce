@@ -1,0 +1,638 @@
+{% unless template contains 'cart' %}
+
+{% liquid
+  assign sticky_cart_goal = 3
+  assign sticky_cart_offer_label = 'Buy 3 Get 25% Off'
+  assign sticky_cart_currency = cart.currency.iso_code | default: shop.currency
+%}
+
+
+<div
+  class="sticky-offer-cart"
+  id="StickyOfferCart"
+  data-cart-goal="{{ sticky_cart_goal }}"
+  data-cart-url="{{ routes.cart_url }}"
+  data-cart-change-url="{{ routes.cart_change_url }}"
+  data-money-format="{{ shop.money_format | escape }}"
+  data-currency="{{ sticky_cart_currency | escape }}"
+  data-offer-label="{{ sticky_cart_offer_label | escape }}"
+  hidden
+>
+  <div class="sticky-offer-cart__inner">
+    <div class="sticky-offer-cart__top">
+      <div class="sticky-offer-cart__headline" id="StickyOfferHeadline">0/3 selected . Buy 3 Get 25% Off</div>
+      <div class="sticky-offer-cart__summary" id="StickyOfferSummary">Add 3 more items</div>
+    </div>
+
+    <div class="sticky-offer-cart__body">
+      <div class="sticky-offer-cart__steps" id="StickyOfferSteps" aria-label="Offer progress"></div>
+
+      <div class="sticky-offer-cart__meta">
+        <div class="sticky-offer-cart__prices">
+          <div class="sticky-offer-cart__row">
+            <span class="sticky-offer-cart__label">Subtotal</span>
+            <strong class="sticky-offer-cart__value" id="StickyOfferSubtotal">Rs. 0</strong>
+          </div>
+          <div class="sticky-offer-cart__row">
+            <span class="sticky-offer-cart__label">Est. total</span>
+            <strong class="sticky-offer-cart__value" id="StickyOfferEstimated">Rs. 0</strong>
+          </div>
+          <div class="sticky-offer-cart__discount" id="StickyOfferDiscount" hidden>You save Rs. 0</div>
+        </div>
+
+        <a class="sticky-offer-cart__button" id="StickyOfferButton" href="{{ routes.cart_url }}">Add 3 more</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sticky-offer-cart {
+    --sticky-offer-bg: rgba(255, 255, 255, 0.98);
+    --sticky-offer-border: #ece7df;
+    --sticky-offer-text: #222222;
+    --sticky-offer-muted: #6b7280;
+    --sticky-offer-chip-bg: #fbf8f2;
+    --sticky-offer-chip-active: #f1e5cd;
+    --sticky-offer-button: #7d7d7d;
+    --sticky-offer-button-ready: #111111;
+    --sticky-offer-button-text: #ffffff;
+    --sticky-offer-shadow: 0 -10px 30px rgba(17, 24, 39, 0.08);
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    padding: 8px;
+    background: transparent;
+  }
+
+  .sticky-offer-cart[hidden] {
+    display: none !important;
+  }
+
+  .sticky-offer-cart__inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 14px 16px;
+    border: 1px solid var(--sticky-offer-border);
+    border-radius: 18px;
+    background: var(--sticky-offer-bg);
+    box-shadow: var(--sticky-offer-shadow);
+    backdrop-filter: blur(12px);
+  }
+
+  .sticky-offer-cart__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .sticky-offer-cart__headline {
+    color: var(--sticky-offer-text);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .sticky-offer-cart__summary {
+    color: var(--sticky-offer-muted);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .sticky-offer-cart__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .sticky-offer-cart__steps {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .sticky-offer-cart__step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 56px;
+    border: 1px dashed var(--sticky-offer-border);
+    border-radius: 12px;
+    background: var(--sticky-offer-chip-bg);
+    color: #8b8b8b;
+    font-size: 18px;
+    font-weight: 700;
+    overflow: hidden;
+  }
+
+  .sticky-offer-cart__step.is-active {
+    border-style: solid;
+    border-color: #d7c29b;
+    background: var(--sticky-offer-chip-active);
+    color: var(--sticky-offer-text);
+  }
+
+  .sticky-offer-cart__step img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .sticky-offer-cart__remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(17, 17, 17, 0.84);
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .sticky-offer-cart__meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .sticky-offer-cart__prices {
+    display: grid;
+    gap: 4px;
+    align-content: start;
+  }
+
+  .sticky-offer-cart__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .sticky-offer-cart__label {
+    color: var(--sticky-offer-muted);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .sticky-offer-cart__value {
+    color: var(--sticky-offer-text);
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .sticky-offer-cart__discount {
+    color: #15803d;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .sticky-offer-cart__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: var(--sticky-offer-button);
+    color: var(--sticky-offer-button-text);
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .sticky-offer-cart__button.is-ready {
+    background: var(--sticky-offer-button-ready);
+  }
+
+  .sticky-offer-cart__button:hover {
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 767px) {
+
+    .sticky-offer-cart__meta{
+      gap:6px;
+    }
+
+    .sticky-offer-cart {
+      padding: 6px;
+    }
+
+    .sticky-offer-cart__inner {
+      padding: 8px 10px;
+      border-radius: 16px;
+    }
+
+    .sticky-offer-cart__top {
+      margin-bottom: 10px;
+    }
+
+    .sticky-offer-cart__headline {
+      font-size: 14px;
+    }
+
+    .sticky-offer-cart__summary {
+      display: none;
+    }
+
+    .sticky-offer-cart__body {
+      grid-template-columns: 1fr 1.35fr;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .sticky-offer-cart__steps {
+      gap: 8px;
+    }
+
+    .sticky-offer-cart__step {
+      width: 46px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .sticky-offer-cart__remove {
+      width: 14px;
+      height: 14px;
+      font-size: 9px;
+      top: 3px;
+      right: 3px;
+    }
+
+    .sticky-offer-cart__label,
+    .sticky-offer-cart__value {
+      font-size: 12px;
+    }
+
+    .sticky-offer-cart__discount {
+      font-size: 11px;
+    }
+
+    .sticky-offer-cart__button {
+      min-height: 42px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .sticky-offer-cart__meta {
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 220px);
+      align-items: end;
+      gap: 16px;
+    }
+
+    .sticky-offer-cart__button {
+      min-height: 56px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    if (window.__stickyOfferCartInitialized) return;
+    window.__stickyOfferCartInitialized = true;
+
+    var root = document.getElementById('StickyOfferCart');
+    if (!root) return;
+
+    var stepsEl = document.getElementById('StickyOfferSteps');
+    var headlineEl = document.getElementById('StickyOfferHeadline');
+    var summaryEl = document.getElementById('StickyOfferSummary');
+    var subtotalEl = document.getElementById('StickyOfferSubtotal');
+    var estimatedEl = document.getElementById('StickyOfferEstimated');
+    var discountEl = document.getElementById('StickyOfferDiscount');
+    var buttonEl = document.getElementById('StickyOfferButton');
+    var goal = parseInt(root.getAttribute('data-cart-goal') || '3', 10);
+    var cartUrl = root.getAttribute('data-cart-url') || '/cart';
+    var changeUrl = root.getAttribute('data-cart-change-url') || '/cart/change.js';
+    var moneyFormat = root.getAttribute('data-money-format') || '${{amount}}';
+    var currency = root.getAttribute('data-currency') || 'INR';
+    var offerLabel = root.getAttribute('data-offer-label') || 'Buy 3 Get 25% Off';
+    var refreshTimer = null;
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatMoney(cents) {
+      var amount = Number(cents || 0);
+
+      if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+        return window.Shopify.formatMoney(amount, moneyFormat);
+      }
+
+      try {
+        return new Intl.NumberFormat(undefined, {
+          style: 'currency',
+          currency: currency
+        }).format(amount / 100);
+      } catch (error) {
+        return 'Rs. ' + (amount / 100).toFixed(2);
+      }
+    }
+
+    function getSavings(cart) {
+      return (cart.items || []).reduce(function (total, item) {
+        var original = Number(item.original_line_price || item.line_price || 0);
+        var finalPrice = Number(item.final_line_price || item.line_price || 0);
+        return total + Math.max(original - finalPrice, 0);
+      }, 0);
+    }
+
+    function getTotalQuantity(cart) {
+      if (typeof cart.item_count === 'number') return cart.item_count;
+      return (cart.items || []).reduce(function (sum, item) {
+        return sum + Number(item.quantity || 0);
+      }, 0);
+    }
+
+    function getPreviewUnits(cart) {
+      var units = [];
+
+      (cart.items || []).forEach(function (item, itemIndex) {
+        var quantity = Number(item.quantity || 0);
+
+        for (var count = 0; count < quantity; count += 1) {
+          if (units.length >= goal) break;
+
+          units.push({
+            image: item.image,
+            title: item.product_title || item.title || 'Cart item',
+            line: itemIndex + 1
+          });
+        }
+      });
+
+      return units;
+    }
+
+    function renderSteps(cart) {
+      var previewUnits = getPreviewUnits(cart);
+      var totalQuantity = getTotalQuantity(cart);
+      var html = '';
+
+      for (var i = 0; i < goal; i += 1) {
+        var item = previewUnits[i];
+        var active = i < totalQuantity;
+        var content = String(i + 1);
+
+        if (item && item.image) {
+          content = '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title) + '" loading="lazy">';
+        }
+
+        html += ''
+          + '<div class="sticky-offer-cart__step' + (active ? ' is-active' : '') + '">'
+          + content;
+
+        if (item) {
+          html += '<button class="sticky-offer-cart__remove" type="button" data-line="' + escapeHtml(item.line) + '" aria-label="Remove item ' + escapeHtml(i + 1) + '">&times;</button>';
+        }
+
+        html += '</div>';
+      }
+
+      stepsEl.innerHTML = html;
+    }
+
+    function renderTexts(cart) {
+      var totalQuantity = getTotalQuantity(cart);
+      var subtotal = Number(cart.total_price || 0);
+      var savings = getSavings(cart);
+      var itemsLeft = Math.max(goal - totalQuantity, 0);
+
+      headlineEl.textContent = Math.min(totalQuantity, goal) + '/' + goal + ' selected . ' + offerLabel;
+      summaryEl.textContent = itemsLeft > 0 ? 'Add ' + itemsLeft + ' more item' + (itemsLeft === 1 ? '' : 's') : 'Offer unlocked';
+
+      subtotalEl.textContent = formatMoney(subtotal);
+      estimatedEl.textContent = formatMoney(Math.max(subtotal - savings, 0));
+
+      if (savings > 0) {
+        discountEl.hidden = false;
+        discountEl.textContent = 'You save ' + formatMoney(savings);
+      } else {
+        discountEl.hidden = true;
+        discountEl.textContent = '';
+      }
+
+      if (itemsLeft > 0) {
+        buttonEl.textContent = 'Add ' + itemsLeft + ' more';
+        buttonEl.classList.remove('is-ready');
+      } else {
+        buttonEl.textContent = 'View Cart';
+        buttonEl.classList.add('is-ready');
+      }
+    }
+
+    function render(cart) {
+      var totalQuantity = getTotalQuantity(cart);
+
+      if (!totalQuantity) {
+        root.hidden = true;
+        document.body.style.paddingBottom = '';
+        return;
+      }
+
+      root.hidden = false;
+      renderSteps(cart);
+      renderTexts(cart);
+
+      window.requestAnimationFrame(function () {
+        document.body.style.paddingBottom = root.offsetHeight + 'px';
+      });
+    }
+
+    function scheduleFetchCart(delay) {
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(fetchCart, typeof delay === 'number' ? delay : 180);
+    }
+
+    function fetchCart() {
+      return fetch('/cart.js', {
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' }
+      }).then(function (response) {
+        if (!response.ok) throw new Error('Unable to fetch cart');
+        return response.json();
+      }).then(function (cart) {
+        render(cart);
+        document.dispatchEvent(new CustomEvent('sticky-offer-cart:updated', { detail: { cart: cart } }));
+        return cart;
+      }).catch(function () {
+        root.hidden = true;
+      });
+    }
+
+    function removeItem(line) {
+      return fetch(changeUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          line: Number(line),
+          quantity: 0
+        })
+      }).then(function (response) {
+        if (!response.ok) throw new Error('Unable to update cart');
+        return response.json();
+      }).then(function (cart) {
+        render(cart);
+        document.dispatchEvent(new CustomEvent('sticky-offer-cart:updated', { detail: { cart: cart } }));
+        scheduleFetchCart(120);
+      });
+    }
+
+    stepsEl.addEventListener('click', function (event) {
+      var button = event.target.closest('.sticky-offer-cart__remove');
+      if (!button) return;
+
+      event.preventDefault();
+      button.disabled = true;
+      removeItem(button.getAttribute('data-line')).catch(function () {
+        button.disabled = false;
+      });
+    });
+
+    document.addEventListener('cart:refresh', fetchCart);
+    document.addEventListener('cart:updated', fetchCart);
+    document.addEventListener('cart:change', fetchCart);
+    document.addEventListener('cart:reload', fetchCart);
+    document.addEventListener('cart:build', fetchCart);
+    document.addEventListener('shopify:section:load', function () {
+      scheduleFetchCart(120);
+    });
+    document.addEventListener('shopify:section:reorder', function () {
+      scheduleFetchCart(120);
+    });
+    document.addEventListener('DOMContentLoaded', fetchCart);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) scheduleFetchCart(120);
+    });
+    window.addEventListener('focus', function () {
+      scheduleFetchCart(120);
+    });
+
+    document.addEventListener('click', function (event) {
+      var trigger = event.target.closest(
+        '[name="plus"], [name="minus"], .quantity__button, .cart-drawer__quantity-selector, .cart-item__quantity-wrapper button, [data-quantity-plus], [data-quantity-minus], [data-cart-remove], [data-cart-update]'
+      );
+
+      if (trigger) {
+        scheduleFetchCart(300);
+      }
+    }, true);
+
+    document.addEventListener('change', function (event) {
+      var target = event.target;
+      if (!target) return;
+
+      if (
+        target.matches('input[name="updates[]"], input[name="quantity"], .quantity__input, [data-quantity-input]') ||
+        target.closest('.cart-drawer, cart-drawer, #CartDrawer')
+      ) {
+        scheduleFetchCart(300);
+      }
+    }, true);
+
+    var nativeFetch = window.fetch;
+    if (typeof nativeFetch === 'function') {
+      window.fetch = function () {
+        var requestUrl = arguments[0];
+        var promise = nativeFetch.apply(this, arguments);
+        var url = typeof requestUrl === 'string' ? requestUrl : (requestUrl && requestUrl.url) || '';
+
+        if (/\/cart\/(add|change|update|clear)\.js/.test(url)) {
+          promise.then(function () {
+            scheduleFetchCart(150);
+          });
+        }
+
+        return promise;
+      };
+    }
+
+    if (!window.__stickyOfferCartXhrPatched) {
+      window.__stickyOfferCartXhrPatched = true;
+
+      var originalOpen = XMLHttpRequest.prototype.open;
+      var originalSend = XMLHttpRequest.prototype.send;
+
+      XMLHttpRequest.prototype.open = function (method, url) {
+        this.__stickyOfferCartUrl = typeof url === 'string' ? url : '';
+        return originalOpen.apply(this, arguments);
+      };
+
+      XMLHttpRequest.prototype.send = function () {
+        this.addEventListener('loadend', function () {
+          if (/\/cart\/(add|change|update|clear)(\.js)?/.test(this.__stickyOfferCartUrl || '')) {
+            scheduleFetchCart(150);
+          }
+        });
+
+        return originalSend.apply(this, arguments);
+      };
+    }
+
+    if ('MutationObserver' in window) {
+      var drawerObserver = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i += 1) {
+          var mutation = mutations[i];
+          if (
+            mutation.type === 'childList' ||
+            (mutation.type === 'attributes' && mutation.target && mutation.target.closest && mutation.target.closest('.cart-drawer, cart-drawer, #CartDrawer'))
+          ) {
+            scheduleFetchCart(220);
+            break;
+          }
+        }
+      });
+
+      window.setTimeout(function () {
+        var drawerRoot = document.querySelector('.cart-drawer, cart-drawer, #CartDrawer, #CartDrawer-Overlay');
+        if (drawerRoot) {
+          drawerObserver.observe(drawerRoot, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['class', 'open']
+          });
+        }
+      }, 500);
+    }
+
+    {% comment %} buttonEl.setAttribute('href', cartUrl); {% endcomment %}
+
+    buttonEl.addEventListener('click', function(event){
+         event.preventDefault();
+
+       document.querySelector('.header-actions__cart-icon').click();
+    })
+    fetchCart();
+  })();
+</script>
+{% endunless %}

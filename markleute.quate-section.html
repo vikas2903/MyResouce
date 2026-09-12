@@ -1,0 +1,173 @@
+<section class="markleute-quote-section" aria-label="Why choose Mark Leute">
+  <div class="markleute-quote-section__inner">
+    <span class="markleute-quote-section__eyebrow">Made for your everyday style</span>
+    <h2 class="markleute-quote-section__title">Quality you can <em>wear with confidence.</em></h2>
+
+    <div class="markleute-quote-section__content">
+      <p>Mark Leute brings together high-quality materials, considered design, and timeless style. Every piece is made to feel comfortable, look refined, and become a lasting part of your wardrobe.</p>
+    </div>
+
+    <div class="markleute-quote-section__trust-list" role="list">
+      <div class="markleute-quote-section__trust-item" role="listitem">
+        <strong>Premium quality</strong>
+        <span>Carefully selected materials</span>
+      </div>
+      <div class="markleute-quote-section__trust-item" role="listitem">
+        <strong>Made with care</strong>
+        <span>Attention in every detail</span>
+      </div>
+      <div class="markleute-quote-section__trust-item" role="listitem">
+        <strong>Timeless style</strong>
+        <span>Designed beyond the season</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .markleute-quote-section {
+    box-sizing: border-box;
+    padding: clamp(48px, 7vw, 76px) clamp(18px, 4vw, 32px);
+    background: #202126;
+    color: #fff;
+  }
+
+  .markleute-quote-section *,
+  .markleute-quote-section *::before,
+  .markleute-quote-section *::after {
+    box-sizing: border-box;
+  }
+
+  .markleute-quote-section__inner {
+    width: min(100%, 840px);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .markleute-quote-section__eyebrow {
+    display: block;
+    margin-bottom: clamp(14px, 2vw, 20px);
+    color: rgba(255, 255, 255, .68);
+    font-size: clamp(10px, 1.1vw, 11px);
+    font-weight: 500;
+    letter-spacing: .2em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .markleute-quote-section__title {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(31px, 4vw, 50px);
+    font-weight: 300;
+    letter-spacing: -.025em;
+    line-height: 1.15;
+  }
+
+  .markleute-quote-section__title em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .markleute-quote-section__content {
+    max-width: 720px;
+    margin: clamp(24px, 3vw, 34px) auto 0;
+  }
+
+  .markleute-quote-section__content p {
+    margin: 0 0 16px;
+    color: rgba(255, 255, 255, .7);
+    font-size: clamp(14px, 1.5vw, 16px);
+    font-weight: 300;
+    letter-spacing: .01em;
+    line-height: 1.7;
+  }
+
+  .markleute-quote-section__content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .markleute-quote-section__trust-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 760px;
+    margin: clamp(28px, 4vw, 40px) auto 0;
+    padding-top: clamp(20px, 3vw, 28px);
+    border-top: 1px solid rgba(255, 255, 255, .22);
+  }
+
+  .markleute-quote-section__trust-item {
+    display: grid;
+    gap: 7px;
+    padding: 0 18px;
+  }
+
+  .markleute-quote-section__trust-item + .markleute-quote-section__trust-item {
+    border-left: 1px solid rgba(255, 255, 255, .18);
+  }
+
+  .markleute-quote-section__trust-item strong {
+    color: #fff;
+    font-size: clamp(12px, 1.35vw, 14px);
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+
+  .markleute-quote-section__trust-item span {
+    color: rgba(255, 255, 255, .78);
+    font-size: clamp(11px, 1.15vw, 13px);
+    font-weight: 300;
+    letter-spacing: .025em;
+    line-height: 1.4;
+  }
+
+  @media screen and (max-width: 749px) {
+    .markleute-quote-section {
+      padding: 48px 20px;
+    }
+
+    .markleute-quote-section__eyebrow {
+      margin-bottom: 14px;
+    }
+
+    .markleute-quote-section__content p {
+      margin-bottom: 14px;
+      line-height: 1.65;
+    }
+
+    .markleute-quote-section__trust-list {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      max-width: 360px;
+      text-align: left;
+    }
+
+    .markleute-quote-section__trust-item {
+      gap: 4px;
+      padding: 0;
+    }
+
+    .markleute-quote-section__trust-item + .markleute-quote-section__trust-item {
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, .15);
+      border-left: 0;
+    }
+  }
+
+  @media screen and (max-width: 374px) {
+    .markleute-quote-section {
+      padding: 42px 16px;
+    }
+
+    .markleute-quote-section__title {
+      font-size: 29px;
+      line-height: 1.25;
+    }
+
+    .markleute-quote-section__eyebrow {
+      font-size: 9px;
+      letter-spacing: .16em;
+    }
+  }
+</style>

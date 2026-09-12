@@ -1,0 +1,328 @@
+{% assign comp_product = all_products['pure-modal-silk-bottom'] %}
+{% assign first_available_variant = comp_product.selected_or_first_available_variant %}
+
+{% if comp_product != blank and first_available_variant != blank %}
+  <div class="comp-off-products" data-comp-off-products>
+    <div class="comp-off-products__header">
+      <h3 class="comp-off-products__title">Add this product at just ₹600</h3>
+      {% comment %} <p class="comp-off-products__subtitle">Quick add complementary pick</p> {% endcomment %}
+    </div>
+
+    <div class="comp-off-products__list">
+      <div class="comp-off-card" data-product-id="{{ comp_product.id }}">
+        <a class="comp-off-card__media" href="{{ comp_product.url }}">
+          {% if comp_product.featured_image %}
+            <img
+              src="{{ comp_product.featured_image | image_url: width: 160 }}"
+              alt="{{ comp_product.featured_image.alt | default: comp_product.title | escape }}"
+              loading="lazy"
+              width="80"
+              height="80"
+            >
+          {% else %}
+            <div class="comp-off-card__placeholder"></div>
+          {% endif %}
+        </a>
+
+        <div class="comp-off-card__content">
+          <a class="comp-off-card__name" href="{{ comp_product.url }}">{{ comp_product.title }}</a>
+          <div class="comp-off-card__price">{{ first_available_variant.price | money_without_trailing_zeros }}</div>
+        </div>
+
+        <button
+          class="comp-off-card__add"
+          type="button"
+          data-variant-id="{{ first_available_variant.id }}"
+          aria-label="Add {{ comp_product.title | escape }} to cart"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .comp-off-products {
+      margin: 18px 0;
+      padding: 14px;
+      border: 1px solid #ece6dc;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fffdfa 0%, #f8f3eb 100%);
+    }
+
+    .comp-off-products__header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .comp-off-products__title {
+        margin: 0;
+        color: #1d1d1d;
+        font-size: 16px;
+        line-height: 1.2;
+        font-weight: 300;
+        font-family: 'Jost';
+    }
+
+    .comp-off-products__subtitle {
+      margin: 0;
+      color: #7a7268;
+      font-size: 12px;
+      line-height: 1.3;
+      text-align: right;
+    }
+
+    .comp-off-products__list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .comp-off-card {
+      display: grid;
+      grid-template-columns: 68px minmax(0, 1fr) 36px;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid #eee5d8;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .comp-off-card__media {
+      display: block;
+      width: 68px;
+      height: 68px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f3eee6;
+      flex-shrink: 0;
+    }
+
+    .comp-off-card__media img,
+    .comp-off-card__placeholder {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .comp-off-card__content {
+      min-width: 0;
+    }
+
+    .comp-off-card__name {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin: 0 0 4px;
+      color: #222;
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .comp-off-card__price {
+      color: #111;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .comp-off-card__add {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 50%;
+      background: #111;
+      color: #fff;
+      font-size: 26px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease, background 0.2s ease;
+    }
+
+    .comp-off-card__add:hover {
+      transform: scale(1.05);
+    }
+
+    .comp-off-card__add:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .comp-off-card__add.is-adding {
+      background: #4b4b4b;
+      font-size: 15px;
+    }
+
+    .comp-off-card__add.is-added {
+      background: #0f8a43;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 767px) {
+      .comp-off-products {
+        padding: 12px;
+        border-radius: 14px;
+      }
+
+      .comp-off-products__header {
+        align-items: start;
+        flex-direction: column;
+        margin-bottom: 10px;
+      }
+
+      .comp-off-products__subtitle {
+        text-align: left;
+      }
+
+      .comp-off-card {
+        grid-template-columns: 60px minmax(0, 1fr) 34px;
+        gap: 9px;
+        padding: 9px;
+      }
+
+      .comp-off-card__media {
+        width: 60px;
+        height: 60px;
+      }
+
+      .comp-off-card__name {
+        font-size: 12px;
+      }
+
+      .comp-off-card__price {
+        font-size: 13px;
+      }
+
+      .comp-off-card__add {
+        width: 34px;
+        height: 34px;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      if (window.__compOffProductsInitialized) return;
+      window.__compOffProductsInitialized = true;
+
+      function getCartDrawer() {
+        return document.querySelector('cart-drawer');
+      }
+
+      function getCartSections() {
+        var drawer = getCartDrawer();
+
+        if (drawer && typeof drawer.getSectionsToRender === 'function') {
+          return drawer.getSectionsToRender().map(function (section) {
+            return section.id;
+          });
+        }
+
+        return ['cart-drawer', 'cart-icon-bubble'];
+      }
+
+      function openCartDrawer() {
+        var drawer = getCartDrawer() || document.getElementById('CartDrawer');
+        var cartToggle = document.querySelector('.header__icon--cart');
+
+        if (drawer) {
+          drawer.classList.remove('is-empty');
+        }
+
+        if (cartToggle) {
+          cartToggle.click();
+          return;
+        }
+
+        if (drawer && typeof drawer.open === 'function') {
+          drawer.open();
+        }
+      }
+
+      function dispatchCartRefreshEvents() {
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+        document.dispatchEvent(new CustomEvent('cart:refresh'));
+        document.dispatchEvent(new CustomEvent('cart-drawer:updated'));
+      }
+
+      document.addEventListener('click', function (event) {
+        const button = event.target.closest('.comp-off-card__add');
+        if (!button) return;
+
+        event.preventDefault();
+
+        if (button.disabled) return;
+
+        const variantId = parseInt(button.getAttribute('data-variant-id'), 10);
+        if (!variantId) return;
+
+        const originalLabel = button.textContent;
+        button.disabled = true;
+        button.classList.add('is-adding');
+        button.textContent = '...';
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            items: [{ id: variantId, quantity: 1 }],
+            sections: getCartSections(),
+            sections_url: window.location.pathname
+          })
+        })
+          .then(function (response) {
+            return response.json().then(function (data) {
+              if (!response.ok) {
+                throw new Error(data.description || data.message || 'Unable to add product');
+              }
+
+              return data;
+            });
+          })
+          .then(function (result) {
+            const drawer = getCartDrawer();
+
+            button.classList.remove('is-adding');
+            button.classList.add('is-added');
+            button.textContent = 'OK';
+            dispatchCartRefreshEvents();
+
+            if (drawer && typeof drawer.renderContents === 'function') {
+              drawer.renderContents(result);
+            }
+
+            window.setTimeout(openCartDrawer, 150);
+          })
+          .catch(function (error) {
+            console.error('[Complementary Products] Add to cart failed:', error);
+            button.classList.remove('is-adding');
+            button.disabled = false;
+            button.textContent = originalLabel;
+            alert(error.message || 'Unable to add product. Please try again.');
+          })
+          .finally(function () {
+            window.setTimeout(function () {
+              button.classList.remove('is-adding', 'is-added');
+              button.disabled = false;
+              button.textContent = originalLabel;
+            }, 1200);
+          });
+      });
+    })();
+  </script>
+{% endif %}

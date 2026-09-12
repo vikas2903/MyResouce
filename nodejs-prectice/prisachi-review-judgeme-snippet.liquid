@@ -1,0 +1,109 @@
+{% if product != blank and product.metafields.judgeme.badge != blank %}
+  <div class="vs-custom-judgeme-review">
+    {{ product.metafields.judgeme.badge }}
+  </div>
+{% endif %}
+
+<style>
+  .vs-custom-judgeme-review,
+  .vs-custom-judgeme-review .jdgm-prev-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-family: inherit;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge__stars {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+    color: #ffa900 !important;
+    order: 1;
+  }
+
+  .vs-custom-judgeme-review .jdgm-star {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    flex: 0 0 16px;
+    font-size: 16px;
+    color: #ffa900 !important;
+    opacity: 1 !important;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge__text,
+  .vs-custom-judgeme-review [data-rating-display]::after {
+    font-size: 16px;
+    font-weight: 500;
+    color: #4b4b55;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge {
+    visibility: visible !important;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge[data-rating-display]::after {
+    content: attr(data-rating-display);
+    display: inline-block;
+    order: 2;
+    margin-left: 8px;
+    color: #4b4b55;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge__text {
+    order: 3;
+    margin: 0 !important;
+    color: #5b5b63 !important;
+    text-transform: capitalize;
+    font-size: 16px !important;
+  }
+
+  .vs-custom-judgeme-review .jdgm-prev-badge__text::before {
+    content: "";
+    display: inline-block;
+    width: 25px;
+    height: 16px;
+    margin: 0 8px 0 4px;
+    vertical-align: middle;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 1px 14px, 16px 16px;
+    background-position: left center, right center;
+    background-image:
+      linear-gradient(#d9d9df, #d9d9df),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%231263f1' d='M12 1.75l2.81 1.57 3.19-.08 1.57 2.81 2.61 1.83-.83 3.08.83 3.08-2.61 1.83-1.57 2.81-3.19-.08L12 22.25l-2.81-1.57-3.19.08-1.57-2.81-2.61-1.83.83-3.08-.83-3.08 2.61-1.83 1.57-2.81 3.19.08L12 1.75Z'/%3E%3Cpath fill='%23ffffff' d='M10.46 15.58 6.9 12.03l1.41-1.42 2.15 2.15 5.24-5.23 1.41 1.41-6.65 6.64Z'/%3E%3C/svg%3E");
+  }
+
+  @media screen and (max-width: 749px) {
+    .vs-custom-judgeme-review,
+    .vs-custom-judgeme-review .jdgm-prev-badge {
+      gap: 6px !important;
+      white-space: nowrap;
+    }
+
+    .vs-custom-judgeme-review .jdgm-star {
+      width: 16px;
+      height: 16px;
+      flex-basis: 16px;
+      font-size: 16px;
+    }
+
+    .vs-custom-judgeme-review .jdgm-prev-badge__text,
+    .vs-custom-judgeme-review [data-rating-display]::after {
+      font-size: 16px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var badges = document.querySelectorAll('.vs-custom-judgeme-review .jdgm-prev-badge[data-average-rating]');
+    badges.forEach(function (badge) {
+      var rawRating = parseFloat(badge.getAttribute('data-average-rating') || '0');
+      if (!Number.isNaN(rawRating)) {
+        badge.setAttribute('data-rating-display', rawRating.toFixed(1));
+      }
+    });
+  })();
+</script>

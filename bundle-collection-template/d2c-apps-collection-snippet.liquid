@@ -1,0 +1,146 @@
+{%- liquid
+  assign card_product = product
+  assign first_variant = card_product.selected_or_first_available_variant
+  assign has_multiple_variants = false
+  assign size_option = blank
+  assign color_option = blank
+
+  if card_product.has_only_default_variant == false
+    assign has_multiple_variants = true
+  endif
+
+  assign card_image = card_product.featured_image
+
+  for option in card_product.options_with_values
+    assign option_name = option.name | downcase
+    if size_option == blank and option_name contains 'size'
+      assign size_option = option
+    endif
+    if color_option == blank and option_name contains 'color'
+      assign color_option = option
+    endif
+  endfor
+-%}
+
+<article
+  class="bundle-collection__card"
+  data-product-card
+  data-product-id="{{ card_product.id }}"
+  data-product-title="{{ card_product.title | escape }}"
+  data-product-url="{{ card_product.url }}"
+  data-product-image="{%- if card_image != blank -%}{{ card_image | image_url: width: 160 }}{%- endif -%}"
+  data-default-variant-id="{{ first_variant.id }}"
+  data-default-variant-title="{{ first_variant.title | escape }}"
+  data-default-price="{{ first_variant.price }}"
+  data-has-multiple-variants="{{ has_multiple_variants }}"
+>
+  <div class="bundle-collection__card-media">
+    <a href="{{ card_product.url }}" class="bundle-collection__card-link" aria-label="{{ card_product.title | escape }}">
+      {%- if card_image != blank -%}
+        {{
+          card_image
+          | image_url: width: 560
+          | image_tag:
+            loading: 'lazy',
+            class: 'bundle-collection__card-image',
+            alt: card_product.title
+        }}
+      {%- else -%}
+        <div class="bundle-collection__card-placeholder"></div>
+      {%- endif -%}
+    </a>
+
+  </div>
+
+  <div class="bundle-collection__card-body">
+    <a href="{{ card_product.url }}" class="bundle-collection__card-title">
+      {{ card_product.title | escape }}
+    </a>
+
+    {%- if size_option != blank and size_option.values.size > 0 -%}
+      <div class="bundle-collection__card-sizes">
+        {%- for value in size_option.values limit: 5 -%}
+          <span class="bundle-collection__card-size {% if forloop.first %}is-active{% endif %}">
+            {{ value | escape }}
+          </span>
+        {%- endfor -%}
+        {%- if size_option.values.size > 5 -%}
+          <span class="bundle-collection__card-size-more">+{{ size_option.values.size | minus: 5 }} More</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if color_option != blank and color_option.values.size > 0 -%}
+      <div class="bundle-collection__card-colors">
+        {%- for value in color_option.values limit: 4 -%}
+          {%- assign swatch_value = value | downcase -%}
+          {%- assign swatch_color = '#d4d4d8' -%}
+          {%- case swatch_value -%}
+            {%- when 'black' -%}{%- assign swatch_color = '#111111' -%}
+            {%- when 'white' -%}{%- assign swatch_color = '#f8fafc' -%}
+            {%- when 'blue' -%}{%- assign swatch_color = '#2563eb' -%}
+            {%- when 'red' -%}{%- assign swatch_color = '#ef4444' -%}
+            {%- when 'green' -%}{%- assign swatch_color = '#16a34a' -%}
+            {%- when 'yellow' -%}{%- assign swatch_color = '#fde047' -%}
+            {%- when 'pink' -%}{%- assign swatch_color = '#ec4899' -%}
+            {%- when 'purple' -%}{%- assign swatch_color = '#7c3aed' -%}
+            {%- when 'orange' -%}{%- assign swatch_color = '#ea580c' -%}
+            {%- when 'grey', 'gray' -%}{%- assign swatch_color = '#9ca3af' -%}
+            {%- when 'brown' -%}{%- assign swatch_color = '#8b5e3c' -%}
+            {%- when 'beige' -%}{%- assign swatch_color = '#d6c4a1' -%}
+            {%- when 'gold' -%}{%- assign swatch_color = '#d4a017' -%}
+          {%- endcase -%}
+          <span
+            class="bundle-collection__card-color {% if forloop.first %}is-active{% endif %}"
+            style="--card-swatch-color: {{ swatch_color }};"
+            title="{{ value | escape }}"
+          ></span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="bundle-collection__card-price-row">
+      <span class="bundle-collection__card-price">{{ first_variant.price | money }}</span>
+      {%- if first_variant.compare_at_price > first_variant.price -%}
+        <span class="bundle-collection__card-compare">{{ first_variant.compare_at_price | money }}</span>
+      {%- endif -%}
+    </div>
+
+    <div class="bundle-collection__card-footer">
+ 
+
+      <button
+        type="button"
+        class="bundle-collection__card-toggle"
+        data-card-toggle
+        aria-pressed="false"
+      >
+        {%- if has_multiple_variants -%}
+          Choose options
+        {%- else -%}
+          Add to bundle
+        {%- endif -%}
+      </button>
+    </div>
+  </div>
+
+  <script type="application/json" data-product-variants>
+    [
+      {%- for variant in card_product.variants -%}
+        {
+          "id": {{ variant.id | json }},
+          "title": {{ variant.title | json }},
+          "option1": {{ variant.option1 | json }},
+          "option2": {{ variant.option2 | json }},
+          "option3": {{ variant.option3 | json }},
+          "price": {{ variant.price | json }},
+          "available": {{ variant.available | json }},
+          "compare_at_price": {{ variant.compare_at_price | default: 0 | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  </script>
+  <script type="application/json" data-product-options>
+    {{ card_product.options | json }}
+  </script>
+</article>

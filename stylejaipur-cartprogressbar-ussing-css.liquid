@@ -1,0 +1,244 @@
+
+  <style>
+  :root {
+    --brand-gold: #c6a56b;
+    --brand-gold-dark: #9f7b42;
+    --brand-gold-light: #f4ecdf;
+    --brand-gold-soft: #e8d5b2;
+    --brand-text-muted: #7f6740;
+  }
+
+  div#cart-progress-container1 {
+    text-align: center;
+    align-content: center;
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: sticky;
+    z-index: 1;
+    top: 4px;
+    border-radius: 0;
+    padding: 8px 0 4px;
+    margin: 8px 0;
+    gap: 8px;
+  }
+
+  #cart-progress-bar1 {
+    display: block !important;
+    position: relative;
+    height: 6px;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+    background: linear-gradient(
+      90deg,
+      var(--brand-gold-dark),
+      var(--brand-gold),
+      #dec490
+    );
+    box-shadow: 0 2px 8px rgba(159, 123, 66, 0.18);
+  }
+
+  .pro-wrap {
+    height: 6px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      rgba(198, 165, 107, 0.18),
+      rgba(198, 165, 107, 0.1)
+    );
+    border: 0;
+    border-radius: 999px;
+    position: relative;
+    overflow: visible;
+    margin-top: 20px;
+  }
+
+  span.step-1,
+  span.step-2,
+  span.step-3 {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    top: -11px;
+    background: #ffffff;
+    padding: 5px;
+    border: 1px solid rgba(198, 165, 107, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(159, 123, 66, 0.12);
+  }
+
+  span.step-1 {
+    left: 33%;
+    transform: translateX(-50%);
+  }
+
+  span.step-2 {
+    left: 66%;
+    transform: translateX(-50%);
+  }
+
+  span.step-3 {
+    right: 0;
+  }
+
+  span.step-1 svg,
+  span.step-2 svg,
+  span.step-3 svg {
+    width: 100%;
+    height: 100%;
+    stroke: var(--brand-gold-dark);
+  }
+
+  .step-complete {
+    background: var(--brand-gold) !important;
+    border-color: var(--brand-gold-dark) !important;
+    box-shadow: 0 4px 10px rgba(159, 123, 66, 0.24) !important;
+  }
+
+  .step-complete svg {
+    stroke: #ffffff !important;
+  }
+
+  .progress-offer-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--brand-gold-dark);
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  p#progress-messagee1 {
+    text-align: center;
+    display: block;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--brand-text-muted);
+    letter-spacing: 0;
+    margin: 0;
+    line-height: 1.4;
+    text-transform: none;
+  }
+
+  @media (max-width: 768px) {
+    div#cart-progress-container1 {
+      padding: 6px 0 2px;
+      margin: 6px 0;
+      gap: 6px;
+    }
+
+    .pro-wrap {
+      height: 6px;
+      margin-top: 18px;
+    }
+
+    #cart-progress-bar1 {
+      height: 6px;
+    }
+
+    span.step-1,
+    span.step-2,
+    span.step-3 {
+      width: 28px;
+      height: 28px;
+      top: -11px;
+      padding: 5px;
+    }
+
+    .progress-offer-title {
+      font-size: 14px;
+    }
+
+    p#progress-messagee1 {
+      font-size: 12px;
+      letter-spacing: 0;
+      margin: 0;
+    }
+  }
+</style>
+
+{% if cart.item_count != 0 %}
+
+  {%- assign target_items = 3 -%}
+  {%- assign remaining_items = target_items | minus: cart.item_count -%}
+  {%- assign step1_filled = false -%}
+  {%- assign step2_filled = false -%}
+  {%- assign step3_filled = false -%}
+  {%- assign progress_width = 0 -%}
+  {%- assign progress_message = '' -%}
+
+  {%- if cart.item_count >= 1 -%}
+    {%- assign step1_filled = true -%}
+  {%- endif -%}
+
+  {%- if cart.item_count >= 2 -%}
+    {%- assign step2_filled = true -%}
+  {%- endif -%}
+
+  {%- if cart.item_count >= 3 -%}
+    {%- assign step3_filled = true -%}
+  {%- endif -%}
+
+  {%- if cart.item_count >= target_items -%}
+    {%- assign progress_width = 100 -%}
+    {%- assign progress_message = 'Congratulations! Your Buy 2 Get 1 offer is unlocked.' -%}
+  {%- elsif cart.item_count == 2 -%}
+    {%- assign progress_width = 66 -%}
+    {%- assign progress_message = 'Add 1 more item to get 1 free.' -%}
+  {%- elsif cart.item_count == 1 -%}
+    {%- assign progress_width = 33 -%}
+    {%- assign progress_message = 'Add 2 more items to unlock your free item.' -%}
+  {%- else -%}
+    {%- assign progress_width = 0 -%}
+    {%- assign progress_message = 'Add 3 items to activate the Buy 2 Get 1 offer.' -%}
+  {%- endif -%}
+
+  <div id="cart-progress-container1">
+    <p class="progress-offer-title">Buy 2, Get 1 Free</p>
+    <p id="progress-messagee1">{{ progress_message }}</p>
+
+    <div class="pro-wrap">
+      <div
+        id="cart-progress-bar1"
+        style="width: {{ progress_width }}%;">
+      </div>
+
+      <span class="step-1 {% if step1_filled %}step-complete{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+      </span>
+
+      <span class="step-2 {% if step2_filled %}step-complete{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+      </span>
+
+      <span class="step-3 {% if step3_filled %}step-complete{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="18" height="13" rx="2"></rect>
+            <path d="M12 8v13"></path>
+            <path d="M3 12h18"></path>
+            <path d="M9 8a3 3 0 1 1 3-3"></path>
+            <path d="M15 8a3 3 0 1 0-3-3"></path>
+          </svg>
+      </span>
+    </div>
+  </div>
+
+{% endif %}

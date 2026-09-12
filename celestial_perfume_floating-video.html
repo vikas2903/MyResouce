@@ -1,0 +1,198 @@
+  <style>
+    .floating-video {
+        position: fixed;
+        right: -15px;
+        bottom: 100px;
+        width: min(192px, calc(100vw - 32px));
+        z-index: 9999;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #000;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+        touch-action: none;
+        cursor: grab;
+        transform: scale(.6);
+    }
+
+    .floating-video.is-dragging { cursor: grabbing; }
+
+    .video-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: none;
+      background: rgba(0, 0, 0, .65);
+    }
+
+    .video-modal-backdrop.is-open { display: block; }
+
+    .floating-video.is-expanded {
+      left: 50% !important;
+      top: 50% !important;
+      right: auto !important;
+      bottom: auto !important;
+      width: min(420px, 90vw);
+      height: min(75vh, 680px);
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      cursor: default;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 3;
+      display: none;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(0, 0, 0, .5);
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .floating-video.is-expanded .close-modal { display: block; }
+
+    video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .play-pause {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      z-index: 2;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(0, 0, 0, .5);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .play-pause::before {
+      content: '';
+      display: inline-block;
+    }
+
+    .play-pause.is-playing::before {
+      width: 9px;
+      height: 13px;
+      border-left: 3px solid #fff;
+      border-right: 3px solid #fff;
+    }
+
+    .play-pause:not(.is-playing)::before {
+      width: 0;
+      height: 0;
+      margin-left: 2px;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-left: 11px solid #fff;
+    }
+  </style>
+
+
+
+    <div class="video-modal-backdrop" id="modalBackdrop" aria-hidden="true"></div>
+    <div class="floating-video" id="floatingVideo">
+    <video id="video" src="https://cdn.shopify.com/videos/c/o/v/69a54b95e7a3490f95ef7bbc3bfbb64a.mp4" autoplay  loop playsinline preload="auto">
+      Your browser does not support HTML video.
+    </video>
+    <button class="play-pause is-playing" id="playPause" type="button" aria-label="Pause video"></button>
+    <button class="close-modal" id="closeModal" type="button" aria-label="Close expanded video">&times;</button>
+  </div>
+
+  <script>
+    const player = document.getElementById('floatingVideo');
+    const video = document.getElementById('video');
+    const playPause = document.getElementById('playPause');
+    const closeModalButton = document.getElementById('closeModal');
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+    let startX = 0;
+    let startY = 0;
+    let clickedVideo = false;
+
+    player.addEventListener('pointerdown', (event) => {
+      if (event.target.closest('.play-pause, .close-modal') || player.classList.contains('is-expanded')) return;
+      const rect = player.getBoundingClientRect();
+      dragging = true;
+      player.classList.add('is-dragging');
+      startX = event.clientX;
+      startY = event.clientY;
+      clickedVideo = event.target === video;
+      offsetX = event.clientX - rect.left;
+      offsetY = event.clientY - rect.top;
+      player.style.right = 'auto';
+      player.style.bottom = 'auto';
+      player.setPointerCapture(event.pointerId);
+    });
+
+    player.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+
+      const maxLeft = window.innerWidth - player.offsetWidth;
+      const maxTop = window.innerHeight - player.offsetHeight;
+      const left = Math.max(0, Math.min(event.clientX - offsetX, maxLeft));
+      const top = Math.max(0, Math.min(event.clientY - offsetY, maxTop));
+      player.style.left = `${left}px`;
+      player.style.top = `${top}px`;
+    });
+
+    const stopDragging = (event) => {
+      const wasClick = dragging && Math.abs(event.clientX - startX) < 8 && Math.abs(event.clientY - startY) < 8;
+      dragging = false;
+      player.classList.remove('is-dragging');
+      if (wasClick && clickedVideo) openModal();
+    };
+    player.addEventListener('pointerup', stopDragging);
+    player.addEventListener('pointercancel', stopDragging);
+
+    function updateButton() {
+      const isPlaying = !video.paused && !video.ended;
+      playPause.classList.toggle('is-playing', isPlaying);
+      playPause.setAttribute('aria-label', isPlaying ? 'Pause video' : 'Resume video');
+    }
+
+    video.addEventListener('play', updateButton);
+    video.addEventListener('pause', updateButton);
+
+    playPause.addEventListener('click', () => {
+      if (video.paused) {
+        video.play().catch(() => updateButton());
+      } else {
+        video.pause();
+      }
+    });
+
+    video.play().catch(() => updateButton());
+
+    function openModal() {
+      player.classList.add('is-expanded');
+      modalBackdrop.classList.add('is-open');
+      modalBackdrop.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      player.classList.remove('is-expanded');
+      modalBackdrop.classList.remove('is-open');
+      modalBackdrop.setAttribute('aria-hidden', 'true');
+    }
+
+    modalBackdrop.addEventListener('click', closeModal);
+    closeModalButton.addEventListener('click', closeModal);
+  </script>

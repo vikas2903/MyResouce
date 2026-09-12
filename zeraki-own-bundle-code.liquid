@@ -1,0 +1,2904 @@
+{%- comment -%}
+Bundle Builder Section - Buy 2 at Rs. 599
+Shows selected products with bundle offer
+{%- endcomment -%}
+
+<div class="bundle-builder-section" id="bundle-builder-{{ section.id }}" data-bundle-price="{{ section.settings.bundle_price | default: 59900 }}" data-required-products="{{ section.settings.required_products | default: 2 }}" data-desktop-columns="{{ section.settings.desktop_columns | default: 4 }}" data-mobile-columns="{{ section.settings.mobile_columns | default: 2 }}" data-discount-code="{{ section.settings.discount_code | default: '' }}">
+  {%- if section.settings.show_hero_banner and section.settings.hero_image != blank -%}
+    <div class="bundle-hero-banner">
+      {%- if section.settings.hero_link != blank -%}
+        <a href="{{ section.settings.hero_link }}" class="bundle-hero-link">
+      {%- endif -%}
+      <div class="bundle-hero-image-wrapper">
+        <img 
+          src="{{ section.settings.hero_image | img_url: '1920x800' }}"
+          srcset="{{ section.settings.hero_image | img_url: '768x320' }} 768w,
+                  {{ section.settings.hero_image | img_url: '1024x426' }} 1024w,
+                  {{ section.settings.hero_image | img_url: '1920x800' }} 1920w"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1920px"
+          alt="{{ section.settings.hero_image.alt | default: section.settings.hero_title | escape }}"
+          loading="eager"
+          class="bundle-hero-image"
+        >
+          
+        {%- if section.settings.hero_title != blank or section.settings.hero_subtitle != blank or section.settings.hero_button_text != blank -%}
+          <div class="bundle-hero-content">
+            <div class="bundle-hero-content-inner">
+              {%- if section.settings.hero_title != blank -%}
+                <h1 class="bundle-hero-title">{{ section.settings.hero_title }}</h1>
+              {%- endif -%}
+              {%- if section.settings.hero_subtitle != blank -%}
+                <p class="bundle-hero-subtitle">{{ section.settings.hero_subtitle }}</p>
+              {%- endif -%}
+              {%- if section.settings.hero_button_text != blank and section.settings.hero_link != blank -%}
+                <span class="bundle-hero-button">{{ section.settings.hero_button_text }}</span>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.hero_link != blank -%}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  <style>
+    .announcement-bar-div {
+        width: 100%;
+        overflow: hidden;
+       
+background: #c09a39;
+        color: #fff;
+        padding: 20px 0;
+    }
+
+    .announcement-content-div {
+        white-space: nowrap;
+        animation: scroll 20s linear infinite;
+    }
+
+    .announcement-bar-div:hover .announcement-content-div {
+        animation-play-state: paused;
+    }
+    .announcement-content-div {
+        display: flex;
+        gap: 26px;
+        line-height: 1;
+    }
+
+    @keyframes scroll {
+        0% {
+            transform: translateX(0%);
+        }
+
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+
+    @media only screen and (max-width: 400px) {
+        .announcement-content-div {
+            animation: scroll 12s linear infinite;
+        }
+    }
+</style>
+{% if collection.handle == 'the-combos' %}
+<div class="announcement-bar-div">
+    <div class="announcement-content-div">
+        {% for i in (1..5) %}
+     
+        
+        <span>Choose any 2 Products at 599/- Only  </span>   
+        <span>✦</span>      
+         
+           
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="announcement-bar-div">
+    <div class="announcement-content-div">
+        {% for i in (1..5) %}
+     
+        
+        <span>Choose any 2 Products at 599/- Only</span>   
+        <span>✦</span>      
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+  <div class="bundle-builder-container">
+    {%- if section.settings.title != blank -%}
+      <h2 class="bundle-builder-title">{{ section.settings.title }}</h2>
+    {%- endif -%}
+    
+    {%- if section.settings.offer_text != blank -%}
+      <div class="bundle-offer-badge">{{ section.settings.offer_text }}</div>
+    {%- endif -%}
+
+    <div class="bundle-products-grid" id="bundle-products-grid-{{ section.id }}" data-desktop-columns="{{ section.settings.desktop_columns | default: 4 }}" data-mobile-columns="{{ section.settings.mobile_columns | default: 2 }}">
+      {%- comment -%} Use current collection page collection if available, otherwise use section setting {%- endcomment -%}
+      {%- assign current_collection = null -%}
+      {%- if collection.handle != blank -%}
+        {%- comment -%} We're on a collection page, use the current collection {%- endcomment -%}
+        {%- assign current_collection = collection -%}
+      {%- elsif section.settings.collection != blank -%}
+        {%- comment -%} Use collection from section settings {%- endcomment -%}
+        {%- assign current_collection = collections[section.settings.collection] -%}
+      {%- endif -%}
+      
+      {%- if current_collection != blank -%}
+        {%- assign collection = current_collection -%}
+        {%- if collection != blank -%}
+          {%- assign products_per_page = 20 -%}
+          {%- assign product_count = 0 -%}
+          {%- assign image_positions = '' -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'image' -%}
+              {%- assign image_positions = image_positions | append: block.settings.position | append: ',' -%}
+            {%- endif -%}
+          {%- endfor -%}
+          
+          {%- for product in collection.products -%}
+            {%- comment -%} Find 60ML variant, or fallback to first available variant {%- endcomment -%}
+            {%- assign variant_60ml = null -%}
+            {%- assign fallback_variant = null -%}
+            {%- for variant in product.variants -%}
+              {%- if variant.available -%}
+                {%- if fallback_variant == null -%}
+                  {%- assign fallback_variant = variant -%}
+                {%- endif -%}
+                {%- if variant.title contains '60ML' or variant.title contains '60 ML' or variant.title contains '60ml' or variant.title contains '60 ml' -%}
+                  {%- assign variant_60ml = variant -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            
+            {%- comment -%} Use 60ML variant if found, otherwise use first available variant {%- endcomment -%}
+            {%- if variant_60ml == null -%}
+              {%- assign variant_60ml = fallback_variant -%}
+            {%- endif -%}
+            
+            {%- comment -%} Show product if any available variant exists {%- endcomment -%}
+            {%- if variant_60ml != null -%}
+              {%- assign product_count = product_count | plus: 1 -%}
+              
+              {%- comment -%} Check if image should be shown before this product {%- endcomment -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'image' and block.settings.position != blank -%}
+                  {%- assign image_position = block.settings.position | plus: 0 -%}
+                  {%- if image_position == product_count and block.settings.image != blank -%}
+                    <div class="bundle-media-block bundle-image-block" data-position="{{ image_position }}">
+                      {%- if block.settings.link != blank -%}
+                        <a href="{{ block.settings.link }}" class="bundle-media-link">
+                      {%- endif -%}
+                      <img 
+                        src="{{ block.settings.image | img_url: '800x800' }}"
+                        alt="{{ block.settings.image.alt | default: 'Media' }}"
+                        loading="lazy"
+                        class="bundle-media-image"
+                      >
+                      {%- if block.settings.link != blank -%}
+                        </a>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              
+              <div class="bundle-product-card" data-product-id="{{ product.id }}" data-variant-id="{{ variant_60ml.id }}">
+                <div class="bundle-product-image-wrapper">
+                  <img 
+                    src="{{ product.featured_image | img_url: '300x300' }}"
+                    alt="{{ product.title | escape }}"
+                    loading="lazy"
+                    class="bundle-product-image"
+                  >
+                  <input 
+                    type="checkbox" 
+                    id="product-{{ product.id }}-{{ section.id }}"
+                    class="bundle-checkbox-input"
+                    data-product-id="{{ product.id }}"
+                    data-variant-id="{{ variant_60ml.id }}"
+                    data-price="{{ variant_60ml.price }}"
+                    data-title="{{ product.title | escape }}"
+                    data-image="{{ product.featured_image | img_url: '150x150' }}"
+                    style="display: none;"
+                  >
+                </div>
+                
+                <div class="bundle-product-info">
+                  <h3 class="bundle-product-title">{{ product.title }}</h3>
+                  
+                  {%- comment -%} Variant Selector {%- endcomment -%}
+                  {%- if product.variants.size > 1 -%}
+                    <div class="bundle-variant-selector" data-product-id="{{ product.id }}">
+                      <select class="bundle-variant-select" data-product-id="{{ product.id }}" data-section-id="{{ section.id }}">
+                        {%- for variant in product.variants -%}
+                          {%- if variant.available -%}
+                            <option 
+                              value="{{ variant.id }}"
+                              data-price="{{ variant.price }}"
+                              data-image="{% if variant.featured_image %}{{ variant.featured_image | img_url: '150x150' }}{% else %}{{ product.featured_image | img_url: '150x150' }}{% endif %}"
+                              {% if variant.id == variant_60ml.id %}selected{% endif %}
+                            >
+                              {{ variant.title }} - {{ variant.price | money }}
+                            </option>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </select>
+                    </div>
+                  {%- endif -%}
+                  
+                  {% comment %} {%- if variant_60ml.compare_at_price > variant_60ml.price -%}
+                    <div class="bundle-product-price-wrapper">
+                      <span class="bundle-product-original-price">{{ variant_60ml.compare_at_price | money }}</span>
+                      <span class="bundle-product-price">{{ variant_60ml.price | money }}</span>
+                    </div>
+                  {%- else -%}
+                    <div class="bundle-product-price-wrapper">
+                      <span class="bundle-product-price">{{ variant_60ml.price | money }}</span>
+                    </div>
+                  {%- endif -%} {% endcomment %}
+                  
+                  <button class="bundle-add-btn" data-product-id="{{ product.id }}" data-variant-id="{{ variant_60ml.id }}" data-price="{{ variant_60ml.price }}" data-title="{{ product.title | escape }}" data-image="{{ product.featured_image | img_url: '150x150' }}">
+                    ADD TO BOX
+                  </button>
+                </div>
+              </div>
+            {%- endif -%}
+            
+            {%- if forloop.index == products_per_page and collection.products.size > products_per_page -%}
+              <div class="bundle-collection-loader" data-collection-handle="{{ collection.handle }}" data-page="1" data-total-products="{{ collection.products.size }}" data-products-loaded="{{ products_per_page }}" data-section-id="{{ section.id }}">
+                <div class="bundle-loader-spinner"></div>
+                <p class="bundle-loader-text">Loading more products...</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+          
+          {%- comment -%} Show message if no products found {%- endcomment -%}
+          {%- if product_count == 0 -%}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px;">
+              <p style="font-size: 16px; color: #666;">No products found in this collection.</p>
+              <p style="font-size: 14px; color: #999; margin-top: 10px;">Please check your collection settings or add products to the collection.</p>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'product' and block.settings.product != blank -%}
+            {%- assign product = all_products[block.settings.product] -%}
+            {%- if product != blank -%}
+              {%- comment -%} Find 60ML variant, or fallback to first available variant {%- endcomment -%}
+              {%- assign variant_60ml = null -%}
+              {%- assign fallback_variant = null -%}
+              {%- for variant in product.variants -%}
+                {%- if variant.available -%}
+                  {%- if fallback_variant == null -%}
+                    {%- assign fallback_variant = variant -%}
+                  {%- endif -%}
+                  {%- if variant.title contains '60ML' or variant.title contains '60 ML' or variant.title contains '60ml' or variant.title contains '60 ml' -%}
+                    {%- assign variant_60ml = variant -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              
+              {%- comment -%} Use 60ML variant if found, otherwise use first available variant {%- endcomment -%}
+              {%- if variant_60ml == null -%}
+                {%- assign variant_60ml = fallback_variant -%}
+              {%- endif -%}
+              
+              {%- comment -%} Show product if any available variant exists {%- endcomment -%}
+              {%- if variant_60ml != null -%}
+                <div class="bundle-product-card" data-product-id="{{ product.id }}" data-variant-id="{{ variant_60ml.id }}">
+                  <div class="bundle-product-image-wrapper">
+                    <img 
+                      src="{{ product.featured_image | img_url: '300x300' }}"
+                      alt="{{ product.title | escape }}"
+                      loading="lazy"
+                      class="bundle-product-image"
+                    >
+                    <input 
+                      type="checkbox" 
+                      id="product-{{ product.id }}-{{ section.id }}"
+                      class="bundle-checkbox-input"
+                      data-product-id="{{ product.id }}"
+                      data-variant-id="{{ variant_60ml.id }}"
+                      data-price="{{ variant_60ml.price }}"
+                      data-title="{{ product.title | escape }}"
+                      data-image="{{ product.featured_image | img_url: '150x150' }}"
+                      style="display: none;"
+                    >
+                  </div>
+                  
+                  <div class="bundle-product-info">
+                    <h3 class="bundle-product-title">{{ product.title }}</h3>
+                    
+                    {%- comment -%} Variant Selector {%- endcomment -%}
+                    {%- if product.variants.size > 1 -%}
+                      <div class="bundle-variant-selector" data-product-id="{{ product.id }}">
+                        <select class="bundle-variant-select" data-product-id="{{ product.id }}" data-section-id="{{ section.id }}">
+                          {%- for variant in product.variants -%}
+                            {%- if variant.available -%}
+                              <option 
+                                value="{{ variant.id }}"
+                                data-price="{{ variant.price }}"
+                                data-image="{% if variant.featured_image %}{{ variant.featured_image | img_url: '150x150' }}{% else %}{{ product.featured_image | img_url: '150x150' }}{% endif %}"
+                                {% if variant.id == variant_60ml.id %}selected{% endif %}
+                              >
+                                {{ variant.title }} - {{ variant.price | money }}
+                              </option>
+                            {%- endif -%}
+                          {%- endfor -%}
+                        </select>
+                      </div>
+                    {%- endif -%}
+                    
+                    {% comment %} {%- if variant_60ml.compare_at_price > variant_60ml.price -%}
+                      <div class="bundle-product-price-wrapper">
+                        <span class="bundle-product-original-price">{{ variant_60ml.compare_at_price | money }}</span>
+                        <span class="bundle-product-price">{{ variant_60ml.price | money }}</span>
+                      </div>
+                    {%- else -%}
+                      <div class="bundle-product-price-wrapper">
+                        <span class="bundle-product-price">{{ variant_60ml.price | money }}</span>
+                      </div>
+                    {%- endif -%} {% endcomment %}
+                    
+                    <button class="bundle-add-btn" data-product-id="{{ product.id }}" data-variant-id="{{ variant_60ml.id }}" data-price="{{ variant_60ml.price }}" data-title="{{ product.title | escape }}" data-image="{{ product.featured_image | img_url: '150x150' }}">
+                      ADD TO BOX
+                    </button>
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          {%- elsif block.type == 'image' and block.settings.image != blank -%}
+            <div class="bundle-media-block bundle-image-block" data-position="{{ block.settings.position }}">
+              {%- if block.settings.link != blank -%}
+                <a href="{{ block.settings.link }}" class="bundle-media-link">
+              {%- endif -%}
+              <img 
+                src="{{ block.settings.image | img_url: '800x800' }}"
+                alt="{{ block.settings.image.alt | default: 'Media' }}"
+                loading="lazy"
+                class="bundle-media-image"
+              >
+              {%- if block.settings.link != blank -%}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- elsif block.type == 'video' -%}
+          {%- if block.settings.video_url != blank -%}
+            <div class="bundle-media-block bundle-video-block">
+              <div class="bundle-video-wrapper">
+                <video 
+                  controls
+                  class="bundle-video-element"
+                  {%- if block.settings.video_poster != blank -%}poster="{{ block.settings.video_poster | img_url: '800x800' }}"{%- endif -%}
+                >
+                  <source src="{{ block.settings.video_url }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          {%- elsif block.settings.video != blank -%}
+            <div class="bundle-media-block bundle-video-block">
+              {%- if block.settings.video.type == 'youtube' -%}
+                <div class="bundle-video-wrapper">
+                  <iframe 
+                    src="https://www.youtube.com/embed/{{ block.settings.video.id }}?rel=0"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="bundle-video-iframe"
+                  ></iframe>
+                </div>
+              {%- elsif block.settings.video.type == 'vimeo' -%}
+                <div class="bundle-video-wrapper">
+                  <iframe 
+                    src="https://player.vimeo.com/video/{{ block.settings.video.id }}"
+                    frameborder="0"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen
+                    class="bundle-video-iframe"
+                  ></iframe>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- Bottom Bar for Selected Products -->
+  <div class="bundle-bottom-bar visible" id="bundle-bottom-bar-{{ section.id }}">
+     <div class="bundle-progress-container" id="bundle-progress-{{ section.id }}">
+          <div class="bundle-progress-bar-wrapper">
+            <div class="bundle-progress-bar" id="bundle-progress-bar-{{ section.id }}">
+              <div class="bundle-progress-fill" id="bundle-progress-fill-{{ section.id }}">
+                <span class="bundle-progress-text">
+                  <span class="bundle-progress-current" id="bundle-progress-current-{{ section.id }}">0</span>
+                  <span class="bundle-progress-separator">/</span>
+                  <span class="bundle-progress-total" id="bundle-progress-total-{{ section.id }}">{{ section.settings.required_products | default: 2 }}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+    <div class="bundle-bottom-bar-content">
+      <div class="bundle-selected-products" id="bundle-selected-products-{{ section.id }}">
+        <div class="bundle-selected-items-list"></div>
+        <div class="bundle-empty-slots">
+          {%- for i in (1..4) -%}
+            <div class="bundle-empty-slot">
+              <span class="bundle-plus-icon">+</span>
+            </div>
+          {%- endfor -%}
+        </div>
+           <div class="bundle-pricing-info">
+          <div class="bundle-pricing-header">
+            <div class="bundle-subtotal-label">Subtotal</div>
+            <div class="bundle-save-amount" id="bundle-save-amount-{{ section.id }}">Save: ₹0</div>
+          </div>
+          <div class="bundle-price-display">
+            <span class="bundle-offer-total" id="bundle-offer-total-{{ section.id }}">₹0</span>
+            <span class="bundle-original-total" id="bundle-original-total-{{ section.id }}">₹0</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bundle-total-section">
+        <!-- Subtotal and Pricing Info -->
+     
+        
+        <!-- Progress Bar -->
+       
+        <div class="gokwik-checkout bundle-gokwik-checkout" id="bundle-gokwik-checkout-{{ section.id }}">
+          <button type="button" class="button bundle-checkout-btn disabled" id="bundle-checkout-btn-{{ section.id }}" disabled>
+            <span class="btn-text">
+              <span>{{ section.settings.gokwik_main_title | default: 'CHECKOUT' }}</span>
+              <span>{{ section.settings.gokwik_sub_title | default: 'Secure Payment' }}</span>
+            </span>
+            <span class="pay-opt-icon">
+              <img src="https://cdn.gokwik.co/v4/images/upi-icons.svg" alt="UPI">
+              <img src="https://cdn.gokwik.co/v4/images/right-arrow.svg" alt="Arrow">
+            </span>
+            <div style="display:none" class="addloadr" id="btn-loader-{{ section.id }}">
+              <div class="cir-loader">Loading..</div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confetti Canvas -->
+<canvas id="bundle-confetti-{{ section.id }}" class="bundle-confetti-canvas"></canvas>
+
+<style>
+/* Bundle Builder Section Styles */
+
+.bundle-builder-section {
+  padding: 40px 20px;
+  padding-bottom: 120px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Hero Banner Styles */
+.bundle-hero-banner {
+  width: 100%;
+  {% comment %} margin-bottom: 40px; {% endcomment %}
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bundle-hero-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bundle-hero-image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  {% comment %} min-height: 400px; {% endcomment %}
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bundle-hero-image {
+  width: 100%;
+  height: 100%;
+  {% comment %} min-height: 400px; {% endcomment %}
+  display: block;
+  object-fit: cover;
+}
+
+.bundle-hero-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.bundle-hero-content-inner {
+  text-align: center;
+  max-width: 800px;
+  color: #fff;
+  z-index: 2;
+}
+
+.bundle-hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.bundle-hero-subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  margin: 0 0 24px 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+.bundle-hero-button {
+  display: inline-block;
+  padding: 14px 32px;
+  background: #ff6b35;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.bundle-hero-link:hover .bundle-hero-button {
+  background: #e55a2b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.bundle-builder-container {
+  margin-bottom: 0;
+}
+
+.bundle-builder-title {
+  font-size: 28px;
+  font-weight: 400;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.bundle-offer-badge {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ff6b35;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background: #fff5f2;
+  border-radius: 8px;
+  display: block;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Progress Bar Styles - In Bottom Bar */
+.bundle-progress-container {
+  width: 100%;
+  {% comment %} max-width: 200px; {% endcomment %}
+  margin: 0 10px 10px ;
+  flex-shrink: 0;
+}
+
+.bundle-progress-bar-wrapper {
+  width: 100%;
+  height: 12px;
+  background: #f0f0f0;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bundle-progress-bar {
+  width: 100%;
+  height: 100%;
+  background: #e8e8e8;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bundle-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b35 0%, #ff8c5a 100%);
+  border-radius: 16px;
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+}
+
+.bundle-progress-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.bundle-progress-current {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.bundle-progress-separator {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 1px;
+}
+
+.bundle-progress-total {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.bundle-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: bundle-progress-shine 2s infinite;
+  z-index: 1;
+}
+
+@keyframes bundle-progress-shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.bundle-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.bundle-product-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.bundle-product-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.bundle-product-card.selected {
+  border-color: #ff6b35;
+  border-width: 2px;
+}
+
+.bundle-product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  background: #f8f8f8;
+  overflow: hidden;
+}
+
+.bundle-product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bundle-checkbox-input {
+  display: none !important;
+}
+
+.bundle-product-info {
+  padding: 16px;
+}
+
+.bundle-product-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  min-height: 40px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bundle-variant-selector {
+  margin-bottom: 12px;
+}
+
+.bundle-variant-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #333;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 35px;
+}
+
+.bundle-variant-select:hover {
+  border-color: #ff6b35;
+}
+
+.bundle-variant-select:focus {
+  outline: none;
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+}
+
+.bundle-product-price-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.bundle-product-original-price {
+  font-size: 14px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.bundle-product-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.bundle-add-btn {
+  width: 100%;
+  padding: 12px;
+  background: #ffd700;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bundle-add-btn:hover:not(:disabled) {
+  background: #ffed4e;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.bundle-add-btn:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.bundle-add-btn.selected {
+  background: #ff6b35;
+  color: #fff;
+}
+
+/* Media Blocks */
+.bundle-media-block {
+  width: 100%;
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.bundle-image-block {
+  /* Images now take same width as product cards */
+}
+
+.bundle-media-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.bundle-media-link {
+  display: block;
+  text-decoration: none;
+}
+
+.bundle-video-block {
+  grid-column: 1 / -1;
+}
+
+.bundle-video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+}
+
+.bundle-video-iframe,
+.bundle-video-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
+
+/* Bottom Bar Styles */
+.bundle-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #e6e6e6;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  padding: 16px 20px;
+  transform: translateY(0);
+}
+
+.bundle-bottom-bar-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bundle-selected-products {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+      justify-content: space-between;
+}
+
+.bundle-empty-slots {
+  display: flex;
+  gap: 12px;
+}
+
+.bundle-empty-slot {
+  width: 60px;
+  height: 60px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+}
+
+.bundle-plus-icon {
+  font-size: 24px;
+  color: #999;
+  font-weight: 300;
+}
+
+.bundle-selected-items-list {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.bundle-selected-item {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #ff6b35;
+  background: #fff;
+}
+
+.bundle-selected-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bundle-selected-item-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff6b35;
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.bundle-total-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.bundle-pricing-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 150px;
+}
+
+.bundle-pricing-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.bundle-subtotal-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bundle-save-amount {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: #e74c3c;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.bundle-price-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bundle-offer-total {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1;
+}
+
+.bundle-original-total {
+  font-size: 16px;
+  color: #999;
+  text-decoration: line-through;
+  line-height: 1;
+}
+
+.bundle-gokwik-checkout {
+  flex-shrink: 0;
+}
+
+.bundle-checkout-btn {
+  padding: 14px 32px;
+  background: #ff6b35;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-width: 200px;
+  position: relative;
+}
+
+.bundle-checkout-btn .btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex: 1;
+}
+
+.bundle-checkout-btn .btn-text span:first-child {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.bundle-checkout-btn .btn-text span:last-child {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.9;
+  text-transform: none;
+}
+
+.bundle-checkout-btn .pay-opt-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bundle-checkout-btn .pay-opt-icon img {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+.bundle-checkout-btn:hover:not(:disabled):not(.disabled) {
+  background: #e55a2b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.bundle-checkout-btn:disabled,
+.bundle-checkout-btn.disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.bundle-checkout-btn .addloadr {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.bundle-checkout-btn .cir-loader {
+  color: #fff;
+  font-size: 14px;
+}
+
+/* Confetti Canvas */
+.bundle-confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+}
+
+.bundle-confetti-canvas.active {
+  display: block;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .bundle-builder-section {
+    padding: 15px 12px;
+    padding-bottom: 120px;
+  }
+
+  .bundle-hero-banner {
+    {% comment %} margin-bottom: 30px; {% endcomment %}
+    border-radius: 12px;
+  }
+
+  .bundle-hero-image-wrapper {
+    border-radius: 12px;
+    {% comment %} min-height: 250px; {% endcomment %}
+  }
+
+  .bundle-hero-image {
+    {% comment %} min-height: 250px; {% endcomment %}
+  }
+
+  .bundle-hero-content {
+    padding: 30px 16px;
+  }
+
+  .bundle-hero-content-inner {
+    max-width: 100%;
+  }
+
+  .bundle-hero-title {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .bundle-hero-subtitle {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .bundle-hero-button {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
+  .bundle-builder-container {
+    margin-bottom: 0;
+  }
+
+  .bundle-builder-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .bundle-offer-badge {
+    font-size: 16px;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+  }
+
+  .bundle-products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .bundle-products-grid[data-mobile-columns="1"] {
+    grid-template-columns: 1fr;
+  }
+  
+  .bundle-products-grid[data-mobile-columns="2"] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bundle-products-grid[data-mobile-columns="3"] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bundle-product-card {
+    border-radius: 8px;
+  }
+
+  .bundle-product-info {
+    padding: 12px;
+  }
+
+  .bundle-product-title {
+    font-size: 12px;
+    min-height: 32px;
+    margin-bottom: 6px;
+  }
+
+  .bundle-variant-select {
+    font-size: 11px;
+    padding: 6px 10px;
+    padding-right: 30px;
+  }
+
+  .bundle-product-price {
+    font-size: 16px;
+  }
+
+  .bundle-product-original-price {
+    font-size: 12px;
+  }
+
+  .bundle-add-btn {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .bundle-bottom-bar {
+    padding: 12px 15px;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .bundle-bottom-bar-content {
+    flex-direction: column;
+    gap: 4px;
+    max-width: 100%;
+  }
+
+  .bundle-selected-products {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bundle-selected-products::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bundle-empty-slots {
+    gap: 8px;
+  }
+
+  .bundle-empty-slot,
+  .bundle-selected-item {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+  }
+
+  .bundle-selected-item-remove {
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    top: -5px;
+    right: -5px;
+  }
+
+  .bundle-total-section {
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .bundle-pricing-info {
+    min-width: auto;
+    align-items: flex-start;
+  }
+
+  .bundle-pricing-header {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .bundle-subtotal-label {
+    font-size: 12px;
+  }
+
+  .bundle-save-amount {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  .bundle-offer-total {
+    font-size: 20px;
+  }
+
+  .bundle-original-total {
+    font-size: 14px;
+  }
+
+  .bundle-progress-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 5px;
+    order: 2;
+  }
+
+  .bundle-progress-bar-wrapper {
+    height: 8px;
+  }
+
+  .bundle-progress-text {
+    font-size: 6px;
+  }
+
+  .bundle-progress-current {
+    font-size: 9px;
+  }
+
+  .bundle-progress-separator {
+    font-size: 12px;
+  }
+
+  .bundle-progress-total {
+    font-size: 12px;
+  }
+
+  .bundle-gokwik-checkout {
+    order: 3;
+    width: 80%;
+  }
+
+  .bundle-checkout-btn {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 14px;
+    min-width: 120px;
+    gap: 8px;
+  }
+
+  .bundle-checkout-btn .btn-text span:first-child {
+    font-size: 14px;
+  }
+
+  .bundle-checkout-btn .btn-text span:last-child {
+    font-size: 11px;
+  }
+
+  .bundle-checkout-btn .pay-opt-icon img {
+    height: 16px;
+  }
+
+  .bundle-media-block {
+    border-radius: 8px;
+    margin: 8px 0;
+  }
+
+  .bundle-video-wrapper {
+    border-radius: 8px;
+  }
+}
+
+/* Collection Loader */
+.bundle-collection-wrapper {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.bundle-collection-loader {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  margin: 20px 0;
+}
+
+.bundle-loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff6b35;
+  border-radius: 50%;
+  animation: bundle-spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+
+.bundle-loader-text {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+@keyframes bundle-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media screen and (min-width: 769px) {
+  .bundle-products-grid[data-desktop-columns="1"] {
+    grid-template-columns: 1fr;
+  }
+  
+  .bundle-products-grid[data-desktop-columns="2"] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bundle-products-grid[data-desktop-columns="3"] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .bundle-products-grid[data-desktop-columns="4"] {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .bundle-products-grid[data-desktop-columns="5"] {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  
+  .bundle-products-grid[data-desktop-columns="6"] {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .bundle-builder-section {
+    padding: 12px 0px;
+    padding-bottom: 110px;
+  }
+
+  .bundle-builder-title {
+    font-size: 18px;
+  }
+
+  .bundle-products-grid {
+    gap: 10px;
+  }
+
+  .bundle-product-info {
+    padding: 10px;
+  }
+
+  .bundle-bottom-bar {
+    padding: 10px 12px;
+  }
+
+  .bundle-empty-slot,
+  .bundle-selected-item {
+    width: 35px;
+    height: 35px;
+  }
+
+  .bundle-checkout-btn {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}
+.button:after{
+box-shadow:unset;
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const bundleSections = document.querySelectorAll('.bundle-builder-section');
+    bundleSections.forEach(function(section) {
+      new BundleBuilder(section);
+    });
+  });
+
+  function BundleBuilder(sectionElement) {
+    this.section = sectionElement;
+    this.sectionId = sectionElement.id.replace('bundle-builder-', '');
+    this.selectedProducts = [];
+    this.bundlePrice = parseInt(sectionElement.dataset.bundlePrice) || 59900;
+    this.requiredProducts = parseInt(sectionElement.dataset.requiredProducts) || 2;
+    this.confettiTriggered = false;
+    this.init();
+  }
+
+  BundleBuilder.prototype.init = function() {
+    var self = this;
+    
+    this.selectedProductsContainer = this.section.querySelector('.bundle-selected-items-list');
+    this.emptySlots = this.section.querySelector('.bundle-empty-slots');
+    this.originalTotal = this.section.querySelector('#bundle-original-total-' + this.sectionId);
+    this.offerTotal = this.section.querySelector('#bundle-offer-total-' + this.sectionId);
+    this.saveAmount = this.section.querySelector('#bundle-save-amount-' + this.sectionId);
+    this.checkoutBtn = this.section.querySelector('#bundle-checkout-btn-' + this.sectionId);
+    this.confettiCanvas = document.getElementById('bundle-confetti-' + this.sectionId);
+    this.progressCurrent = this.section.querySelector('#bundle-progress-current-' + this.sectionId);
+    this.progressFill = this.section.querySelector('#bundle-progress-fill-' + this.sectionId);
+    
+    if (!this.checkoutBtn) {
+      console.error('Checkout button not found');
+      return;
+    }
+
+    // Clear non-bundle products from cart and load only bundle products
+    this.initializeFromCart();
+
+    // Handle window resize for confetti canvas
+    var resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        if (self.confettiCanvas && self.confettiCanvas.classList.contains('active')) {
+          // Update canvas size to full screen
+          self.confettiCanvas.width = window.innerWidth;
+          self.confettiCanvas.height = window.innerHeight;
+        }
+      }, 250);
+    });
+
+    // Event delegation for button clicks
+    this.section.addEventListener('click', function(e) {
+      var btn = e.target.closest('.bundle-add-btn');
+      if (btn && !btn.disabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        self.handleAddButtonClick(btn);
+      }
+    });
+
+    // Event delegation for variant selector changes
+    this.section.addEventListener('change', function(e) {
+      if (e.target.classList.contains('bundle-variant-select')) {
+        e.preventDefault();
+        e.stopPropagation();
+        self.handleVariantChange(e.target);
+      }
+    });
+
+    // Event delegation for remove buttons
+    this.section.addEventListener('click', function(e) {
+      if (e.target.classList.contains('bundle-selected-item-remove')) {
+        e.preventDefault();
+        e.stopPropagation();
+        var index = parseInt(e.target.dataset.index);
+        self.removeProduct(index);
+      }
+    });
+
+    this.checkoutBtn.addEventListener('click', function() {
+      self.handleCheckout();
+    });
+    
+    this.setupCollectionLoaders();
+    this.updateUI();
+  };
+
+  BundleBuilder.prototype.initializeFromCart = function() {
+    var self = this;
+    
+    // Get current cart
+    fetch('/cart.js')
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(cart) {
+        // Get all product IDs from the bundle section
+        var bundleProductIds = [];
+        var productCards = self.section.querySelectorAll('.bundle-product-card');
+        productCards.forEach(function(card) {
+          var productId = card.dataset.productId;
+          if (productId) {
+            bundleProductIds.push(String(productId));
+          }
+        });
+        
+        // Also check products loaded via AJAX
+        var addButtons = self.section.querySelectorAll('.bundle-add-btn');
+        addButtons.forEach(function(btn) {
+          var productId = btn.dataset.productId;
+          if (productId && bundleProductIds.indexOf(String(productId)) === -1) {
+            bundleProductIds.push(String(productId));
+          }
+        });
+        
+        // Filter cart items to only include bundle products
+        var bundleCartItems = [];
+        var nonBundleItems = [];
+        
+        cart.items.forEach(function(item) {
+          var itemProductId = String(item.product_id);
+          if (bundleProductIds.indexOf(itemProductId) !== -1) {
+            // This is a bundle product
+            bundleCartItems.push(item);
+          } else {
+            // This is not a bundle product - mark for removal
+            nonBundleItems.push(item);
+          }
+        });
+        
+        // Remove non-bundle products from cart
+        if (nonBundleItems.length > 0) {
+          var removePromises = [];
+          nonBundleItems.forEach(function(item) {
+            removePromises.push(
+              fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: item.key,
+                  quantity: 0
+                })
+              })
+            );
+          });
+          
+          Promise.all(removePromises)
+            .then(function() {
+              // After removing non-bundle items, load bundle products
+              self.loadBundleProductsFromCart(bundleCartItems);
+            })
+            .catch(function(error) {
+              console.error('Error removing non-bundle products:', error);
+              // Still try to load bundle products even if removal failed
+              self.loadBundleProductsFromCart(bundleCartItems);
+            });
+        } else {
+          // No non-bundle items, just load bundle products
+          self.loadBundleProductsFromCart(bundleCartItems);
+        }
+      })
+      .catch(function(error) {
+        console.error('Error loading cart:', error);
+      });
+  };
+
+  BundleBuilder.prototype.loadBundleProductsFromCart = function(bundleCartItems) {
+    var self = this;
+    
+    // Clear current selections
+    this.selectedProducts = [];
+    
+    // Load bundle products from cart
+    bundleCartItems.forEach(function(cartItem) {
+      var productId = String(cartItem.product_id);
+      var variantId = String(cartItem.variant_id);
+      
+      // Find product card by product ID
+      var productCard = self.section.querySelector('[data-product-id="' + productId + '"]');
+      if (productCard) {
+        // Check if variant selector exists and update it
+        var variantSelect = productCard.querySelector('.bundle-variant-select');
+        if (variantSelect) {
+          // Set the correct variant in selector
+          variantSelect.value = variantId;
+          // Trigger variant change to update data attributes
+          var event = new Event('change', { bubbles: true });
+          variantSelect.dispatchEvent(event);
+        }
+        
+        // Get variant info from the product card (after variant selector update)
+        var button = productCard.querySelector('.bundle-add-btn');
+        var checkbox = productCard.querySelector('.bundle-checkbox-input');
+        
+        if (button || checkbox) {
+          var source = button || checkbox;
+          var price = parseInt(source.dataset.price) || cartItem.price;
+          var title = source.dataset.title || cartItem.product_title;
+          var image = source.dataset.image || (cartItem.image || '');
+          
+          // Check if this product is already in selectedProducts (avoid duplicates)
+          var isDuplicate = self.selectedProducts.some(function(product) {
+            return String(product.id) === productId && String(product.variantId) === variantId;
+          });
+          
+          if (!isDuplicate) {
+            // Add to selected products
+            self.selectedProducts.push({
+              id: productId,
+              variantId: variantId,
+              price: price,
+              title: title,
+              image: image
+            });
+            
+            // Update UI state
+            if (checkbox) {
+              checkbox.checked = true;
+            }
+            productCard.classList.add('selected');
+            if (button) {
+              button.textContent = 'REMOVE FROM BOX';
+              button.classList.add('selected');
+            }
+          }
+        }
+      }
+    });
+    
+    // Update UI
+    this.updateUI();
+  };
+
+  BundleBuilder.prototype.setupCollectionLoaders = function() {
+    var self = this;
+    var loaders = this.section.querySelectorAll('.bundle-collection-loader');
+    
+    loaders.forEach(function(loader) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && loader.dataset.loading !== 'true') {
+            self.loadMoreCollectionProducts(loader);
+          }
+        });
+      }, {
+        rootMargin: '100px'
+      });
+      
+      observer.observe(loader);
+    });
+  };
+
+  BundleBuilder.prototype.loadMoreCollectionProducts = function(loader) {
+    var self = this;
+    
+    if (loader.dataset.loading === 'true') return;
+    
+    loader.dataset.loading = 'true';
+    loader.style.display = 'flex';
+    
+    var collectionHandle = loader.dataset.collectionHandle;
+    var currentPage = parseInt(loader.dataset.page) || 1;
+    var totalProducts = parseInt(loader.dataset.totalProducts) || 0;
+    var productsLoaded = parseInt(loader.dataset.productsLoaded) || 20;
+    var productsPerPage = 20;
+    var nextPage = currentPage + 1;
+    
+    if (productsLoaded >= totalProducts) {
+      loader.style.display = 'none';
+      loader.dataset.loading = 'false';
+      return;
+    }
+    
+    fetch('/collections/' + collectionHandle + '/products.json?page=' + nextPage + '&limit=' + productsPerPage)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        var products = data.products || [];
+        
+        if (products.length > 0) {
+          var sectionId = loader.dataset.sectionId || self.sectionId;
+          var collectionWrapper = self.section.querySelector('.bundle-products-grid');
+          
+          products.forEach(function(product) {
+            var productCard = self.createProductCard(product, sectionId);
+            if (productCard) {
+              collectionWrapper.insertBefore(productCard, loader);
+            }
+          });
+          
+          var newProductsLoaded = productsLoaded + products.length;
+          loader.dataset.page = nextPage;
+          loader.dataset.productsLoaded = newProductsLoaded;
+          loader.dataset.loading = 'false';
+          loader.style.display = 'none';
+          
+          if (newProductsLoaded >= totalProducts) {
+            loader.style.display = 'none';
+          }
+          
+          self.updateUI();
+        } else {
+          loader.style.display = 'none';
+          loader.dataset.loading = 'false';
+        }
+      })
+      .catch(function(error) {
+        console.error('Error loading more products:', error);
+        loader.dataset.loading = 'false';
+        loader.style.display = 'none';
+      });
+  };
+
+  BundleBuilder.prototype.handleVariantChange = function(selectElement) {
+    var self = this;
+    var productId = selectElement.dataset.productId;
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    var variantId = selectedOption.value;
+    var variantPrice = parseInt(selectedOption.dataset.price) || 0;
+    var variantImage = selectedOption.dataset.image || '';
+    
+    // Find the product card
+    var productCard = selectElement.closest('.bundle-product-card');
+    if (!productCard) return;
+    
+    // Get old variant ID from card
+    var oldVariantId = productCard.dataset.variantId;
+    
+    // Update product card data attributes
+    productCard.dataset.variantId = variantId;
+    
+    // Update checkbox
+    var checkbox = productCard.querySelector('.bundle-checkbox-input');
+    if (checkbox) {
+      checkbox.dataset.variantId = variantId;
+      checkbox.dataset.price = variantPrice;
+      checkbox.dataset.image = variantImage;
+    }
+    
+    // Update button
+    var button = productCard.querySelector('.bundle-add-btn');
+    if (button) {
+      button.dataset.variantId = variantId;
+      button.dataset.price = variantPrice;
+      button.dataset.image = variantImage;
+      
+      // Check if this product was selected with a different variant
+      var oldSelection = self.selectedProducts.find(function(product) {
+        return String(product.id) === String(productId) && String(product.variantId) === String(oldVariantId);
+      });
+      
+      if (oldSelection && String(oldSelection.variantId) !== String(variantId)) {
+        // Remove old variant from cart
+        fetch('/cart.js')
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(cart) {
+            // Find the cart item with old variant ID
+            var cartItem = null;
+            for (var j = 0; j < cart.items.length; j++) {
+              if (String(cart.items[j].variant_id) === String(oldVariantId)) {
+                cartItem = cart.items[j];
+                break;
+              }
+            }
+            
+            if (cartItem) {
+              // Remove old variant from cart
+              return fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: cartItem.key,
+                  quantity: 0
+                })
+              });
+            }
+            return Promise.resolve();
+          })
+          .then(function() {
+            // Remove old variant from selected products
+            self.selectedProducts = self.selectedProducts.filter(function(product) {
+              return !(String(product.id) === String(productId) && String(product.variantId) === String(oldVariantId));
+            });
+            
+            // Update UI
+            checkbox.checked = false;
+            productCard.classList.remove('selected');
+            button.textContent = 'ADD TO BOX';
+            button.classList.remove('selected');
+            self.updateUI();
+            self.updateCartAttributes();
+          })
+          .catch(function(error) {
+            console.error('Error removing old variant from cart:', error);
+          });
+      }
+    }
+  };
+
+  BundleBuilder.prototype.createProductCard = function(product, sectionId) {
+    // Find 60ML variant, or fallback to first available variant
+    var variant = null;
+    var fallbackVariant = null;
+    if (product.variants && product.variants.length > 0) {
+      for (var i = 0; i < product.variants.length; i++) {
+        var v = product.variants[i];
+        if (v.available) {
+          // Store first available variant as fallback
+          if (!fallbackVariant) {
+            fallbackVariant = v;
+          }
+          // Check if variant title contains 60ML in various formats
+          var variantTitle = (v.title || '').toUpperCase();
+          if (variantTitle.indexOf('60ML') !== -1 || 
+              variantTitle.indexOf('60 ML') !== -1 || 
+              variantTitle.indexOf('60ml') !== -1 || 
+              variantTitle.indexOf('60 ml') !== -1) {
+            variant = v;
+            break;
+          }
+        }
+      }
+    }
+    
+    // Use 60ML variant if found, otherwise use first available variant
+    if (!variant) {
+      variant = fallbackVariant;
+    }
+    
+    // Only create card if any available variant exists
+    if (!variant) return null;
+    
+    var card = document.createElement('div');
+    card.className = 'bundle-product-card';
+    card.dataset.productId = product.id;
+    card.dataset.variantId = variant.id;
+    
+    var imageUrl = '';
+    if (product.featured_image) {
+      imageUrl = typeof product.featured_image === 'string' ? product.featured_image : product.featured_image.src;
+    } else if (product.images && product.images.length > 0) {
+      imageUrl = typeof product.images[0] === 'string' ? product.images[0] : product.images[0].src;
+    }
+    
+    // Handle price format from JSON API
+    // Shopify JSON API returns prices as strings in decimal format (e.g., "99.00" for ₹99)
+    // We need to convert to cents (9900) for consistency with the rest of the code
+    var price = 0;
+    var comparePrice = null;
+    
+    if (variant.price) {
+      if (typeof variant.price === 'string') {
+        // Price is a string like "99.00" or "1999.00" - convert to cents
+        price = Math.round(parseFloat(variant.price) * 100);
+      } else {
+        // Price is a number - check if it looks like cents or decimal
+        // If it's a very large number (> 10000), likely already in cents
+        // Otherwise, assume it's decimal format and convert
+        if (variant.price > 10000) {
+          price = Math.round(variant.price);
+        } else {
+          price = Math.round(variant.price * 100);
+        }
+      }
+    }
+    
+    if (variant.compare_at_price) {
+      if (typeof variant.compare_at_price === 'string') {
+        // Compare at price is a string - convert to cents
+        comparePrice = Math.round(parseFloat(variant.compare_at_price) * 100);
+      } else {
+        // Compare at price is a number
+        if (variant.compare_at_price > 10000) {
+          comparePrice = Math.round(variant.compare_at_price);
+        } else {
+          comparePrice = Math.round(variant.compare_at_price * 100);
+        }
+      }
+    }
+    
+    // Format prices for display (divide by 100 to get rupees)
+    var displayPrice = (price / 100).toFixed(0);
+    var displayComparePrice = comparePrice ? (comparePrice / 100).toFixed(0) : null;
+    
+    // Build variant selector if product has multiple variants
+    var variantSelector = '';
+    if (product.variants && product.variants.length > 1) {
+      var variantOptions = '';
+      for (var k = 0; k < product.variants.length; k++) {
+        var v = product.variants[k];
+        if (v.available) {
+          var vPrice = 0;
+          if (typeof v.price === 'string') {
+            vPrice = Math.round(parseFloat(v.price) * 100);
+          } else {
+            vPrice = v.price > 10000 ? Math.round(v.price) : Math.round(v.price * 100);
+          }
+          var vDisplayPrice = (vPrice / 100).toFixed(0);
+          var vImage = '';
+          if (v.featured_image) {
+            vImage = typeof v.featured_image === 'string' ? v.featured_image : v.featured_image.src;
+          } else {
+            vImage = imageUrl;
+          }
+          var isSelected = v.id === variant.id ? 'selected' : '';
+          variantOptions += '<option value="' + v.id + '" data-price="' + vPrice + '" data-image="' + vImage + '" ' + isSelected + '>' + (v.title || 'Default') + ' - ₹' + vDisplayPrice + '</option>';
+        }
+      }
+      variantSelector = '<div class="bundle-variant-selector" data-product-id="' + product.id + '">' +
+        '<select class="bundle-variant-select" data-product-id="' + product.id + '" data-section-id="' + sectionId + '">' +
+        variantOptions +
+        '</select>' +
+        '</div>';
+    }
+    
+    card.innerHTML = 
+      '<div class="bundle-product-image-wrapper">' +
+        '<img src="' + imageUrl + '" alt="' + product.title + '" loading="lazy" class="bundle-product-image">' +
+        '<input type="checkbox" id="product-' + product.id + '-' + sectionId + '" class="bundle-checkbox-input" data-product-id="' + product.id + '" data-variant-id="' + variant.id + '" data-price="' + price + '" data-title="' + product.title + '" data-image="' + imageUrl + '" style="display: none;">' +
+      '</div>' +
+      '<div class="bundle-product-info">' +
+        '<h3 class="bundle-product-title">' + product.title + '</h3>' +
+        variantSelector +
+        '<div class="bundle-product-price-wrapper">' +
+          (comparePrice && comparePrice > price ? '<span class="bundle-product-original-price">₹' + displayComparePrice + '</span>' : '') +
+          '<span class="bundle-product-price">₹' + displayPrice + '</span>' +
+        '</div>' +
+        '<button class="bundle-add-btn" data-product-id="' + product.id + '" data-variant-id="' + variant.id + '" data-price="' + price + '" data-title="' + product.title + '" data-image="' + imageUrl + '">ADD TO BOX</button>' +
+      '</div>';
+    
+    return card;
+  };
+
+  BundleBuilder.prototype.handleAddButtonClick = function(btn) {
+    var self = this;
+    
+    // Check if button is disabled (but allow if it's a selected product being removed)
+    if (!btn) {
+      console.log('Button not found');
+      return;
+    }
+    
+    var productCard = btn.closest('.bundle-product-card');
+    if (!productCard) {
+      console.log('Product card not found');
+      return;
+    }
+    
+    var checkbox = productCard.querySelector('.bundle-checkbox-input');
+    if (!checkbox) {
+      console.log('Checkbox not found');
+      return;
+    }
+    
+    var productId = btn.dataset.productId || checkbox.dataset.productId;
+    var variantId = btn.dataset.variantId || checkbox.dataset.variantId;
+    var price = parseInt(btn.dataset.price || checkbox.dataset.price || 0);
+    var title = btn.dataset.title || checkbox.dataset.title || '';
+    var image = btn.dataset.image || checkbox.dataset.image || '';
+    
+    if (!productId || !variantId || productId === 'undefined' || variantId === 'undefined') {
+      console.error('Product data missing:', { productId: productId, variantId: variantId, btn: btn });
+      return;
+    }
+    
+    var productData = {
+      id: String(productId),
+      variantId: String(variantId),
+      price: price,
+      title: title,
+      image: image
+    };
+
+    // Check if product is already selected
+    var isAlreadySelected = false;
+    var selectedIndex = -1;
+    for (var i = 0; i < this.selectedProducts.length; i++) {
+      if (String(this.selectedProducts[i].id) === String(productData.id) && 
+          String(this.selectedProducts[i].variantId) === String(productData.variantId)) {
+        isAlreadySelected = true;
+        selectedIndex = i;
+        break;
+      }
+    }
+    
+    // If product is already selected, allow removal even if button is disabled
+    if (isAlreadySelected && btn.disabled && btn.dataset.limitDisabled === 'true') {
+      btn.disabled = false;
+      btn.classList.remove('disabled');
+      delete btn.dataset.limitDisabled;
+    }
+    
+    // If button is disabled and product is not selected, prevent action
+    if (btn.disabled && !isAlreadySelected) {
+      console.log('Button disabled and product not selected');
+      return;
+    }
+    
+    // If product is already selected, remove it
+    if (isAlreadySelected) {
+      // Remove product from cart
+      fetch('/cart.js')
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(cart) {
+          // Find the cart item with this variant ID
+          var cartItem = null;
+          for (var j = 0; j < cart.items.length; j++) {
+            if (String(cart.items[j].variant_id) === String(productData.variantId)) {
+              cartItem = cart.items[j];
+              break;
+            }
+          }
+          
+          if (cartItem) {
+            // Remove from cart
+            return fetch('/cart/change.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: cartItem.key,
+                quantity: 0
+              })
+            });
+          }
+          return Promise.resolve();
+        })
+        .then(function() {
+          // Product removed from cart, update UI
+          self.selectedProducts = self.selectedProducts.filter(function(p) {
+            return !(String(p.id) === String(productData.id) && String(p.variantId) === String(productData.variantId));
+          });
+          checkbox.checked = false;
+          productCard.classList.remove('selected');
+          btn.textContent = 'ADD TO BOX';
+          btn.classList.remove('selected');
+          self.updateUI();
+          self.updateCartAttributes();
+        })
+        .catch(function(error) {
+          console.error('Error removing product from cart:', error);
+          alert('Error removing product from cart. Please try again.');
+        });
+      return;
+    }
+    
+    // Check maximum limit (required bundle quantity) - only for new products
+    if (this.selectedProducts.length >= this.requiredProducts) {
+      alert('You can only add ' + this.requiredProducts + ' products to this bundle.');
+      return;
+    }
+    
+    // Add new product to cart with bundle attribute
+    console.log('Adding product to cart:', productData);
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: productData.variantId,
+        quantity: 1,
+        properties: {
+          '_bundle_product': 'true',
+          '_bundle_section_id': this.sectionId
+        }
+      })
+    })
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(function(data) {
+      console.log('Product added to cart:', data);
+      // Product added to cart, update UI
+      // Add to beginning of array (left side)
+      self.selectedProducts.unshift(productData);
+      checkbox.checked = true;
+      productCard.classList.add('selected');
+      btn.textContent = 'REMOVE FROM BOX';
+      btn.classList.add('selected');
+      self.updateUI();
+      self.updateCartAttributes();
+    })
+    .catch(function(error) {
+      console.error('Error adding product to cart:', error);
+      alert('Error adding product to cart. Please try again.');
+    });
+  };
+
+  BundleBuilder.prototype.updateUI = function() {
+    var self = this;
+    this.updateSelectedProductsDisplay();
+    this.updateTotals();
+    this.updateProgressBar();
+    
+    // Update button states - disable buttons when the bundle is full (unless it's a selected product)
+    var addButtons = this.section.querySelectorAll('.bundle-add-btn');
+    var maxSelected = this.selectedProducts.length >= this.requiredProducts;
+    addButtons.forEach(function(button) {
+      if (!button) return;
+      
+      var buttonProductId = button.dataset.productId;
+      var buttonVariantId = button.dataset.variantId;
+      var isSelected = self.selectedProducts.some(function(product) {
+        return String(product.id) === String(buttonProductId) && String(product.variantId) === String(buttonVariantId);
+      });
+      
+      // If max products selected and this button's product is not selected, disable it
+      if (maxSelected && !isSelected) {
+        button.disabled = true;
+        button.classList.add('disabled');
+        button.dataset.limitDisabled = 'true';
+      } else if (button.dataset.limitDisabled === 'true') {
+        // Re-enable button if limit is no longer reached
+        button.disabled = false;
+        button.classList.remove('disabled');
+        delete button.dataset.limitDisabled;
+      }
+      
+      // Update button text based on selection state
+      if (isSelected) {
+        button.textContent = 'REMOVE FROM BOX';
+        button.classList.add('selected');
+      } else {
+        // Only change text if it's not already "ADD TO BOX" (to avoid unnecessary DOM updates)
+        if (button.textContent !== 'ADD TO BOX') {
+          button.textContent = 'ADD TO BOX';
+        }
+        button.classList.remove('selected');
+      }
+    });
+
+    // Enable checkout when minimum 2 products are selected
+    if (this.selectedProducts.length >= this.requiredProducts) {
+      if (this.selectedProducts.length === this.requiredProducts && !this.confettiTriggered) {
+        this.triggerConfetti();
+        this.confettiTriggered = true;
+      }
+      this.checkoutBtn.disabled = false;
+      this.checkoutBtn.classList.remove('disabled');
+    } else {
+      this.checkoutBtn.disabled = true;
+      this.checkoutBtn.classList.add('disabled');
+      this.confettiTriggered = false;
+    }
+  };
+
+  BundleBuilder.prototype.updateProgressBar = function() {
+    var current = this.selectedProducts.length;
+    var total = this.requiredProducts;
+    // Progress bar shows minimum requirement, but can exceed 100%
+    var percentage = Math.min((current / total) * 100, 100);
+    
+    // Update current count
+    if (this.progressCurrent) {
+      this.progressCurrent.textContent = current;
+    }
+    
+    // Update progress bar fill (max 100%)
+    if (this.progressFill) {
+      this.progressFill.style.width = percentage + '%';
+    }
+  };
+
+  BundleBuilder.prototype.updateSelectedProductsDisplay = function() {
+    var self = this;
+    
+    if (!this.selectedProductsContainer) {
+      this.selectedProductsContainer = this.section.querySelector('.bundle-selected-items-list');
+    }
+    if (!this.emptySlots) {
+      this.emptySlots = this.section.querySelector('.bundle-empty-slots');
+    }
+    
+    if (!this.selectedProductsContainer || !this.emptySlots) return;
+    
+    this.selectedProductsContainer.innerHTML = '';
+
+    // Display products (newest first, on the left)
+    // Since we use unshift, array is already in correct order (newest at index 0)
+    this.selectedProducts.forEach(function(product, index) {
+      var item = document.createElement('div');
+      item.className = 'bundle-selected-item';
+      
+      var img = document.createElement('img');
+      img.src = product.image || '';
+      img.alt = product.title || '';
+      item.appendChild(img);
+      
+      var removeBtn = document.createElement('span');
+      removeBtn.className = 'bundle-selected-item-remove';
+      removeBtn.textContent = '×';
+      removeBtn.setAttribute('data-index', index);
+      removeBtn.dataset.index = index;
+      item.appendChild(removeBtn);
+      
+      self.selectedProductsContainer.appendChild(item);
+    });
+
+    // Show empty slots only if less than the required bundle quantity
+    var remainingSlots = Math.max(0, this.requiredProducts - this.selectedProducts.length);
+    this.emptySlots.innerHTML = '';
+    for (var i = 0; i < remainingSlots; i++) {
+      var slot = document.createElement('div');
+      slot.className = 'bundle-empty-slot';
+      slot.innerHTML = '<span class="bundle-plus-icon">+</span>';
+      this.emptySlots.appendChild(slot);
+    }
+  };
+
+  BundleBuilder.prototype.removeProduct = function(index) {
+    var self = this;
+    var product = this.selectedProducts[index];
+    if (!product) return;
+    
+    // Remove from cart
+    fetch('/cart.js')
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(cart) {
+        // Find the cart item with this variant ID
+        var cartItem = null;
+        for (var j = 0; j < cart.items.length; j++) {
+          if (String(cart.items[j].variant_id) === String(product.variantId)) {
+            cartItem = cart.items[j];
+            break;
+          }
+        }
+        
+        if (cartItem) {
+          // Remove from cart
+          return fetch('/cart/change.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: cartItem.key,
+              quantity: 0
+            })
+          });
+        }
+        return Promise.resolve();
+      })
+      .then(function() {
+        // Remove from selected products array
+        self.selectedProducts.splice(index, 1);
+
+        // Find and update the product card button state
+        var checkboxes = self.section.querySelectorAll('[data-product-id="' + String(product.id) + '"]');
+        checkboxes.forEach(function(checkbox) {
+          if (String(checkbox.dataset.variantId) === String(product.variantId)) {
+            checkbox.checked = false;
+            var productCard = checkbox.closest('.bundle-product-card');
+            if (productCard) {
+              productCard.classList.remove('selected');
+              var btn = productCard.querySelector('.bundle-add-btn');
+              if (btn) {
+                btn.textContent = 'ADD TO BOX';
+                btn.classList.remove('selected');
+              }
+            }
+          }
+        });
+
+        self.updateUI();
+        self.updateCartAttributes();
+      })
+      .catch(function(error) {
+        console.error('Error removing product from cart:', error);
+        alert('Error removing product from cart. Please try again.');
+      });
+  };
+
+  BundleBuilder.prototype.updateTotals = function() {
+    var productCount = this.selectedProducts.length;
+    var bundlePrice = this.bundlePrice;
+    var requiredProducts = this.requiredProducts;
+    
+    // Calculate original total (sum of all individual prices)
+    var originalTotal = 0;
+    for (var i = 0; i < productCount; i++) {
+      originalTotal += this.selectedProducts[i].price;
+    }
+    
+    // Calculate bundle pricing:
+    // - Every complete bundle uses the configured offer price
+    // - Remaining products = actual individual prices
+    var bundleCount = Math.floor(productCount / requiredProducts);
+    var remainingProducts = productCount % requiredProducts;
+    
+    var bundleTotal = bundleCount * bundlePrice;
+    var remainingTotal = 0;
+    
+    // Calculate price for remaining products (actual individual prices)
+    for (var j = bundleCount * requiredProducts; j < productCount; j++) {
+      remainingTotal += this.selectedProducts[j].price;
+    }
+    
+    var finalTotal = bundleTotal + remainingTotal;
+    var savings = originalTotal - finalTotal;
+    
+    // Display pricing
+    if (productCount >= requiredProducts) {
+      // Show savings amount
+      if (this.saveAmount && savings > 0) {
+        this.saveAmount.textContent = 'Save: ' + this.formatPrice(savings);
+        this.saveAmount.style.display = 'block';
+      } else if (this.saveAmount) {
+        this.saveAmount.style.display = 'none';
+      }
+      
+      // Show final total (bundle price) - current price
+      this.offerTotal.textContent = this.formatPrice(finalTotal);
+      
+      // Show original total (strikethrough) - sum of all product prices
+      this.originalTotal.textContent = this.formatPrice(originalTotal);
+      this.originalTotal.style.display = 'inline';
+    } else {
+      // Less than minimum, show actual individual total
+      if (this.saveAmount) {
+        this.saveAmount.style.display = 'none';
+      }
+      this.originalTotal.style.display = 'none';
+      this.offerTotal.textContent = this.formatPrice(originalTotal);
+    }
+  };
+
+  BundleBuilder.prototype.formatPrice = function(cents) {
+    return '₹' + (cents / 100).toFixed(0);
+  };
+
+  BundleBuilder.prototype.triggerConfetti = function() {
+    if (!this.confettiCanvas || !this.checkoutBtn) return;
+
+    // Get checkout button position
+    var buttonRect = this.checkoutBtn.getBoundingClientRect();
+    var buttonCenterX = buttonRect.left + buttonRect.width / 2;
+    var buttonCenterY = buttonRect.top + buttonRect.height / 2;
+
+    this.confettiCanvas.classList.add('active');
+    var ctx = this.confettiCanvas.getContext('2d');
+    
+    // Set canvas to full screen
+    this.confettiCanvas.width = window.innerWidth;
+    this.confettiCanvas.height = window.innerHeight;
+    this.confettiCanvas.style.left = '0';
+    this.confettiCanvas.style.right = '0';
+    this.confettiCanvas.style.top = '0';
+    this.confettiCanvas.style.bottom = '0';
+
+    var confetti = [];
+    var confettiCount = 100;
+    var colors = ['#ff6b35', '#ffd700', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b'];
+    
+    // Start confetti from checkout button center, blasting upward
+    for (var i = 0; i < confettiCount; i++) {
+      // Create particles that spread out from button center
+      var angle = (Math.PI * 2 * i) / confettiCount + Math.random() * 0.5;
+      var speed = Math.random() * 4 + 3;
+      var spread = Math.random() * 30 - 15; // Random spread around button
+      
+      // Calculate velocity - particles go upward and outward
+      var vx = Math.cos(angle) * speed * 0.5; // Horizontal spread
+      var vy = -Math.abs(Math.sin(angle)) * speed - 3; // Upward velocity (negative Y)
+      
+      confetti.push({
+        x: buttonCenterX + spread,
+        y: buttonCenterY + spread,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * confettiCount,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: Math.floor(Math.random() * 10) - 10,
+        tiltAngleIncrement: Math.random() * 0.07 + 0.05,
+        tiltAngle: 0,
+        vx: vx,
+        vy: vy
+      });
+    }
+
+    var self = this;
+    var animationId;
+    var animate = function() {
+      ctx.clearRect(0, 0, self.confettiCanvas.width, self.confettiCanvas.height);
+
+      confetti.forEach(function(c, i) {
+        ctx.beginPath();
+        ctx.lineWidth = c.r / 2;
+        ctx.strokeStyle = c.color;
+        ctx.moveTo(c.x + c.tilt + c.r, c.y);
+        ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r);
+        ctx.stroke();
+
+        c.tiltAngle += c.tiltAngleIncrement;
+        // Update position with velocity
+        c.y += c.vy + (Math.cos(c.d) + 3 + c.r / 2) / 2;
+        c.x += c.vx + Math.sin(c.d);
+        c.vy += 0.3; // Gravity (positive = downward)
+        c.tilt = Math.sin(c.tiltAngle - i / 3) * 15;
+
+        // Reset if particle goes off screen (below or above)
+        if (c.y > self.confettiCanvas.height || c.y < -50 || c.x < -50 || c.x > self.confettiCanvas.width + 50) {
+          // Don't reset - just let particles disappear naturally
+          c.y = self.confettiCanvas.height + 100; // Move off screen
+        }
+      });
+
+      animationId = requestAnimationFrame(animate);
+
+      setTimeout(function() {
+        cancelAnimationFrame(animationId);
+        self.confettiCanvas.classList.remove('active');
+        ctx.clearRect(0, 0, self.confettiCanvas.width, self.confettiCanvas.height);
+      }, 3000);
+    };
+
+    animate();
+  };
+
+  BundleBuilder.prototype.updateCartAttributes = function() {
+    var self = this;
+    
+    // Only update attributes if minimum products are selected
+    if (this.selectedProducts.length < this.requiredProducts) {
+      return;
+    }
+    
+    // First, ensure only bundle products are in cart
+    this.ensureOnlyBundleProductsInCart();
+    
+    // Calculate totals using bundle pricing
+    var productCount = this.selectedProducts.length;
+    var bundlePrice = this.bundlePrice;
+    var requiredProducts = this.requiredProducts;
+    
+    var originalTotal = 0;
+    this.selectedProducts.forEach(function(product) {
+      originalTotal += product.price;
+    });
+    
+    // Calculate bundle pricing
+    var bundleCount = Math.floor(productCount / requiredProducts);
+    var remainingProducts = productCount % requiredProducts;
+    var bundleTotal = bundleCount * bundlePrice;
+    var remainingTotal = 0;
+    
+    // Calculate price for remaining products (actual individual prices)
+    for (var j = bundleCount * requiredProducts; j < productCount; j++) {
+      remainingTotal += this.selectedProducts[j].price;
+    }
+    
+    var finalTotal = bundleTotal + remainingTotal;
+    var discountNeeded = originalTotal - finalTotal;
+    
+    var discountCode = this.section.dataset.discountCode;
+    
+    // Prepare cart update data
+    var cartUpdateData = {
+      note: 'Bundle Offer: ' + bundleCount + ' bundle(s) of ' + requiredProducts + ' products for ₹' + (bundlePrice / 100).toFixed(0) + (remainingProducts > 0 ? ' + ' + remainingProducts + ' individual product(s)' : ''),
+      attributes: {
+        '_bundle': 'true',
+        '_bundle_section_id': this.sectionId,
+        '_bundle_price': bundlePrice.toString(),
+        '_bundle_count': bundleCount.toString(),
+        '_remaining_products': remainingProducts.toString(),
+        '_original_total': originalTotal.toString(),
+        '_final_total': finalTotal.toString(),
+        '_discount_needed': discountNeeded.toString()
+      }
+    };
+    
+    if (discountCode && discountCode.trim() !== '') {
+      cartUpdateData.discount = discountCode.trim();
+    }
+    
+    // Update cart attributes in background (non-blocking)
+    fetch('/cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cartUpdateData)
+    }).catch(function(err) {
+      // Silently fail - not critical
+    });
+  };
+
+  BundleBuilder.prototype.ensureOnlyBundleProductsInCart = function() {
+    var self = this;
+    
+    // Get current cart
+    fetch('/cart.js')
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(cart) {
+        // Get all bundle product IDs
+        var bundleProductIds = [];
+        self.selectedProducts.forEach(function(product) {
+          bundleProductIds.push(String(product.id));
+        });
+        
+        // Find and remove non-bundle products
+        var nonBundleItems = [];
+        cart.items.forEach(function(item) {
+          var itemProductId = String(item.product_id);
+          var isBundleProduct = bundleProductIds.indexOf(itemProductId) !== -1;
+          var hasBundleProperty = false;
+          
+          // Check if item has bundle property
+          if (item.properties && item.properties._bundle_product === 'true') {
+            hasBundleProperty = true;
+          }
+          
+          if (!isBundleProduct && !hasBundleProperty) {
+            nonBundleItems.push(item);
+          }
+        });
+        
+        // Remove non-bundle items
+        if (nonBundleItems.length > 0) {
+          var removePromises = [];
+          nonBundleItems.forEach(function(item) {
+            removePromises.push(
+              fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: item.key,
+                  quantity: 0
+                })
+              })
+            );
+          });
+          
+          Promise.all(removePromises).catch(function(error) {
+            console.error('Error removing non-bundle products:', error);
+          });
+        }
+      })
+      .catch(function(error) {
+        console.error('Error checking cart:', error);
+      });
+  };
+
+  BundleBuilder.prototype.handleCheckout = function() {
+    var self = this;
+    
+    if (this.selectedProducts.length < this.requiredProducts) {
+      alert('Please select at least ' + this.requiredProducts + ' products to proceed.');
+      return;
+    }
+
+    // Ensure cart attributes are up to date
+    this.updateCartAttributes();
+    
+    // Show loader
+    var loader = document.getElementById('btn-loader-' + this.sectionId);
+    if (loader) {
+      loader.style.display = 'block';
+    }
+    this.checkoutBtn.disabled = true;
+    this.checkoutBtn.classList.add('disabled');
+    
+    // Small delay to ensure cart attributes are updated
+    setTimeout(function() {
+      // Hide loader
+      if (loader) {
+        loader.style.display = 'none';
+      }
+      
+      // Trigger Gokwik checkout - cart already has products
+      if (typeof onCheckoutClick === 'function') {
+        onCheckoutClick(self.checkoutBtn);
+      } else {
+        window.location.href = '/checkout';
+      }
+    }, 200);
+  };
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Bundle Builder",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero Banner Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero_banner",
+      "label": "Show Hero Banner",
+      "default": false,
+      "info": "Enable to display a hero banner at the top of the section"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Banner Image",
+      "info": "Recommended size: 1920x800px"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "Create Your Perfect Bundle"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Hero Subtitle",
+      "default": "Mix and match your favorite products and save big!"
+    },
+    {
+      "type": "text",
+      "id": "hero_button_text",
+      "label": "Hero Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "hero_link",
+      "label": "Hero Banner Link",
+      "info": "Optional: Link to redirect when banner is clicked"
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Create Your Bundle"
+    },
+    {
+      "type": "text",
+      "id": "offer_text",
+      "label": "Offer Text",
+      "default": "Buy 2 at Rs. 599"
+    },
+    {
+      "type": "number",
+      "id": "bundle_price",
+      "label": "Bundle Price (in cents)",
+      "default": 59900,
+      "info": "Enter price in cents (e.g., 59900 for Rs. 599)"
+    },
+    {
+      "type": "number",
+      "id": "required_products",
+      "label": "Required Products for Offer",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "label": "Desktop Columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "info": "Number of product columns on desktop (769px and above)"
+    },
+    {
+      "type": "range",
+      "id": "mobile_columns",
+      "label": "Mobile Columns",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2,
+      "info": "Number of product columns on mobile (768px and below)"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Select a collection to show all its products. If no collection is selected, individual products from blocks will be shown."
+    },
+    {
+      "type": "header",
+      "content": "Gokwik Checkout Settings"
+    },
+    {
+      "type": "text",
+      "id": "gokwik_main_title",
+      "label": "Gokwik Button Main Title",
+      "default": "CHECKOUT",
+      "info": "Main text displayed on the checkout button"
+    },
+    {
+      "type": "text",
+      "id": "gokwik_sub_title",
+      "label": "Gokwik Button Sub Title",
+      "default": "Secure Payment",
+      "info": "Sub text displayed below the main title"
+    },
+    {
+      "type": "header",
+      "content": "Bundle Discount Settings"
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount Code (Optional)",
+      "info": "Enter a discount code to automatically apply at checkout. Leave empty if using Shopify Scripts or an app for automatic discount."
+    },
+    {
+      "type": "paragraph",
+      "content": "Note: For automatic bundle pricing without a discount code, you'll need Shopify Scripts (Shopify Plus) or a discount app that reads cart attributes. The cart will be marked with bundle attributes for automatic discount application."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "number",
+          "id": "position",
+          "label": "Position",
+          "default": 1,
+          "info": "Position where this image should appear (e.g., 3 = after 3rd product, 5 = after 5th product)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "video_url",
+          "id": "video",
+          "label": "YouTube or Vimeo URL",
+          "accept": ["youtube", "vimeo"]
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL (MP4)",
+          "info": "Alternative: Direct video file URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "video_poster",
+          "label": "Video Poster Image (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle Builder"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,246 @@
+<style>
+  :root {
+    --page-bg: #000000;
+    --card-bg: #050505;
+    --text: #f1e3cf;
+    --muted: rgba(255, 255, 255, 0.45);
+    --border: rgba(255, 255, 255, 0.06);
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+  }
+
+
+  .feature-section {
+    position: relative;
+    background: #181e19;
+    padding: 80px 0;
+
+  }
+
+  .feature-section::before,
+  .feature-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .feature-section::before {
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.025) 50%, transparent 100%);
+    opacity: 0.35;
+    mix-blend-mode: screen;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    max-width: 1600px;
+    margin: 0 auto;
+    align-items: stretch;
+  }
+
+  .feature-card {
+    position: relative;
+    min-height: 680px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    isolation: isolate;
+  }
+
+  .feature-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.2) 55%, rgba(0, 0, 0, 0.72) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .feature-media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.88) contrast(1.05) brightness(0.72);
+    transform: scale(1.02);
+  }
+
+  .feature-media--left {
+    object-position: center bottom;
+    opacity: 0.68;
+  }
+
+  .feature-media--center {
+    object-position: center center;
+  }
+
+  .feature-media--right {
+    object-position: center center;
+    opacity: 0.92;
+  }
+
+  .feature-card__content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    padding: 28px 34px 34px;
+    text-align:left;
+  }
+
+.feature-text {
+    margin: 0;
+    font-size: clamp(2rem, 2.2vw, 2.85rem);
+    line-height: 1.16;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    text-wrap: balance;
+    font-family: 'Jost';
+}
+
+  .feature-card--center .feature-card__content {
+    padding-bottom: 30px;
+  }
+
+  .feature-card--left .feature-media {
+    transform: scale(1.08);
+  }
+
+  .feature-card--right .feature-media {
+    transform: scale(1.03);
+  }
+
+  .feature-card--right .feature-card__content {
+    padding-bottom: 36px;
+  }
+
+  @media (max-width: 1100px) {
+    .feature-section {
+      padding-inline: 20px;
+    }
+
+    .feature-grid {
+      gap: 20px;
+    }
+
+    .feature-card {
+      min-height: 580px;
+    }
+  }
+
+    @media (max-width: 768px) {
+      .feature-section {
+        padding: 28px 0 44px;
+      }
+
+      .feature-grid {
+        grid-template-columns: unset;
+        grid-auto-flow: column;
+        grid-auto-columns: 80vw;
+        gap: 14px;
+        overflow-x: auto;
+        padding: 0 16px 8px;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 16px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .feature-grid::-webkit-scrollbar {
+        display: none;
+      }
+
+      .feature-card {
+        min-height: 460px;
+        border-radius: 14px;
+        scroll-snap-align: start;
+      }
+
+      .feature-card__content {
+        padding: 22px 22px 24px;
+      }
+
+    .feature-text {
+      font-size: clamp(1.8rem, 8vw, 2.2rem);
+    }
+  }
+</style>
+
+<div class="feature-section">
+  <div class="container feature-section_v ">
+    <section class="feature-grid" aria-label="Product feature videos">
+      <article class="feature-card feature-card--left">
+        <video
+          class="feature-media feature-media--left"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        >
+          <source
+            src="https://content.marchtee.com/assets/shop-resource/category/feature_1_mp4_70.mp4?v=11520"
+            type="video/mp4"
+          >
+        </video>
+        <div class="feature-card__content">
+          <p class="feature-text">
+            100% cotton.<br>
+            Two-twist yarn.
+          </p>
+        </div>
+      </article>
+
+      <article class="feature-card feature-card--center">
+        <video
+          class="feature-media feature-media--center"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        >
+          <source
+            src="https://content.marchtee.com/assets/shop-resource/category/feature_2_mp4_70.mp4?v=11520"
+            type="video/mp4"
+          >
+        </video>
+        <div class="feature-card__content">
+          <p class="feature-text">
+            Double stitch.<br>
+            Reinforced rib.
+          </p>
+        </div>
+      </article>
+
+      <article class="feature-card feature-card--right">
+        <video
+          class="feature-media feature-media--right"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        >
+          <source
+            src="https://content.marchtee.com/assets/shop-resource/category/feature_3_mp4_70.mp4?v=11520"
+            type="video/mp4"
+          >
+        </video>
+        <div class="feature-card__content">
+          <p class="feature-text">
+            Solid construction.<br>
+            Built to last.
+          </p>
+        </div>
+      </article>
+    </section>
+  </div>
+</div>

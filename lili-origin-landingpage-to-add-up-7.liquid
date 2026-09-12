@@ -1,0 +1,873 @@
+{%- assign bundle_max_products = 5 -%}
+{%- assign bundle_price = section.settings.bundle_price | default: 999 -%}
+{%- assign bundle_heading = section.settings.heading | default: 'Build Your Bundle' -%}
+{%- assign bundle_subtext = section.settings.subtext | default: 'Pick any 5 products and add them to cart from the sticky summary below' -%}
+
+<div
+  class="worriorworld-bundle-section"
+  id="worriorworld-bundle-{{ section.id }}"
+  data-max-products="{{ bundle_max_products }}"
+  data-offer-products="{{ bundle_max_products }}"
+  data-bundle-price="{{ bundle_price }}"
+>
+  <div class="worriorworld-bundle-container">
+    <div class="worriorworld-bundle-header">
+      <h2 class="worriorworld-bundle-heading">{{ bundle_heading }}</h2>
+      <p class="worriorworld-bundle-subtext">{{ bundle_subtext }}</p>
+    </div>
+
+    <div class="worriorworld-products-grid">
+      {%- if collection != blank and collection.products.size > 0 -%}
+        {%- for product in collection.products limit: 20 -%}
+          {%- assign selected_variant = product.selected_or_first_available_variant -%}
+          {%- if product.available and selected_variant and selected_variant.available -%}
+            <article
+              class="worriorworld-product-card"
+              data-product-id="{{ product.id }}"
+              data-variant-id="{{ selected_variant.id }}"
+            >
+              <div class="worriorworld-product-image-wrap">
+                <img
+                  class="worriorworld-product-image"
+                  src="{{ product.featured_image | image_url: width: 800 }}"
+                  alt="{{ product.title | escape }}"
+                  loading="lazy"
+                >
+              </div>
+
+              <div class="worriorworld-product-info">
+                <h3 class="worriorworld-product-title">{{ product.title }}</h3>
+                <div class="worriorworld-product-price">
+                  {{ selected_variant.price | money }}
+                </div>
+
+                <button
+                  type="button"
+                  class="worriorworld-summary-add-btn"
+                  data-product-id="{{ product.id }}"
+                  data-variant-id="{{ selected_variant.id }}"
+                  data-price="{{ selected_variant.price }}"
+                  data-title="{{ product.title | escape }}"
+                  data-image="{{ product.featured_image | image_url: width: 160 }}"
+                >
+                  <span class="worriorworld-btn-text">ADD TO CART</span>
+                </button>
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        <p class="worriorworld-empty-state">No products found in this collection.</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="worriorworld-bottom-bar" id="worriorworld-bottom-bar-{{ section.id }}">
+    <div class="worriorworld-bottom-bar-content">
+      <div class="worriorworld-summary-block">
+        <div class="worriorworld-summary-copy">
+          <div class="worriorworld-summary-title">Sticky Summary</div>
+          <div class="worriorworld-summary-status" id="worriorworld-offer-info-{{ section.id }}">
+            Select 5 products to add this bundle to cart
+          </div>
+        </div>
+
+        <div class="worriorworld-selected-row">
+          <div class="worriorworld-selected-items-list" id="worriorworld-selected-items-{{ section.id }}"></div>
+          <div class="worriorworld-empty-slots" id="worriorworld-empty-slots-{{ section.id }}">
+            <div class="worriorworld-empty-slot"><span>+</span></div>
+            <div class="worriorworld-empty-slot"><span>+</span></div>
+            <div class="worriorworld-empty-slot"><span>+</span></div>
+            <div class="worriorworld-empty-slot"><span>+</span></div>
+            <div class="worriorworld-empty-slot"><span>+</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="worriorworld-action-block">
+        <div class="worriorworld-pricing-info">
+          <div class="worriorworld-subtotal-label">Bundle Total</div>
+          <div class="worriorworld-save-amount" id="worriorworld-save-{{ section.id }}">Save: Rs 0</div>
+          <div class="worriorworld-price-display">
+            <span class="worriorworld-offer-total" id="worriorworld-offer-total-{{ section.id }}">Rs 0</span>
+            <span class="worriorworld-original-total" id="worriorworld-original-total-{{ section.id }}" style="display:none;">Rs 0</span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="worriorworld-summary-action"
+          id="worriorworld-summary-action-{{ section.id }}"
+          disabled
+          aria-disabled="true"
+        >
+          <span class="worriorworld-summary-action__main">ADD BUNDLE TO CART</span>
+          <span class="worriorworld-summary-action__sub">Select 5 products first</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .worriorworld-bundle-section {
+    padding: 24px 14px 170px;
+    background: #fff;
+    color: #111;
+  }
+
+  .worriorworld-bundle-container {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .worriorworld-bundle-header {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  .worriorworld-bundle-heading {
+    margin: 0 0 8px;
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .worriorworld-bundle-subtext {
+    margin: 0;
+    font-size: 15px;
+    color: #4a4a4a;
+  }
+
+  .worriorworld-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  .worriorworld-product-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e6e6e6;
+    border-radius: 14px;
+    background: #fff;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .worriorworld-product-card.selected {
+    border-color: #111;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .worriorworld-product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  }
+
+  .worriorworld-product-image-wrap {
+    aspect-ratio: 4 / 5;
+    background: #f7f7f7;
+  }
+
+  .worriorworld-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .worriorworld-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .worriorworld-product-title {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .worriorworld-product-price {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .worriorworld-summary-add-btn {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: #111;
+    color: #fff;
+    padding: 11px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+
+  .worriorworld-summary-add-btn.added {
+    background: #1f7a1f;
+  }
+
+  .worriorworld-summary-add-btn.disabled,
+  .worriorworld-summary-add-btn:disabled {
+    background: #dedede;
+    color: #888;
+    cursor: not-allowed;
+  }
+
+  .worriorworld-empty-state {
+    text-align: center;
+    margin: 30px 0;
+  }
+
+  .worriorworld-bottom-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+    background: #fff;
+    border-top: 1px solid #e8e8e8;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .worriorworld-bottom-bar.visible {
+    transform: translateY(0);
+  }
+
+  .worriorworld-bottom-bar-content {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .worriorworld-summary-block {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .worriorworld-summary-copy {
+    margin-bottom: 10px;
+  }
+
+  .worriorworld-summary-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .worriorworld-summary-status {
+    font-size: 12px;
+    color: #5b5b5b;
+  }
+
+  .worriorworld-selected-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow-x: auto;
+  }
+
+  .worriorworld-selected-items-list,
+  .worriorworld-empty-slots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .worriorworld-selected-item,
+  .worriorworld-empty-slot {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex: 0 0 auto;
+    position: relative;
+  }
+
+  .worriorworld-selected-item {
+    border: 1px solid #111;
+    background: #fff;
+  }
+
+  .worriorworld-selected-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .worriorworld-selected-item-remove {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .worriorworld-empty-slot {
+    border: 1px dashed #cfcfcf;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9b9b9b;
+    font-size: 24px;
+  }
+
+  .worriorworld-empty-slot-message {
+    white-space: nowrap;
+    font-size: 12px;
+    color: #666;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  .worriorworld-action-block {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .worriorworld-pricing-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  .worriorworld-subtotal-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+  }
+
+  .worriorworld-save-amount {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f7a1f;
+  }
+
+  .worriorworld-price-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .worriorworld-offer-total {
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .worriorworld-original-total {
+    font-size: 16px;
+    color: #888;
+    text-decoration: line-through;
+  }
+
+  .worriorworld-summary-action {
+    min-width: 220px;
+    border: none;
+    border-radius: 12px;
+    background: #111;
+    color: #fff;
+    padding: 13px 16px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+  }
+
+  .worriorworld-summary-action:disabled {
+    background: #dcdcdc;
+    color: #888;
+    cursor: not-allowed;
+  }
+
+  .worriorworld-summary-action__main {
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .worriorworld-summary-action__sub {
+    font-size: 11px;
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    .worriorworld-bundle-section {
+      padding: 18px 10px 180px;
+    }
+
+    .worriorworld-bundle-heading {
+      font-size: 24px;
+    }
+
+    .worriorworld-bundle-subtext {
+      font-size: 13px;
+    }
+
+    .worriorworld-products-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .worriorworld-product-info {
+      padding: 10px;
+      gap: 8px;
+    }
+
+    .worriorworld-product-title {
+      font-size: 13px;
+    }
+
+    .worriorworld-product-price {
+      font-size: 16px;
+    }
+
+    .worriorworld-bottom-bar-content {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .worriorworld-selected-item,
+    .worriorworld-empty-slot {
+      width: 42px;
+      height: 42px;
+    }
+
+    .worriorworld-action-block {
+      width: 100%;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .worriorworld-summary-action {
+      min-width: 165px;
+      padding: 11px 12px;
+    }
+
+    .worriorworld-offer-total {
+      font-size: 20px;
+    }
+
+    .worriorworld-original-total {
+      font-size: 14px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    class WorriorworldBundle {
+      constructor(sectionElement) {
+        this.section = sectionElement;
+        this.sectionId = sectionElement.id.replace('worriorworld-bundle-', '');
+        this.maxProducts = parseInt(sectionElement.dataset.maxProducts, 10) || 5;
+        this.offerProducts = parseInt(sectionElement.dataset.offerProducts, 10) || 5;
+        this.bundlePrice = parseInt(sectionElement.dataset.bundlePrice, 10) || 999;
+        this.selectedProducts = [];
+        this.syncedVariantIds = new Set();
+        this.isUpdatingCart = false;
+
+        this.bottomBar = this.section.querySelector(`#worriorworld-bottom-bar-${this.sectionId}`);
+        this.selectedItemsContainer = this.section.querySelector(`#worriorworld-selected-items-${this.sectionId}`);
+        this.emptySlotsContainer = this.section.querySelector(`#worriorworld-empty-slots-${this.sectionId}`);
+        this.offerInfo = this.section.querySelector(`#worriorworld-offer-info-${this.sectionId}`);
+        this.offerTotal = this.section.querySelector(`#worriorworld-offer-total-${this.sectionId}`);
+        this.originalTotal = this.section.querySelector(`#worriorworld-original-total-${this.sectionId}`);
+        this.saveAmount = this.section.querySelector(`#worriorworld-save-${this.sectionId}`);
+        this.actionButton = this.section.querySelector(`#worriorworld-summary-action-${this.sectionId}`);
+        this.addButtons = Array.from(this.section.querySelectorAll('.worriorworld-summary-add-btn'));
+
+        this.init();
+      }
+
+      init() {
+        this.addButtons.forEach((button) => {
+          ['pointerdown', 'mousedown', 'touchstart'].forEach((eventName) => {
+            button.addEventListener(eventName, (event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              if (typeof event.stopImmediatePropagation === 'function') {
+                event.stopImmediatePropagation();
+              }
+            }, { capture: true });
+          });
+
+          button.addEventListener('click', (event) => this.handleAddButtonClick(event));
+        });
+
+        if (this.actionButton) {
+          this.actionButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.handleSummaryAction();
+          });
+        }
+
+        this.updateUI();
+      }
+
+      handleAddButtonClick(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (typeof event.stopImmediatePropagation === 'function') {
+          event.stopImmediatePropagation();
+        }
+
+        const button = event.currentTarget;
+        if (!button || button.disabled) {
+          return;
+        }
+
+        const productData = {
+          id: String(button.dataset.productId || ''),
+          variantId: String(button.dataset.variantId || ''),
+          price: (parseInt(button.dataset.price || '0', 10) || 0) / 100,
+          title: button.dataset.title || 'Product',
+          image: button.dataset.image || ''
+        };
+
+        if (!productData.id || !productData.variantId) {
+          alert('Product information is missing. Please refresh the page.');
+          return;
+        }
+
+        const isSelected = this.selectedProducts.some((product) =>
+          String(product.variantId) === String(productData.variantId)
+        );
+
+        if (isSelected) {
+          this.removeProduct(productData);
+          return;
+        }
+
+        if (this.selectedProducts.length >= this.maxProducts) {
+          alert(`You can only select ${this.maxProducts} products in this bundle.`);
+          return;
+        }
+
+        this.selectedProducts.push(productData);
+        this.updateUI();
+      }
+
+      async removeProduct(productData) {
+        const index = this.selectedProducts.findIndex((product) =>
+          String(product.variantId) === String(productData.variantId)
+        );
+
+        if (index === -1) {
+          return;
+        }
+
+        this.selectedProducts.splice(index, 1);
+
+        if (this.syncedVariantIds.has(String(productData.variantId))) {
+          try {
+            const cartResponse = await fetch('/cart.js', { credentials: 'same-origin' });
+            const cart = await cartResponse.json();
+            const cartItem = cart.items.find((item) => String(item.variant_id) === String(productData.variantId));
+
+            if (cartItem) {
+              await fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ id: cartItem.key, quantity: 0 })
+              });
+            }
+          } catch (error) {
+            console.error('Error removing synced product from cart:', error);
+          }
+
+          this.syncedVariantIds.delete(String(productData.variantId));
+        }
+
+        this.updateUI();
+      }
+
+      updateUI() {
+        if (this.bottomBar) {
+          this.bottomBar.classList.toggle('visible', this.selectedProducts.length > 0);
+        }
+
+        this.updateSelectedProductsDisplay();
+        this.updateTotals();
+        this.updateOfferInfo();
+        this.updateButtonStates();
+      }
+
+      updateSelectedProductsDisplay() {
+        this.selectedItemsContainer.innerHTML = '';
+        this.emptySlotsContainer.innerHTML = '';
+
+        this.selectedProducts.forEach((product) => {
+          const item = document.createElement('div');
+          item.className = 'worriorworld-selected-item';
+          item.innerHTML = `
+            <img src="${product.image}" alt="${product.title}" loading="lazy">
+            <span class="worriorworld-selected-item-remove" aria-label="Remove product">&times;</span>
+          `;
+
+          item.querySelector('.worriorworld-selected-item-remove').addEventListener('click', () => {
+            this.removeProduct(product);
+          });
+
+          this.selectedItemsContainer.appendChild(item);
+        });
+
+        const remainingSlots = Math.max(this.maxProducts - this.selectedProducts.length, 0);
+
+        if (remainingSlots > 0) {
+          const messageSlot = document.createElement('div');
+          messageSlot.className = 'worriorworld-empty-slot-message';
+          messageSlot.textContent = remainingSlots === 1 ? '1 left' : `${remainingSlots} left`;
+          this.emptySlotsContainer.appendChild(messageSlot);
+        }
+
+        for (let index = 0; index < remainingSlots; index += 1) {
+          const slot = document.createElement('div');
+          slot.className = 'worriorworld-empty-slot';
+          slot.innerHTML = '<span>+</span>';
+          this.emptySlotsContainer.appendChild(slot);
+        }
+      }
+
+      updateTotals() {
+        const originalTotal = this.selectedProducts.reduce((sum, product) => sum + product.price, 0);
+
+        if (this.selectedProducts.length === this.offerProducts) {
+          const savings = Math.max(originalTotal - this.bundlePrice, 0);
+          this.originalTotal.textContent = this.formatPrice(originalTotal);
+          this.originalTotal.style.display = 'inline-block';
+          this.offerTotal.textContent = this.formatPrice(this.bundlePrice);
+          this.saveAmount.textContent = `Save: ${this.formatPrice(savings)}`;
+        } else {
+          this.originalTotal.style.display = 'none';
+          this.offerTotal.textContent = this.formatPrice(originalTotal);
+          this.saveAmount.textContent = `Save: ${this.formatPrice(0)}`;
+        }
+      }
+
+      updateOfferInfo() {
+        if (!this.offerInfo) {
+          return;
+        }
+
+        const selectedCount = this.selectedProducts.length;
+        const remaining = this.offerProducts - selectedCount;
+
+        if (selectedCount === 0) {
+          this.offerInfo.textContent = `Select ${this.offerProducts} products to show the sticky summary action`;
+          return;
+        }
+
+        if (remaining > 0) {
+          this.offerInfo.textContent = remaining === 1
+            ? 'Add 1 more product to add this bundle to cart'
+            : `Add ${remaining} more products to add this bundle to cart`;
+          return;
+        }
+
+        this.offerInfo.textContent = 'Your 5-product bundle is ready. Click the sticky button to add it to cart.';
+      }
+
+      updateButtonStates() {
+        const isLimitReached = this.selectedProducts.length >= this.maxProducts;
+
+        this.addButtons.forEach((button) => {
+          const variantId = String(button.dataset.variantId || '');
+          const isSelected = this.selectedProducts.some((product) => String(product.variantId) === variantId);
+
+          button.disabled = isLimitReached && !isSelected;
+          button.classList.toggle('added', isSelected);
+          button.classList.toggle('disabled', isLimitReached && !isSelected);
+
+          const buttonText = button.querySelector('.worriorworld-btn-text');
+          if (buttonText) {
+            buttonText.textContent = isSelected ? 'SELECTED' : 'ADD TO CART';
+          }
+        });
+
+        if (!this.actionButton) {
+          return;
+        }
+
+        const isReady = this.selectedProducts.length === this.offerProducts && !this.isUpdatingCart;
+        this.actionButton.disabled = !isReady;
+        this.actionButton.setAttribute('aria-disabled', String(!isReady));
+
+        const mainText = this.actionButton.querySelector('.worriorworld-summary-action__main');
+        const subText = this.actionButton.querySelector('.worriorworld-summary-action__sub');
+
+        if (mainText) {
+          mainText.textContent = isReady ? 'ADD BUNDLE TO CART' : 'SELECT 5 PRODUCTS';
+        }
+
+        if (subText) {
+          subText.textContent = isReady ? 'Opens cart drawer after add' : `Selected ${this.selectedProducts.length}/${this.offerProducts}`;
+        }
+      }
+
+      async handleSummaryAction() {
+        if (this.selectedProducts.length !== this.offerProducts || this.isUpdatingCart) {
+          return;
+        }
+
+        this.isUpdatingCart = true;
+        this.updateButtonStates();
+
+        try {
+          await this.syncSelectedProductsToCart();
+          this.openCartDrawer();
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+        } catch (error) {
+          console.error('Bundle cart sync error:', error);
+          alert('Unable to add selected products to cart. Please try again.');
+        } finally {
+          this.isUpdatingCart = false;
+          this.updateButtonStates();
+        }
+      }
+
+      async syncSelectedProductsToCart() {
+        const cartResponse = await fetch('/cart.js', { credentials: 'same-origin' });
+        if (!cartResponse.ok) {
+          throw new Error('Unable to fetch cart.');
+        }
+
+        const cart = await cartResponse.json();
+        const selectedVariantIds = this.selectedProducts.map((product) => String(product.variantId));
+        const previousSyncedIds = Array.from(this.syncedVariantIds);
+
+        const itemsToRemove = cart.items.filter((item) => {
+          const variantId = String(item.variant_id);
+          return previousSyncedIds.includes(variantId) && !selectedVariantIds.includes(variantId);
+        });
+
+        if (itemsToRemove.length) {
+          await Promise.all(itemsToRemove.map((item) =>
+            fetch('/cart/change.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify({ id: item.key, quantity: 0 })
+            })
+          ));
+        }
+
+        const refreshedCartResponse = await fetch('/cart.js', { credentials: 'same-origin' });
+        if (!refreshedCartResponse.ok) {
+          throw new Error('Unable to refresh cart.');
+        }
+
+        const refreshedCart = await refreshedCartResponse.json();
+        const currentCartVariantIds = new Set(refreshedCart.items.map((item) => String(item.variant_id)));
+        const itemsToAdd = this.selectedProducts
+          .filter((product) => !currentCartVariantIds.has(String(product.variantId)))
+          .map((product) => ({
+            id: Number(product.variantId),
+            quantity: 1
+          }));
+
+        if (itemsToAdd.length) {
+          const addResponse = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ items: itemsToAdd })
+          });
+
+          if (!addResponse.ok) {
+            const errorText = await addResponse.text();
+            throw new Error(errorText || 'Failed to add products to cart.');
+          }
+
+          await addResponse.json();
+        }
+
+        this.syncedVariantIds = new Set(selectedVariantIds);
+      }
+
+      openCartDrawer() {
+        document.dispatchEvent(new CustomEvent('cart:refresh'));
+
+        if (window.CartDrawerPremium && typeof window.CartDrawerPremium.open === 'function') {
+          window.CartDrawerPremium.open();
+          return;
+        }
+
+        const drawerTrigger = document.querySelector('[data-cart-toggle], .header__icon--cart, a[href="/cart"]');
+        if (drawerTrigger) {
+          drawerTrigger.click();
+        }
+      }
+
+      formatPrice(rupees) {
+        return `Rs ${Number(rupees || 0).toFixed(0)}`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.worriorworld-bundle-section').forEach((section) => {
+        new WorriorworldBundle(section);
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Bundle Landing Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build Your Bundle"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subheading",
+      "default": "Pick any 5 products and add them to cart from the sticky summary below"
+    },
+    {
+      "type": "number",
+      "id": "bundle_price",
+      "label": "Bundle Price",
+      "default": 999
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle Landing Page"
+    }
+  ]
+}
+{% endschema %}
+
+

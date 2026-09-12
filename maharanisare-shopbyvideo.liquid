@@ -1,0 +1,259 @@
+{% liquid
+  assign section_title = section.settings.heading
+%}
+
+<section class="mv-section mv-section--{{ section.id }}">
+  <div class="mv-shell page-width">
+    {% if section_title != blank %}
+      <div class="mv-header">
+        <h2 class="mv-title">{{ section_title }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="mv-row" aria-label="{{ section_title | escape }}">
+      <article class="mv-card mv-card--left">
+        <div class="mv-media">
+          <video class="mv-video" autoplay muted loop playsinline preload="metadata">
+            <source src="https://content.marchtee.com/assets/shop-resource/category/feature_1_mp4_70.mp4?v=11520" type="video/mp4">
+          </video>
+        </div>
+        <div class="mv-copy">
+          <p>100% cotton.</p>
+          <p>Two-twist yarn.</p>
+        </div>
+      </article>
+
+      <article class="mv-card mv-card--center">
+        <div class="mv-media">
+          <video class="mv-video" autoplay muted loop playsinline preload="metadata">
+            <source src="https://content.marchtee.com/assets/shop-resource/category/feature_2_mp4_70.mp4?v=11520" type="video/mp4">
+          </video>
+        </div>
+        <div class="mv-copy">
+          <p>Double stitch.</p>
+          <p>Reinforced rib.</p>
+        </div>
+      </article>
+
+      <article class="mv-card mv-card--right">
+        <div class="mv-media">
+          <video class="mv-video" autoplay muted loop playsinline preload="metadata">
+            <source src="https://content.marchtee.com/assets/shop-resource/category/feature_3_mp4_70.mp4?v=11520" type="video/mp4">
+          </video>
+        </div>
+        <div class="mv-copy">
+          <p>Solid construction.</p>
+          <p>Built to last.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mv-section--{{ section.id }} {
+    padding: 54px 0 68px;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.06), transparent 30%),
+      radial-gradient(circle at 80% 15%, rgba(255, 255, 255, 0.04), transparent 24%),
+      #000000;
+    color: #f4e7d3;
+  }
+
+  .mv-section--{{ section.id }} .page-width {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .mv-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .mv-title {
+    margin: 0;
+    color: #f4e7d3;
+    font-family: "Times New Roman", serif;
+    font-size: clamp(28px, 3vw, 48px);
+    line-height: 1.05;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .mv-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  .mv-card {
+    position: relative;
+    min-height: 520px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #050505;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.46);
+  }
+
+  .mv-media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .mv-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.96) contrast(1.02);
+  }
+
+  .mv-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.48) 58%, rgba(0, 0, 0, 0.84) 100%);
+    pointer-events: none;
+  }
+
+  .mv-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 190px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+    opacity: 0.95;
+    z-index: 1;
+  }
+
+  .mv-copy {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    bottom: 34px;
+    z-index: 2;
+  }
+
+  .mv-copy p {
+    margin: 0;
+    color: #f0dfcb;
+    font-family: "Times New Roman", serif;
+    font-size: clamp(26px, 2.05vw, 40px);
+    line-height: 1.08;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .mv-copy p + p {
+    margin-top: 10px;
+  }
+
+  .mv-card--left .mv-media {
+    opacity: 0.98;
+  }
+
+  .mv-card--center .mv-media {
+    transform: scale(1.02);
+  }
+
+  .mv-card--right .mv-media {
+    transform: scale(1.02);
+  }
+
+  @media screen and (min-width: 750px) {
+    .mv-card:hover .mv-video {
+      transform: scale(1.03);
+      transition: transform 0.45s ease;
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .mv-row {
+      gap: 20px;
+    }
+
+    .mv-card {
+      min-height: 460px;
+    }
+
+    .mv-copy {
+      left: 26px;
+      right: 26px;
+      bottom: 28px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .mv-section--{{ section.id }} {
+      padding: 34px 0 44px;
+    }
+
+    .mv-section--{{ section.id }} .page-width {
+      padding: 0 12px;
+    }
+
+    .mv-header {
+      margin-bottom: 18px;
+    }
+
+    .mv-row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 84%;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .mv-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .mv-card {
+      min-height: 410px;
+      scroll-snap-align: start;
+    }
+
+    .mv-copy {
+      left: 18px;
+      right: 18px;
+      bottom: 22px;
+    }
+
+    .mv-copy p {
+      font-size: 22px;
+    }
+
+    .mv-copy p + p {
+      margin-top: 6px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shop By Video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Shop By Video"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop By Video"
+    }
+  ]
+}
+{% endschema %}

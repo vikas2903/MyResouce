@@ -1,0 +1,390 @@
+{% liquid
+  assign section_title = section.settings.heading
+%}
+
+<section class="ir-royalty-section ir-royalty-section--{{ section.id }}">
+  <div class="ir-royalty-shell page-width">
+    {% if section_title != blank %}
+      <div class="ir-royalty-header">
+        <h2 class="ir-royalty-title">{{ section_title }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="ir-royalty-grid">
+      {% for block in section.blocks %}
+        {% liquid
+          assign block_collection = block.settings.collection
+          assign block_title = block.settings.custom_title
+          assign block_link = block.settings.link
+
+          if block_title == blank and block_collection != blank
+            assign block_title = block_collection.title
+          endif
+
+          if block_link == blank and block_collection != blank
+            assign block_link = block_collection.url
+          endif
+        %}
+
+        <a
+          class="ir-royalty-card{% if block_link == blank %} ir-royalty-card--disabled{% endif %}"
+          {% if block_link != blank %}
+            href="{{ block_link }}"
+          {% else %}
+            aria-disabled="true"
+          {% endif %}
+          {{ block.shopify_attributes }}
+        >
+          <div class="ir-royalty-frame">
+            <div class="ir-royalty-arch">
+              <div class="ir-royalty-media">
+                {% if block.settings.desktop_image != blank %}
+                  {{
+                    block.settings.desktop_image
+                    | image_url: width: 900
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'ir-royalty-image ir-royalty-image--desktop',
+                      alt: block_title,
+                      widths: '300, 500, 700, 900'
+                  }}
+                {% endif %}
+
+                {% if block.settings.mobile_image != blank %}
+                  {{
+                    block.settings.mobile_image
+                    | image_url: width: 700
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'ir-royalty-image ir-royalty-image--mobile',
+                      alt: block_title,
+                      widths: '240, 360, 500, 700'
+                  }}
+                {% elsif block.settings.desktop_image != blank %}
+                  {{
+                    block.settings.desktop_image
+                    | image_url: width: 700
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'ir-royalty-image ir-royalty-image--mobile',
+                      alt: block_title,
+                      widths: '240, 360, 500, 700'
+                  }}
+                {% endif %}
+              </div>
+
+              <div class="ir-royalty-overlay">
+                {% if block_title != blank %}
+                  <h3 class="ir-royalty-card-title">{{ block_title }}</h3>
+                {% endif %}
+                <span class="ir-royalty-divider" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ir-royalty-section--{{ section.id }} {
+    padding: 22px 0 34px;
+    background: #ffffff;
+  }
+
+  .ir-royalty-section--{{ section.id }} .page-width {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 18px;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-header {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-title {
+    margin: 0;
+    color: #111111;
+    font-size: clamp(28px, 2.7vw, 44px);
+    line-height: 1.1;
+    font-weight: 500;
+    font-family: "Times New Roman", serif;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-card--disabled {
+    pointer-events: none;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-frame {
+    position: relative;
+    padding: 10px;
+    border: 1px solid #ef8f8b;
+    border-radius: 10px;
+    background:
+      linear-gradient(135deg, rgba(255, 208, 213, 0.5), rgba(255, 245, 246, 0.9));
+    box-shadow: inset 0 0 0 1px rgba(241, 160, 158, 0.35);
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-frame::before,
+  .ir-royalty-section--{{ section.id }} .ir-royalty-frame::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(239, 143, 139, 0.45);
+    border-radius: 8px;
+    pointer-events: none;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-arch {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 0.72;
+    padding: 14px;
+    border-radius: 26px 26px 4px 4px;
+    background:
+      radial-gradient(circle at top center, #f9d4d9 0 27%, transparent 27.5%),
+      linear-gradient(180deg, #ffe3e6 0%, #f7c7cb 100%);
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-arch::before {
+    content: "";
+    position: absolute;
+    inset: 6px 6px 6px;
+    border-radius: 92px 92px 6px 6px;
+    border: 2px solid #ef8f8b;
+    pointer-events: none;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-media {
+    position: absolute;
+    inset: 14px;
+    border-radius: 82px 82px 0 0;
+    overflow: hidden;
+    background: #d8c7bb;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-image--mobile {
+    display: none;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 45%, rgba(0, 0, 0, 0.62) 100%);
+    pointer-events: none;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-overlay {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 22px;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-card-title {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(16px, 1.3vw, 22px);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-divider {
+    display: inline-block;
+    width: 46px;
+    height: 10px;
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-divider::before,
+  .ir-royalty-section--{{ section.id }} .ir-royalty-divider::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    width: 18px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-divider::before {
+    left: 0;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-divider::after {
+    right: 0;
+  }
+
+  .ir-royalty-section--{{ section.id }} .ir-royalty-divider {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.92);
+    border-radius: 50%;
+  }
+
+  @media screen and (max-width: 1199px) {
+    .ir-royalty-section--{{ section.id }} .ir-royalty-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ir-royalty-section--{{ section.id }} {
+      padding: 18px 0 26px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .page-width {
+      padding: 0 12px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-header {
+      margin-bottom: 14px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-title {
+      font-size: 30px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-frame {
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-arch {
+      padding: 10px;
+      border-radius: 20px 20px 4px 4px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-arch::before {
+      inset: 4px;
+      border-radius: 62px 62px 4px 4px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-media {
+      inset: 10px;
+      border-radius: 56px 56px 0 0;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-image--desktop {
+      display: none;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-image--mobile {
+      display: block;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-overlay {
+      left: 12px;
+      right: 12px;
+      bottom: 16px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-card-title {
+      font-size: 14px;
+      letter-spacing: 0.05em;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-divider {
+      width: 38px;
+      margin-top: 6px;
+    }
+
+    .ir-royalty-section--{{ section.id }} .ir-royalty-divider::before,
+    .ir-royalty-section--{{ section.id }} .ir-royalty-divider::after {
+      width: 14px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Indian Royalty Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "Indian Royalty"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Royalty card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "desktop_image",
+          "label": "Desktop image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom title",
+          "info": "If empty, selected collection title will be used."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link",
+          "info": "If empty, selected collection URL will be used."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Indian Royalty Grid",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weavekala | Brand Story</title>
+  <style>
+    :root {
+      --bg: #fcf7f1;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: #f5edf7;
+      --card: #fffdfb;
+      --ink: #201629;
+      --muted: #675c6e;
+      --accent: #7f335f;
+      --accent-dark: #5d2446;
+      --gold: #f1d889;
+      --peach: #f3c7b1;
+      --sand: #efe3d6;
+      --line: rgba(91, 62, 74, 0.12);
+      --shadow: 0 24px 70px rgba(77, 44, 61, 0.12);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 20px;
+      --container: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .wk-brand-story {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .wk-brand-story {
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top center, rgba(127, 51, 95, 0.08), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(241, 216, 137, 0.2), transparent 22%),
+        linear-gradient(180deg, #fffdfb 0%, var(--bg) 100%);
+    }
+
+    .wk-brand-story img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .wk-brand-story a {
+      color: inherit;
+    }
+    .wk-brand-story .story-page {
+      overflow: hidden;
+    }
+
+    .wk-brand-story .story-section {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .wk-brand-story .story-section {
+      position: relative;
+      padding: 44px 0;
+    }
+
+    .wk-brand-story .story-section[data-reveal] {
+      opacity: 0;
+      transform: translateY(44px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .wk-brand-story .story-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .wk-brand-story .hero {
+      padding-top: 18px;
+    }
+
+    .wk-brand-story .hero__banner {
+      position: relative;
+      min-height: 540px;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(40, 19, 27, 0.04), rgba(40, 19, 27, 0.2)),
+        linear-gradient(135deg, #e7cfbf 0%, #ddbaa9 38%, #bf8c6e 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .wk-brand-story .hero__banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 20%, rgba(255, 245, 236, 0.9), transparent 18%),
+        radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.45), transparent 16%),
+        linear-gradient(180deg, transparent 0 63%, rgba(101, 52, 31, 0.55) 63% 80%, rgba(131, 76, 51, 0.75) 80% 100%);
+      opacity: 0.92;
+    }
+
+    .wk-brand-story .hero__scene {
+      position: absolute;
+      inset: 0;
+    }
+
+    .wk-brand-story .hero__plinth,
+    .wk-brand-story .hero__cup,
+    .wk-brand-story .hero__tray,
+    .wk-brand-story .hero__bowl,
+    .wk-brand-story .hero__fabric {
+      position: absolute;
+      border-radius: 24px;
+      box-shadow: 0 16px 30px rgba(56, 28, 20, 0.14);
+    }
+
+    .wk-brand-story .hero__plinth {
+      left: 11%;
+      bottom: 25%;
+      width: 118px;
+      height: 98px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #82523d 0%, #69402e 100%);
+    }
+
+    .wk-brand-story .hero__plinth::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      top: -18px;
+      height: 22px;
+      border-radius: 999px;
+      background: #f4e8df;
+      box-shadow: 0 6px 14px rgba(73, 38, 24, 0.18);
+    }
+
+    .wk-brand-story .hero__cup {
+      left: 16%;
+      bottom: 44%;
+      width: 84px;
+      height: 64px;
+      border-radius: 12px 12px 24px 24px;
+      background: linear-gradient(180deg, #fff5ed 0%, #f1ddd2 100%);
+    }
+
+    .wk-brand-story .hero__cup::before {
+      content: "";
+      position: absolute;
+      right: -18px;
+      top: 14px;
+      width: 20px;
+      height: 24px;
+      border: 5px solid #f5e4da;
+      border-left: 0;
+      border-radius: 0 20px 20px 0;
+    }
+
+    .wk-brand-story .hero__tray {
+      right: 14%;
+      bottom: 22%;
+      width: 180px;
+      height: 58px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #c87c4d 0%, #9d592e 100%);
+    }
+
+    .wk-brand-story .hero__tray::before,
+    .wk-brand-story .hero__tray::after {
+      content: "";
+      position: absolute;
+      top: -24px;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #f9f2ee 0%, #e9d2c2 100%);
+    }
+
+    .wk-brand-story .hero__tray::before {
+      left: 24px;
+    }
+
+    .wk-brand-story .hero__tray::after {
+      right: 22px;
+    }
+
+    .wk-brand-story .hero__bowl {
+      right: 27%;
+      bottom: 37%;
+      width: 100px;
+      height: 46px;
+      border-radius: 14px 14px 20px 20px;
+      background: linear-gradient(180deg, #ca5a62 0%, #8c2f42 100%);
+    }
+
+    .wk-brand-story .hero__bowl::before {
+      content: "";
+      position: absolute;
+      inset: 8px 10px auto;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 231, 232, 0.72);
+    }
+
+    .wk-brand-story .hero__fabric {
+      right: -2%;
+      bottom: 16%;
+      width: 240px;
+      height: 120px;
+      border-radius: 50px 0 0 30px;
+      background:
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0 7px, rgba(241, 229, 220, 0.85) 7px 14px);
+      box-shadow: none;
+      transform: rotate(-2deg);
+    }
+
+    .wk-brand-story .hero__intro {
+      position: relative;
+      z-index: 1;
+      width: min(840px, calc(100% - 64px));
+      margin: -54px auto 0;
+      padding: 32px 40px;
+      text-align: center;
+      border-radius: 24px;
+      background: rgba(243, 238, 248, 0.92);
+      border: 1px solid rgba(126, 74, 106, 0.08);
+      box-shadow: 0 22px 46px rgba(69, 36, 58, 0.14);
+      backdrop-filter: blur(14px);
+    }
+
+    .wk-brand-story .hero__eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(127, 51, 95, 0.1);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .wk-brand-story .hero__title {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.6rem, 5vw, 5.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+
+    .wk-brand-story .hero__title span {
+      color: var(--accent);
+    }
+
+    .wk-brand-story .hero__text {
+      max-width: 650px;
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.85;
+    }
+
+    .wk-brand-story .hero__meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .wk-brand-story .hero__meta-chip {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(68, 38, 60, 0.08);
+    }
+
+    .wk-brand-story .split-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .wk-brand-story .split-heading h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 3vw, 3.3rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .wk-brand-story .split-heading p {
+      margin: 0;
+      max-width: 420px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .wk-brand-story .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .wk-brand-story .feature-card {
+      position: relative;
+      min-height: 240px;
+      padding: 22px;
+      border-radius: 22px;
+      overflow: hidden;
+      color: #fff;
+      background: linear-gradient(160deg, rgba(45, 28, 39, 0.18), rgba(45, 28, 39, 0.58));
+      box-shadow: 0 18px 42px rgba(57, 27, 46, 0.12);
+    }
+
+    .wk-brand-story .feature-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(40, 19, 27, 0.46)),
+        var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.02);
+    }
+
+    .wk-brand-story .feature-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wk-brand-story .feature-card__value {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2.7rem;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+    }
+
+    .wk-brand-story .feature-card__label {
+      margin-top: 8px;
+      max-width: 140px;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    .wk-brand-story .collage-panel {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 28px;
+      align-items: center;
+      padding: 30px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #efedf7 0%, #ece8f3 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .wk-brand-story .collage-panel__visual {
+      position: relative;
+      min-height: 500px;
+      overflow: hidden;
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(62, 30, 45, 0.12)),
+        linear-gradient(145deg, #ddc0b2 0%, #f8f0ea 46%, #c8907b 100%);
+      box-shadow: 0 20px 42px rgba(85, 43, 62, 0.12);
+    }
+
+    .wk-brand-story .collage-panel__visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(64, 30, 45, 0.18)),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 820 980'><defs><linearGradient id='bg' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%23e3c2b0'/><stop offset='1' stop-color='%23c4846a'/></linearGradient></defs><rect width='820' height='980' fill='url(%23bg)'/><circle cx='620' cy='180' r='150' fill='%23fae7dd' opacity='0.74'/><circle cx='190' cy='784' r='160' fill='%237f335f' opacity='0.08'/><path d='M154 744c64-227 182-393 354-498 64 50 112 118 145 205 29 75 44 161 44 258 0 136-30 245-90 329-83 49-161 70-236 64-107-9-180-61-217-158Z' fill='%23814d54' opacity='0.15'/><path d='M266 692c34-153 108-276 222-368 55 22 102 63 141 122 42 64 64 145 64 241 0 81-16 157-47 228-73 40-144 58-215 53-52-4-96-24-131-59-37-36-48-75-34-117Z' fill='%23f8efe8'/><path d='M344 280c62 31 122 31 182 0 15 39 23 85 23 139v230c0 38-14 69-43 95-28 26-63 39-103 39s-74-13-103-39c-29-26-43-57-43-95V419c0-54 8-100 23-139 18 12 39 22 64 31Z' fill='%237f335f'/><path d='M340 292c64 33 127 34 190 4-18-47-48-84-91-110-50 25-84 61-99 106Z' fill='%233a2431'/><path d='M264 488c94 14 186 14 278 0' stroke='%23f4d3af' stroke-width='24' stroke-linecap='round'/><path d='M264 580c94 14 186 14 278 0' stroke='%23f4d3af' stroke-width='24' stroke-linecap='round'/><path d='M368 402h121v296H368z' fill='%23ab5363' opacity='0.42'/></svg>");
+      background-size: cover;
+      background-position: center top;
+    }
+
+    .wk-brand-story .collage-panel__badge {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      z-index: 1;
+      max-width: 230px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 252, 248, 0.84);
+      border: 1px solid rgba(127, 51, 95, 0.08);
+      box-shadow: 0 16px 34px rgba(71, 37, 55, 0.1);
+      backdrop-filter: blur(12px);
+    }
+
+    .wk-brand-story .collage-panel__badge strong {
+      display: block;
+      color: var(--accent);
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .wk-brand-story .collage-panel__badge span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .wk-brand-story .collage-panel__content h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 4vw, 4.2rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      color: #4f4453;
+    }
+
+    .wk-brand-story .collage-panel__content p {
+      margin: 18px 0 0;
+      max-width: 370px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .wk-brand-story .story-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 24px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 14px 28px rgba(127, 51, 95, 0.24);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .wk-brand-story .story-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 34px rgba(127, 51, 95, 0.3);
+    }
+
+    .wk-brand-story .trust-strip,
+    .wk-brand-story .unique-strip {
+      display: grid;
+      grid-template-columns: 1.3fr repeat(3, 1fr);
+      gap: 18px;
+      align-items: stretch;
+      padding: 28px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 251, 245, 0.96));
+      border: 1px solid rgba(125, 83, 74, 0.08);
+    }
+
+    .wk-brand-story .trust-strip__lead,
+    .wk-brand-story .unique-strip__lead {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .wk-brand-story .trust-strip__lead h3,
+    .wk-brand-story .unique-strip__lead h3 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2rem;
+      line-height: 1.1;
+      color: var(--accent);
+    }
+
+    .wk-brand-story .trust-strip__lead p,
+    .wk-brand-story .unique-strip__lead p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .wk-brand-story .icon-card {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 12px 28px rgba(76, 38, 58, 0.06);
+    }
+
+    .wk-brand-story .icon-card__icon {
+      width: 54px;
+      height: 54px;
+      flex: 0 0 54px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(127, 51, 95, 0.1);
+      color: var(--accent);
+    }
+
+    .wk-brand-story .icon-card__icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .wk-brand-story .icon-card__title {
+      margin: 2px 0 6px;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+
+    .wk-brand-story .icon-card__text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .wk-brand-story .team-grid__content h3,
+    .wk-brand-story .contact-panel h3 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .wk-brand-story .team-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .wk-brand-story .team-grid__content {
+      order: 1;
+    }
+
+    .wk-brand-story .team-visual {
+      position: relative;
+      order: 2;
+      min-height: 520px;
+      overflow: hidden;
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(55, 24, 40, 0.12)),
+        linear-gradient(145deg, #e2c4b7 0%, #f8f0ea 45%, #d7b09e 100%);
+      box-shadow: 0 22px 48px rgba(85, 43, 62, 0.12);
+    }
+
+    .wk-brand-story .team-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(64, 30, 45, 0.16)),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 820 980'><defs><linearGradient id='bg' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%23e2c1b1'/><stop offset='1' stop-color='%23c9927b'/></linearGradient></defs><rect width='820' height='980' fill='url(%23bg)'/><circle cx='640' cy='170' r='150' fill='%23f9e7de' opacity='0.72'/><circle cx='184' cy='806' r='160' fill='%237f335f' opacity='0.1'/><path d='M168 754c62-221 179-385 351-489 63 50 111 117 143 202 29 74 43 159 43 256 0 132-29 240-88 322-82 48-159 69-231 62-106-8-178-59-218-153Z' fill='%23824756' opacity='0.16'/><path d='M272 700c32-154 106-277 220-370 55 22 101 62 140 121 42 63 63 143 63 239 0 80-15 155-46 225-72 39-143 57-212 52-51-4-94-24-129-58-36-35-48-71-36-109Z' fill='%23f8efe8'/><path d='M341 278c61 30 121 30 180 0 15 38 22 83 22 136v231c0 36-14 67-42 92-28 25-61 38-100 38s-72-13-100-38c-28-25-42-56-42-92V414c0-53 7-98 22-136 18 11 38 21 60 30Z' fill='%237f335f'/><path d='M338 289c63 33 125 34 186 4-17-46-47-82-88-108-49 25-82 60-98 104Z' fill='%233c2432'/><path d='M260 485c92 13 182 13 271 0' stroke='%23f4d3af' stroke-width='24' stroke-linecap='round'/><path d='M260 574c92 13 182 13 271 0' stroke='%23f4d3af' stroke-width='24' stroke-linecap='round'/><path d='M361 402h118v290H361z' fill='%23a64f60' opacity='0.42'/></svg>");
+      background-size: cover;
+      background-position: center top;
+    }
+
+    .wk-brand-story .team-visual::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: rgba(255, 253, 249, 0.82);
+      border: 1px solid rgba(127, 51, 95, 0.08);
+      box-shadow: 0 16px 34px rgba(71, 37, 55, 0.1);
+      backdrop-filter: blur(12px);
+    }
+
+    .wk-brand-story .team-visual__badge {
+      position: absolute;
+      left: 44px;
+      bottom: 48px;
+      z-index: 1;
+      max-width: 220px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 253, 249, 0.84);
+      border: 1px solid rgba(127, 51, 95, 0.08);
+      box-shadow: 0 16px 34px rgba(71, 37, 55, 0.1);
+      backdrop-filter: blur(12px);
+    }
+
+    .wk-brand-story .team-visual__badge strong {
+      display: block;
+      color: var(--accent);
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .wk-brand-story .team-visual__badge span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .wk-brand-story .team-grid__content p {
+      margin: 18px 0 0;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .wk-brand-story .team-grid__content a {
+      display: inline-flex;
+      margin-top: 18px;
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .wk-brand-story .contact-panel {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 18px 40px rgba(75, 38, 59, 0.08);
+    }
+
+    .wk-brand-story .contact-panel p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .wk-brand-story .contact-panel__items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .wk-brand-story .contact-chip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fffdfa 0%, #fff7f0 100%);
+      border: 1px solid rgba(110, 74, 79, 0.08);
+    }
+
+    .wk-brand-story .contact-chip__icon {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(127, 51, 95, 0.12);
+      color: var(--accent);
+    }
+
+    .wk-brand-story .contact-chip__icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (max-width: 1080px) {
+      .wk-brand-story .feature-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .wk-brand-story .collage-panel,
+      .wk-brand-story .team-grid,
+      .wk-brand-story .contact-panel,
+      .wk-brand-story .trust-strip,
+      .wk-brand-story .unique-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .wk-brand-story .trust-strip__lead,
+      .wk-brand-story .unique-strip__lead {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .wk-brand-story .hero__intro {
+        width: calc(100% - 24px);
+        padding: 26px 20px;
+      }
+
+      .wk-brand-story .collage-panel,
+      .wk-brand-story .team-grid,
+      .wk-brand-story .contact-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .wk-brand-story .story-section,
+      .wk-brand-story .hero {
+        padding: 28px 0;
+      }
+
+      .wk-brand-story .story-section {
+        width: min(var(--container), calc(100% - 20px));
+      }
+
+      .wk-brand-story .hero__banner {
+        min-height: 360px;
+        border-radius: 0 0 24px 24px;
+      }
+
+      .wk-brand-story .hero__plinth,
+      .wk-brand-story .hero__cup,
+      .wk-brand-story .hero__tray,
+      .wk-brand-story .hero__bowl,
+      .wk-brand-story .hero__fabric {
+        transform: scale(0.76);
+        transform-origin: center;
+      }
+
+      .wk-brand-story .feature-grid,
+      .wk-brand-story .contact-panel__items {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .wk-brand-story .trust-strip,
+      .wk-brand-story .unique-strip {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (max-width: 520px) {
+
+      .wk-brand-story .split-heading{flex-direction: column; text-align: left;}
+      .wk-brand-story .feature-grid,
+      .wk-brand-story .contact-panel__items {
+        grid-template-columns: 1fr;
+      }
+
+      .wk-brand-story .hero__meta {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="story-page wk-brand-story">
+    <main id="top">
+      <section class="story-section hero is-visible" id="about">
+        <div class="hero__banner">
+          <div class="hero__scene">
+            <div class="hero__plinth"></div>
+            <div class="hero__cup"></div>
+            <div class="hero__tray"></div>
+            <div class="hero__bowl"></div>
+            <div class="hero__fabric"></div>
+          </div>
+        </div>
+
+        <div class="hero__intro">
+          <span class="hero__eyebrow">About Weavekala</span>
+          <h1 class="hero__title">A brand shaped by <span>Indian artistry</span> and everyday grace.</h1>
+          <p class="hero__text">
+            Weavekala brings beautiful women's ethnic wear to your screen. We offer sarees, suits, dupattas, and stylish outfits that feel special, comfortable, and easy to wear.
+          </p>
+          <div class="hero__meta">
+            <span class="hero__meta-chip">Sarees & Suits</span>
+            <span class="hero__meta-chip">Ethnic Fashion</span>
+            <span class="hero__meta-chip">Shopify Store</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="story-section" id="collections" data-reveal>
+        <div class="split-heading">
+          <h2>Styles for every<br />woman and every moment.</h2>
+          <p>From daily wear to festive wear, Weavekala has sarees, suits, and dupattas for every occasion.</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card" style="--bg-image: linear-gradient(135deg, rgba(119, 57, 88, 0.32), rgba(45, 28, 39, 0.18)), url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 700%22><defs><linearGradient id=%22a%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22><stop offset=%220%25%22 stop-color=%22%23ceb09f%22/><stop offset=%22100%25%22 stop-color=%22%23a66e56%22/></linearGradient></defs><rect width=%22600%22 height=%22700%22 fill=%22url(%23a)%22/><circle cx=%22480%22 cy=%22150%22 r=%22120%22 fill=%22%23f6e7dd%22 opacity=%220.8%22/><path d=%22M155 518c47-175 138-300 273-375 47 35 82 82 104 141 20 51 31 108 31 174 0 97-21 175-64 234-64 38-123 54-177 49-80-6-136-47-167-123Z%22 fill=%22%23813e3b%22 opacity=%220.22%22/><path d=%22M241 486c27-123 87-220 180-291 42 17 79 48 111 92 34 47 51 107 51 179 0 60-12 118-36 173-58 30-114 44-168 40-40-3-74-18-102-46-29-27-41-56-36-87Z%22 fill=%22%23f8efe8%22/><path d=%22M293 201c50 24 98 24 145 0 12 29 18 63 18 102v173c0 28-10 51-31 70s-46 29-77 29-56-10-77-29c-21-19-31-42-31-70V303c0-39 6-73 18-102 11 8 23 14 35 18Z%22 fill=%22%237f335f%22/></svg>');">
+            <p class="feature-card__value">40+</p>
+            <div class="feature-card__label">saree, suit, and ethnic wear styles</div>
+          </article>
+
+          <article class="feature-card" style="--bg-image: linear-gradient(135deg, rgba(119, 57, 88, 0.24), rgba(45, 28, 39, 0.2)), url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 700%22><rect width=%22600%22 height=%22700%22 fill=%22%23dfcfbf%22/><rect x=%22100%22 y=%22170%22 width=%22400%22 height=%22300%22 rx=%2240%22 fill=%22%23f9f5f0%22/><path d=%22M140 380c52-89 120-156 204-199 38 22 69 53 92 95 25 44 37 91 37 141 0 63-17 120-50 172-54 29-107 41-158 37-55-4-94-22-119-56s-27-64-6-90Z%22 fill=%22%23b88973%22 opacity=%220.38%22/><path d=%22M212 339h176v128H212z%22 fill=%22%237f335f%22 opacity=%220.7%22/></svg>');">
+            <p class="feature-card__value">120+</p>
+            <div class="feature-card__label">looks curated for festive and daily wear</div>
+          </article>
+
+          <article class="feature-card" style="--bg-image: linear-gradient(135deg, rgba(119, 57, 88, 0.28), rgba(45, 28, 39, 0.24)), url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 700%22><rect width=%22600%22 height=%22700%22 fill=%22%23d8c2b4%22/><circle cx=%22170%22 cy=%22240%22 r=%2290%22 fill=%22%23f7e6db%22 opacity=%220.8%22/><circle cx=%22450%22 cy=%22490%22 r=%22110%22 fill=%22%23f0d38d%22 opacity=%220.5%22/><path d=%22M163 453c75-54 150-81 223-81 80 0 147 24 201 72-70 88-148 132-234 132-77 0-140-41-190-123Z%22 fill=%22%237f335f%22 opacity=%220.72%22/></svg>');">
+            <p class="feature-card__value">50k+</p>
+            <div class="feature-card__label">shoppers who trust our ethnic fashion picks</div>
+          </article>
+
+          <article class="feature-card" style="--bg-image: linear-gradient(135deg, rgba(119, 57, 88, 0.26), rgba(45, 28, 39, 0.18)), url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 700%22><rect width=%22600%22 height=%22700%22 fill=%22%23e3d0c2%22/><rect x=%2290%22 y=%22100%22 width=%22420%22 height=%22470%22 rx=%22210%22 fill=%22%23fbf3ec%22/><path d=%22M158 421c60 29 117 43 171 43s111-14 171-43c16 33 24 72 24 115v18c-52 33-117 50-195 50s-143-17-195-50v-18c0-43 8-82 24-115Z%22 fill=%22%237f335f%22 opacity=%220.68%22/><circle cx=%22329%22 cy=%22274%22 r=%2286%22 fill=%22%23ba8b74%22 opacity=%220.38%22/></svg>');">
+            <p class="feature-card__value">Curated</p>
+            <div class="feature-card__label">for women who love grace, comfort, and style</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="story-section" id="craft" data-reveal>
+        <div class="collage-panel">
+          <div class="collage-panel__visual" aria-hidden="true">
+            <div class="collage-panel__badge">
+              <strong>Women's Fashion</strong>
+              <span>Elegant sarees, suits, and ethnic outfits designed for modern Indian women.</span>
+            </div>
+          </div>
+
+          <div class="collage-panel__content">
+            <h2>Everything your wardrobe needs, told through craf</h2>
+            <p>
+              At Weavekala, you can shop sarees, suit sets, dupattas, and more in one place. Our Shopify store makes online shopping simple, smooth, and easy to understand.
+            </p>
+            <a class="story-button" href="#contact">Shop With Confidence</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="story-section" data-reveal>
+        <div class="trust-strip">
+          <div class="trust-strip__lead">
+            <h3>The Weavekala Promise</h3>
+            <p>Weavekala gives you stylish ethnic wear with good quality, trusted service, and easy online shopping.</p>
+          </div>
+
+          <article class="icon-card">
+            <div class="icon-card__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h12l4 4v6H4V7Z" stroke="currentColor" stroke-width="1.8"/><path d="M4 11h16" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="18" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
+            </div>
+            <div>
+              <div class="icon-card__title">Fast Shipping</div>
+              <p class="icon-card__text">Fast shipping and safe delivery for your sarees, suits, and other outfits.</p>
+            </div>
+          </article>
+
+          <article class="icon-card">
+            <div class="icon-card__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6l7-3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="icon-card__title">Quality Check</div>
+              <p class="icon-card__text">Every product is checked for fabric, finishing, and overall quality before dispatch.</p>
+            </div>
+          </article>
+
+          <article class="icon-card">
+            <div class="icon-card__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M7 7h10v10H7z" stroke="currentColor" stroke-width="1.8"/><path d="M17 10h2a2 2 0 0 1 2 2v5H9" stroke="currentColor" stroke-width="1.8"/><path d="M11 14l-3 3-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="icon-card__title">Easy Returns</div>
+              <p class="icon-card__text">Easy support and simple returns if you need any help with your order.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="story-section" data-reveal>
+        <div class="team-grid">
+          <div class="team-grid__content">
+            <h3>Built by people who care about what clothing can make you feel.</h3>
+            <p>
+              Weavekala is made by people who understand what women want in clothing. From sarees to suit sets, we focus on style, comfort, and a good fit.
+            </p>
+            <p>
+              As a Shopify store, we want to make online shopping easy. You can explore products clearly, choose what you like, and shop with confidence for daily wear or festive wear.
+            </p>
+            <a href="#contact">Visit our brand page &rarr;</a>
+          </div>
+
+          <div class="team-visual" aria-hidden="true">
+            <div class="team-visual__badge">
+              <strong>Craft First</strong>
+              <span>Made for women who want stylish ethnic wear that is easy to wear and easy to shop online.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="story-section" data-reveal>
+        <div class="unique-strip">
+          <div class="unique-strip__lead">
+            <h3>How we stay unique</h3>
+            <p>We keep things simple with good designs, good quality, and an easy shopping experience.</p>
+          </div>
+
+          <article class="icon-card">
+            <div class="icon-card__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h10l6 6v8H4V5Z" stroke="currentColor" stroke-width="1.8"/><path d="M14 5v6h6" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="13" r="2.2" stroke="currentColor" stroke-width="1.8"/></svg>
+            </div>
+            <div>
+              <div class="icon-card__title">Curated</div>
+              <p class="icon-card__text">Our collections include sarees, suits, dupattas, and outfits women love to wear.</p>
+            </div>
+          </article>
+
+          <article class="icon-card">
+            <div class="icon-card__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.7-2.5 7.9-7 10-4.5-2.1-7-5.3-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 12.5l2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="icon-card__title">Quality</div>
+              <p class="icon-card__text">We focus on good fabric, neat finishing, and styles that look nice in real life.</p>
+            </div>
+          </article>
+
+          <article class="icon-card">
+            <div class="icon-card__icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M5 11l7-7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="icon-card__title">Convenience</div>
+              <p class="icon-card__text">Easy browsing, easy support, and easy shopping from anywhere.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="story-section" id="contact" data-reveal>
+        <div class="contact-panel">
+          <div>
+            <h3>Contact Us</h3>
+            <p>Contact us for product help, order support, or any question about shopping at Weavekala.</p>
+          </div>
+
+          <div class="contact-panel__items">
+            <div class="contact-chip">
+              <div class="contact-chip__icon">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h4l2 5-2 2c1.3 2.6 3.4 4.7 6 6l2-2 5 2v4c0 1.1-.9 2-2 2C11.6 23 1 12.4 1 4c0-1.1.9-2 2-2h3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>+91 999 9999 99</strong>
+                <div class="icon-card__text">Mon to Sat, 10 AM - 7 PM</div>
+              </div>
+            </div>
+
+            <div class="contact-chip">
+              <div class="contact-chip__icon">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.8"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <strong>hello@weavekala.com</strong>
+                <div class="icon-card__text">We usually reply within 24 hours</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const sections = Array.from(document.querySelectorAll("[data-reveal]"));
+      const counters = [
+        { element: document.querySelector(".feature-card:nth-child(1) .feature-card__value"), target: "40+" },
+        { element: document.querySelector(".feature-card:nth-child(2) .feature-card__value"), target: "120+" },
+        { element: document.querySelector(".feature-card:nth-child(3) .feature-card__value"), target: "50k+" }
+      ];
+
+      function revealSections() {
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.18 });
+
+        sections.forEach(function (section) {
+          observer.observe(section);
+        });
+      }
+
+      function animateFeatureCounts() {
+        counters.forEach(function (item) {
+          if (!item.element) return;
+          const rawTarget = item.target;
+          const numericValue = parseInt(rawTarget, 10);
+          const suffix = rawTarget.replace(String(numericValue), "");
+          const start = performance.now();
+          const duration = 1200;
+
+          function tick(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(numericValue * eased);
+            item.element.textContent = current + suffix;
+            if (progress < 1) {
+              requestAnimationFrame(tick);
+            } else {
+              item.element.textContent = rawTarget;
+            }
+          }
+
+          requestAnimationFrame(tick);
+        });
+      }
+
+      const collectionSection = document.getElementById("collections");
+      if (collectionSection) {
+        const counterObserver = new IntersectionObserver(function (entries, observer) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            animateFeatureCounts();
+            observer.disconnect();
+          });
+        }, { threshold: 0.35 });
+
+        counterObserver.observe(collectionSection);
+      }
+
+      revealSections();
+    })();
+  </script>
+</body>
+</html>

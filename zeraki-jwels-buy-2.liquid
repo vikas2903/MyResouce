@@ -1,0 +1,4882 @@
+{%- comment -%}
+Collection Bundle Section - Buy any 2 products for ₹599
+{%- endcomment -%}
+
+{%- comment -%} Find matching collection settings {%- endcomment -%}
+{%- assign current_collection_handle = collection.handle | default: '' -%}
+{%- assign current_collection_id = collection.id | default: '' -%}
+{%- assign matched_settings = null -%}
+{%- assign collection_subheading = '' -%}
+{%- assign collection_max_products = 2 -%}
+{%- assign collection_offer_products = 2 -%}
+{%- assign collection_bundle_price = 599 -%}
+
+{%- comment -%} Check each collection setting {%- endcomment -%}
+{%- if section.settings.collection_1 != blank -%}
+  {%- assign col1_handle = section.settings.collection_1.handle | default: '' -%}
+  {%- assign col1_id = section.settings.collection_1.id | default: '' -%}
+  {%- if col1_handle == current_collection_handle or col1_id == current_collection_id -%}
+    {%- assign matched_settings = section.settings -%}
+    {%- assign collection_subheading = section.settings.collection_1_subheading | default: 'Buy any 2 products for ₹599' -%}
+    {%- assign collection_max_products = section.settings.collection_1_max_products | default: 2 -%}
+    {%- assign collection_offer_products = section.settings.collection_1_offer_products | default: 2 -%}
+    {%- assign collection_bundle_price = section.settings.collection_1_bundle_price | default: 599 -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if matched_settings == null and section.settings.collection_2 != blank -%}
+  {%- assign col2_handle = section.settings.collection_2.handle | default: '' -%}
+  {%- assign col2_id = section.settings.collection_2.id | default: '' -%}
+  {%- if col2_handle == current_collection_handle or col2_id == current_collection_id -%}
+    {%- assign matched_settings = section.settings -%}
+    {%- assign collection_subheading = section.settings.collection_2_subheading | default: 'Buy any 2 products for ₹599' -%}
+    {%- assign collection_max_products = section.settings.collection_2_max_products | default: 2 -%}
+    {%- assign collection_offer_products = section.settings.collection_2_offer_products | default: 2 -%}
+    {%- assign collection_bundle_price = section.settings.collection_2_bundle_price | default: 599 -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if matched_settings == null and section.settings.collection_3 != blank -%}
+  {%- assign col3_handle = section.settings.collection_3.handle | default: '' -%}
+  {%- assign col3_id = section.settings.collection_3.id | default: '' -%}
+  {%- if col3_handle == current_collection_handle or col3_id == current_collection_id -%}
+    {%- assign matched_settings = section.settings -%}
+    {%- assign collection_subheading = section.settings.collection_3_subheading | default: 'Buy any 2 products for ₹599' -%}
+    {%- assign collection_max_products = section.settings.collection_3_max_products | default: 2 -%}
+    {%- assign collection_offer_products = section.settings.collection_3_offer_products | default: 2 -%}
+    {%- assign collection_bundle_price = section.settings.collection_3_bundle_price | default: 599 -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if matched_settings == null and section.settings.collection_4 != blank -%}
+  {%- assign col4_handle = section.settings.collection_4.handle | default: '' -%}
+  {%- assign col4_id = section.settings.collection_4.id | default: '' -%}
+  {%- if col4_handle == current_collection_handle or col4_id == current_collection_id -%}
+    {%- assign matched_settings = section.settings -%}
+    {%- assign collection_subheading = section.settings.collection_4_subheading | default: 'Buy any 2 products for ₹599' -%}
+    {%- assign collection_max_products = section.settings.collection_4_max_products | default: 2 -%}
+    {%- assign collection_offer_products = section.settings.collection_4_offer_products | default: 2 -%}
+    {%- assign collection_bundle_price = section.settings.collection_4_bundle_price | default: 599 -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if matched_settings == null and section.settings.collection_5 != blank -%}
+  {%- assign col5_handle = section.settings.collection_5.handle | default: '' -%}
+  {%- assign col5_id = section.settings.collection_5.id | default: '' -%}
+  {%- if col5_handle == current_collection_handle or col5_id == current_collection_id -%}
+    {%- assign matched_settings = section.settings -%}
+    {%- assign collection_subheading = section.settings.collection_5_subheading | default: 'Buy any 2 products for ₹599' -%}
+    {%- assign collection_max_products = section.settings.collection_5_max_products | default: 2 -%}
+    {%- assign collection_offer_products = section.settings.collection_5_offer_products | default: 2 -%}
+    {%- assign collection_bundle_price = section.settings.collection_5_bundle_price | default: 599 -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- comment -%} Use default settings if no match {%- endcomment -%}
+{%- if matched_settings == null -%}
+  {%- assign collection_subheading = section.settings.subtext | default: 'Buy any 2 products for ₹599' -%}
+  {%- assign collection_max_products = section.settings.max_products | default: 2 -%}
+  {%- assign collection_offer_products = section.settings.offer_products | default: 2 -%}
+  {%- assign collection_bundle_price = section.settings.bundle_price | default: 599 -%}
+{%- endif -%}
+
+{%- assign collection_subheading = 'Buy any 2 products for ₹599' -%}
+{%- assign collection_max_products = 2 -%}
+{%- assign collection_offer_products = 2 -%}
+{%- assign collection_bundle_price = 599 -%}
+
+<div class="worriorworld-bundle-section" id="worriorworld-bundle-{{ section.id }}" data-max-products="{{ collection_max_products }}" data-offer-products="{{ collection_offer_products }}" data-bundle-price="{{ collection_bundle_price }}" {% if collection.handle %}data-collection-handle="{{ collection.handle }}"{% endif %}>
+  <div class="worriorworld-bundle-container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="worriorworld-bundle-heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    
+    {%- if collection_subheading != blank -%}
+      <p class="worriorworld-bundle-subtext">{{ collection_subheading }}</p>
+    {%- endif -%}
+
+    <div class="worriorworld-products-grid" id="worriorworld-products-{{ section.id }}" data-total-products="{{ collection.products_count | default: collection.products.size }}" data-initial-count="20">
+      {%- if collection != blank and collection.products.size > 0 -%}
+        {%- for product in collection.products limit: 20 -%}
+          {%- if product.available -%}
+            {%- assign selected_variant = product.selected_or_first_available_variant -%}
+            {%- if selected_variant and selected_variant.available -%}
+            {%- assign variant_id = selected_variant.id | default: '' -%}
+            {%- assign variant_image = selected_variant.featured_image | default: product.featured_image -%}
+            <div class="worriorworld-product-card" data-product-id="{{ product.id }}" data-variant-id="{{ variant_id }}" data-product-handle="{{ product.handle }}">
+              <div class="worriorworld-product-image-wrapper">
+                <img 
+                  src="{{ product.featured_image | img_url: 'original' }}"
+                  alt="{{ product.title | escape }}"
+                  loading="lazy"
+                  class="worriorworld-product-image"
+                >
+                <button 
+                  type="button" 
+                  class="worriorworld-quick-view-btn" 
+                  data-product-handle="{{ product.handle }}"
+                  aria-label="Quick view {{ product.title | escape }}"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
+                  </svg>
+                </button>
+              </div>
+              
+              <div class="worriorworld-product-info">
+                <h3 class="worriorworld-product-title">{{ product.title }}</h3>
+                
+                {%- comment -%} Show variant options if product has variants {%- endcomment -%}
+                {%- if product.variants.size > 1 and product.options.size > 0 -%}
+                  <div class="worriorworld-product-variants">
+                    {%- for option in product.options limit: 1 -%}
+                      {%- if option.values.size > 0 -%}
+                        <div class="worriorworld-product-variant-options">
+                          {%- for value in option.values limit: 4 -%}
+                            {%- assign variant_available = false -%}
+                            {%- for variant in product.variants -%}
+                              {%- if variant.available and variant.options[0] == value -%}
+                                {%- assign variant_available = true -%}
+                                {%- break -%}
+                              {%- endif -%}
+                            {%- endfor -%}
+                            {%- if variant_available -%}
+                              <span class="worriorworld-variant-chip" data-option-value="{{ value }}">{{ value }}</span>
+                            {%- endif -%}
+                          {%- endfor -%}
+                          {%- if option.values.size > 4 -%}
+                            <span class="worriorworld-variant-more">+{{ option.values.size | minus: 4 }} more</span>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+                
+                <div class="worriorworld-product-price-wrapper">
+                  {%- if selected_variant.compare_at_price > selected_variant.price -%}
+                    <span class="worriorworld-product-original-price">{{ selected_variant.compare_at_price | money }}</span>
+                  {%- endif -%}
+                  <span class="worriorworld-product-price">{{ selected_variant.price | money }}</span>
+                </div>
+                
+                <button 
+                  class="worriorworld-add-btn" 
+                  data-product-id="{{ product.id }}" 
+                  data-product-handle="{{ product.handle }}"
+                  data-variant-id="{{ variant_id }}" 
+                  data-price="{{ selected_variant.price }}" 
+                  data-title="{{ product.title | escape }}" 
+                  data-image="{% if variant_image %}{{ variant_image | img_url: '150x150' }}{% else %}{{ product.featured_image | img_url: '150x150' }}{% endif %}"
+                >
+                  <span class="worriorworld-btn-text">ADD TO BOX</span>
+                </button>
+              </div>
+            </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    
+    <!-- Infinite Scroll Loader -->
+    <div class="worriorworld-infinite-loader" id="worriorworld-infinite-loader-{{ section.id }}">
+      <div class="worriorworld-loader"></div>
+      <p>Loading more products...</p>
+    </div>
+  </div>
+
+  <!-- Bottom Bar for Selected Products -->
+  <div class="worriorworld-bottom-bar" id="worriorworld-bottom-bar-{{ section.id }}">
+    <div class="worriorworld-bottom-bar-content">
+      <div class="worriorworld-selected-products">
+        <div class="worriorworld-selected-items-list" id="worriorworld-selected-items-{{ section.id }}"></div>
+        <div class="worriorworld-empty-slots" id="worriorworld-empty-slots-{{ section.id }}">
+          <div class="worriorworld-empty-slot"><span class="worriorworld-plus-icon">+</span></div>
+          <div class="worriorworld-empty-slot"><span class="worriorworld-plus-icon">+</span></div>
+        </div>
+      </div>
+      
+      <div class="worriorworld-total-section">
+        <div class="worriorworld-pricing-info">
+          <div class="worriorworld-subtotal-label">Subtotal</div>
+          <div class="worriorworld-save-amount" id="worriorworld-save-{{ section.id }}">Save: ₹0</div>
+          <div class="worriorworld-price-display">
+            <span class="worriorworld-offer-total" id="worriorworld-offer-total-{{ section.id }}">₹0</span>
+            <span class="worriorworld-original-total" id="worriorworld-original-total-{{ section.id }}" style="display: none;">₹0</span>
+          </div>
+        </div>
+        <div class="worriorworld-action-buttons" id="worriorworld-action-buttons-{{ section.id }}">
+          <div class="worriorworld-offer-info" id="worriorworld-offer-info-{{ section.id }}"></div>
+          <button type="button" class="worriorworld-add-box-to-cart-btn" id="worriorworld-add-box-to-cart-{{ section.id }}" style="display: none;">
+            ADD BOX TO CART
+          </button>
+          <div class="gokwik-checkout bundle-gokwik-checkout worriorworld-gokwik-checkout" id="bundle-gokwik-checkout-{{ section.id }}">
+            {% if settings.goEnable %}
+              <div class="gokwik-checkout worriorworld-gokwik-checkout-inner"{% if settings.hideFlow %} style="display:none !important;"{% endif %}>
+                <button type="button" class="button bundle-checkout-btn disabled" id="bundle-checkout-btn-{{ section.id }}" disabled aria-disabled="true">
+                  <span class="btn-text">
+                    <span>{{ section.settings.gokwik_main_title | default: 'CHECKOUT' }}</span>
+                    <span>{{ section.settings.gokwik_sub_title | default: 'Secure Payment' }}</span>
+                  </span>
+                  <span class="pay-opt-icon">
+                    <img src="https://cdn.gokwik.co/v4/images/upi-icons.svg" alt="UPI">
+                    <img src="https://cdn.gokwik.co/v4/images/right-arrow.svg" alt="Arrow">
+                  </span>
+                  <div style="display:none" class="addloadr" id="btn-loader-{{ section.id }}">
+                    <div class="cir-loader">Loading..</div>
+                  </div>
+                </button>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Party Popper Container -->
+    <div class="worriorworld-party-popper" id="worriorworld-party-popper-{{ section.id }}"></div>
+  </div>
+
+  <!-- Cart Added Confirmation Popup -->
+  <div class="worriorworld-cart-confirmation-popup" id="worriorworld-cart-confirmation-{{ section.id }}" role="dialog" aria-modal="true" hidden>
+    <div class="worriorworld-cart-confirmation-overlay"></div>
+    <div class="worriorworld-cart-confirmation-content">
+      <div class="worriorworld-cart-confirmation-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="#4caf50" opacity="0.2"/>
+          <path d="M9 12l2 2 4-4" stroke="#4caf50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="10" stroke="#4caf50" stroke-width="2"/>
+        </svg>
+      </div>
+      <h3 class="worriorworld-cart-confirmation-title">Products Added to Cart!</h3>
+      <p class="worriorworld-cart-confirmation-message" id="worriorworld-cart-confirmation-message-{{ section.id }}"></p>
+      <div class="worriorworld-cart-confirmation-actions">
+        <button type="button" class="worriorworld-cart-confirmation-btn worriorworld-cart-confirmation-continue" id="worriorworld-continue-shopping-{{ section.id }}">
+          Continue Shopping
+        </button>
+        <button type="button" class="worriorworld-cart-confirmation-btn worriorworld-cart-confirmation-view-cart" id="worriorworld-view-cart-{{ section.id }}">
+          View Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Variant Selector Drawer -->
+  <div class="worriorworld-variant-drawer" id="worriorworld-variant-drawer-{{ section.id }}" role="dialog" aria-modal="true" hidden>
+    <div class="worriorworld-variant-drawer-overlay"></div>
+    <div class="worriorworld-variant-drawer-content">
+      <div class="worriorworld-variant-drawer-header">
+        <h3 class="worriorworld-variant-drawer-title" id="variant-drawer-title-{{ section.id }}">Choose Variant</h3>
+        <button type="button" class="worriorworld-variant-drawer-close" aria-label="Close drawer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="worriorworld-variant-drawer-body" id="variant-drawer-body-{{ section.id }}">
+        <div class="worriorworld-variant-loading">
+          <div class="worriorworld-loader"></div>
+          <p>Loading variants...</p>
+        </div>
+      </div>
+      
+      <div class="worriorworld-variant-drawer-footer">
+        <div class="worriorworld-variant-price" id="variant-drawer-price-{{ section.id }}">₹0</div>
+        <button type="button" class="worriorworld-variant-add-btn" id="variant-drawer-add-btn-{{ section.id }}" disabled>
+          ADD TO BOX
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick View Modal -->
+  <div class="worriorworld-quick-view-modal" id="worriorworld-quick-view-modal-{{ section.id }}" role="dialog" aria-modal="true" aria-labelledby="quick-view-title-{{ section.id }}" hidden>
+    <div class="worriorworld-quick-view-overlay"></div>
+    <div class="worriorworld-quick-view-container">
+      <button type="button" class="worriorworld-quick-view-close" aria-label="Close quick view">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      
+      <div class="worriorworld-quick-view-content">
+        <!-- Product Images Section -->
+        <div class="worriorworld-quick-view-images">
+          <div class="worriorworld-quick-view-main-image-wrapper">
+            <button type="button" class="worriorworld-quick-view-nav worriorworld-quick-view-prev" aria-label="Previous image">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 15L7 10L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="worriorworld-quick-view-main-image">
+              <img id="quick-view-main-img-{{ section.id }}" src="" alt="" loading="lazy">
+            </div>
+            <button type="button" class="worriorworld-quick-view-nav worriorworld-quick-view-next" aria-label="Next image">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="worriorworld-quick-view-thumbnails" id="quick-view-thumbnails-{{ section.id }}"></div>
+        </div>
+        
+        <!-- Product Info Section -->
+        <div class="worriorworld-quick-view-info">
+          <h2 class="worriorworld-quick-view-title" id="quick-view-title-{{ section.id }}"></h2>
+          
+          <div class="worriorworld-quick-view-price-wrapper" id="quick-view-price-{{ section.id }}"></div>
+          
+          <div class="worriorworld-quick-view-rating" id="quick-view-rating-{{ section.id }}"></div>
+          
+       
+          
+          <!-- Variant Selector in Quick View -->
+          <div class="worriorworld-quick-view-variants" id="quick-view-variants-{{ section.id }}"></div>
+             <div class="worriorworld-quick-view-description" id="quick-view-description-{{ section.id }}"></div>
+          
+          <button type="button" class="worriorworld-quick-view-add-btn worriorworld-add-btn" id="quick-view-add-btn-{{ section.id }}">
+            ADD TO BOX
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Load CSS -->
+
+
+<style>
+/* Worriorworld Bundle Section Styles */
+.worriorworld-variant-option-btn.selected:hover {
+    color: #000;
+}
+.worriorworld-bundle-section {
+  padding: 0px 20px;
+  padding-bottom: 150px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.worriorworld-bundle-container {
+  margin-bottom: 40px;
+}
+
+.worriorworld-bundle-heading {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.worriorworld-bundle-subtext {
+  font-size: 18px;
+  font-weight: 400;
+  color: #666;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.worriorworld-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.worriorworld-infinite-loader {
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  transition: opacity 0.3s ease, height 0.3s ease;
+  min-height: 100px;
+  width: 100%;
+  position: relative;
+  display: block;
+  visibility: visible;
+}
+
+.worriorworld-infinite-loader p {
+  margin-top: 16px;
+  color: #666;
+  font-size: 14px;
+}
+
+.worriorworld-product-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+{% comment %} .worriorworld-product-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+} {% endcomment %}
+
+{% comment %} .worriorworld-product-card.selected {
+  border-color: rgb(0, 0, 0);
+  border-width: 2px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+} {% endcomment %}
+
+@keyframes productCardAdded {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.worriorworld-product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  background: #f8f8f8;
+  overflow: hidden;
+}
+
+.worriorworld-quick-view-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  {% comment %} width: 44px; {% endcomment %}
+  {% comment %} height: 44px; {% endcomment %}
+  background: linear-gradient(135deg, #00000045 0%, rgb(0 0 0 / 46%) 100%);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 1;
+  transition: all 0.3s ease;
+  z-index: 2;
+  color: #fff;
+  {% comment %} box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); {% endcomment %}
+  animation: quickViewPulse 2s ease-in-out infinite;
+}
+
+@keyframes quickViewPulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.6);
+  }
+}
+
+.worriorworld-quick-view-btn:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #000 100%);
+  transform: scale(1.15);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  animation: none;
+}
+
+.worriorworld-quick-view-btn svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.worriorworld-product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  {% comment %} height: 100%; {% endcomment %}
+  object-fit: contain;
+  object-position: center;
+}
+
+.worriorworld-product-info {
+  padding: 5px;
+}
+
+.worriorworld-product-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+  margin-bottom: 0px;
+  line-height: 1.4;
+  {% comment %} min-height: 40px; {% endcomment %}
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.worriorworld-product-variants {
+  margin-bottom: 8px;
+  display:none;
+}
+
+.worriorworld-product-variant-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.worriorworld-variant-chip {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #666;
+  line-height: 1.2;
+}
+
+.worriorworld-variant-more {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: #999;
+  font-style: italic;
+}
+
+.worriorworld-product-price-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+  flex-wrap: wrap;
+}
+
+.worriorworld-product-original-price {
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.worriorworld-product-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.worriorworld-add-btn {
+  width: 100%;
+  padding: 12px;
+  background:#1D3E70;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.worriorworld-btn-text {
+  display: inline-block;
+}
+
+.worriorworld-btn-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  transition: all 0.3s ease;
+}
+{% comment %} 
+.worriorworld-add-btn:hover:not(:disabled):not(.added) {
+  background:#1D3E70;
+ 
+} {% endcomment %}
+
+.worriorworld-add-btn:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.worriorworld-add-btn.added {
+  background: #1D3E70;
+  color: #fff;
+  cursor: pointer;
+  animation: productAdded 0.6s ease-out;
+}
+
+@keyframes productAdded {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+{% comment %} .worriorworld-add-btn.added .worriorworld-btn-text {
+  position: relative;
+}
+
+.worriorworld-add-btn.added .worriorworld-btn-text::after {
+  content: 'D';
+  display: inline-block;
+  margin-left: 0;
+} {% endcomment %}
+
+.worriorworld-add-btn.added .worriorworld-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.worriorworld-add-btn.added .worriorworld-btn-icon::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3Cline x1='10' y1='11' x2='10' y2='17'/%3E%3Cline x1='14' y1='11' x2='14' y2='17'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: deleteIconAppear 0.3s ease-out;
+}
+
+@keyframes deleteIconAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.worriorworld-add-btn.disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Bottom Bar Styles */
+.worriorworld-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #e6e6e6;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 16px 20px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.worriorworld-bottom-bar.visible {
+  transform: translateY(0);
+}
+
+.worriorworld-bottom-bar-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+}
+
+.worriorworld-selected-products {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.worriorworld-selected-items-list {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.worriorworld-selected-item {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid rgb(0, 0, 0);
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.worriorworld-selected-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: #f8f8f8;
+}
+
+.worriorworld-selected-item-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background:rgb(0, 0, 0);
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.worriorworld-selected-item-remove:hover {
+  background:rgb(0, 0, 0);
+  transform: scale(1.1);
+}
+
+.worriorworld-empty-slots {
+  display: flex;
+  gap: 12px;
+}
+
+.worriorworld-empty-slot {
+  width: 60px;
+  height: 60px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.worriorworld-empty-slot-message {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  padding: 4px 8px;
+  margin-right: 8px;
+}
+
+.worriorworld-plus-icon {
+  font-size: 24px;
+  color: #999;
+  font-weight: 300;
+}
+
+.worriorworld-total-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.worriorworld-pricing-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.worriorworld-subtotal-label {
+  font-size: 14px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.worriorworld-save-amount {
+  font-size: 14px;
+  color: rgb(4, 135, 33);
+  font-weight: 600;
+}
+
+.worriorworld-price-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.worriorworld-offer-total {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.worriorworld-original-total {
+  font-size: 18px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.worriorworld-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.worriorworld-gokwik-checkout {
+  display: inline-block;
+  position: relative;
+  min-width: 220px;
+}
+
+.worriorworld-offer-info {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 8px;
+  line-height: 1.3;
+  font-weight: 400;
+  min-height: 16px;
+}
+
+.worriorworld-gokwik-checkout-inner,
+.worriorworld-gokwik-checkout .gokwik-checkout {
+  width: 100%;
+}
+
+.worriorworld-gokwik-buy-now,
+.bundle-checkout-btn {
+  width: 100%;
+  min-width: 220px;
+  padding: 13px 18px;
+  background: rgb(0, 0, 0);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+}
+
+.worriorworld-add-box-to-cart-btn {
+  padding: 14px 32px;
+  background: #1D3E70;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.worriorworld-add-box-to-cart-btn:hover:not(:disabled) {
+  background: #1a3560;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(29, 62, 112, 0.3);
+}
+
+.worriorworld-add-box-to-cart-btn:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.worriorworld-add-box-to-cart-btn.added-to-cart {
+  background: #4caf50 !important;
+}
+
+.worriorworld-add-box-to-cart-btn.added-to-cart:hover:not(:disabled) {
+  background: #45a049 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.worriorworld-gokwik-buy-now:hover:not(:disabled),
+.bundle-checkout-btn:hover:not(:disabled) {
+  background:rgb(0, 0, 0);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.worriorworld-gokwik-buy-now:disabled,
+.worriorworld-gokwik-buy-now[aria-disabled="true"],
+.bundle-checkout-btn:disabled,
+.bundle-checkout-btn[aria-disabled="true"] {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.worriorworld-gokwik-buy-now.ready,
+.bundle-checkout-btn.ready {
+  background: rgb(0, 0, 0);
+  color: #fff;
+  animation: pulse 2s infinite;
+}
+
+.worriorworld-gokwik-buy-now .btn-text,
+.bundle-checkout-btn .btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.15;
+}
+
+.worriorworld-gokwik-buy-now .btn-text span:first-child,
+.bundle-checkout-btn .btn-text span:first-child {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px !important;
+}
+
+.worriorworld-gokwik-buy-now .btn-text span:last-child,
+.bundle-checkout-btn .btn-text span:last-child {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.9;
+  margin-top: 2px;
+  display: none;
+}
+
+.worriorworld-gokwik-buy-now .pay-opt-icon,
+.bundle-checkout-btn .pay-opt-icon {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+}
+
+.worriorworld-gokwik-buy-now .pay-opt-icon img,
+.bundle-checkout-btn .pay-opt-icon img {
+  display: block;
+  max-height: 19px;
+  width: auto;
+}
+
+.worriorworld-gokwik-buy-now .pay-opt-icon img:last-child,
+.bundle-checkout-btn .pay-opt-icon img:last-child {
+  width: 18px;
+  height: 18px;
+}
+
+.worriorworld-gokwik-buy-now .addloadr,
+.bundle-checkout-btn .addloadr {
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  background: inherit;
+  border-radius: inherit;
+}
+
+.worriorworld-gokwik-buy-now .cir-loader,
+.bundle-checkout-btn .cir-loader {
+  font-size: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+
+.worriorworld-btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+  font-size:12px;
+}
+
+.worriorworld-btn-text span:first-child {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.worriorworld-btn-text span:last-child {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.worriorworld-pay-opt-icon {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.worriorworld-pay-opt-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.worriorworld-btn-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.worriorworld-cir-loader {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(14, 15, 15, 0.76);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+}
+
+/* Party Popper Styles */
+.worriorworld-party-popper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.worriorworld-party-popper.active {
+  opacity: 1;
+}
+
+.worriorworld-confetti-particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  bottom: 0;
+  border-radius: 50%;
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .worriorworld-bundle-section {
+    padding: 0px 15px;
+    padding-bottom: 180px;
+  }
+
+  .worriorworld-bundle-heading {
+    font-size: 24px;
+  }
+
+  .worriorworld-bundle-subtext {
+    font-size: 16px;
+  }
+
+  .worriorworld-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 8px;
+  }
+
+  .worriorworld-bottom-bar {
+    padding: 12px 15px;
+  }
+
+  .worriorworld-bottom-bar-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .worriorworld-selected-products {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .worriorworld-total-section {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .worriorworld-action-buttons {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .worriorworld-add-box-to-cart-btn {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
+  .worriorworld-checkout-btn {
+    flex: 1;
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+
+  .worriorworld-empty-slot,
+  .worriorworld-selected-item {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+  }
+
+  .worriorworld-pricing-info {
+    align-items: flex-start;
+  }
+}
+
+/* Cart Confirmation Popup Styles */
+.worriorworld-cart-confirmation-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.worriorworld-cart-confirmation-popup[hidden] {
+  display: none !important;
+}
+
+.worriorworld-cart-confirmation-popup:not([hidden]),
+.worriorworld-cart-confirmation-popup.active {
+  display: flex !important;
+  opacity: 1;
+  visibility: visible;
+}
+
+.worriorworld-cart-confirmation-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+.worriorworld-cart-confirmation-content {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 30px;
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.worriorworld-cart-confirmation-popup.active .worriorworld-cart-confirmation-content {
+  transform: scale(1);
+}
+
+.worriorworld-cart-confirmation-icon {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  animation: checkmarkBounce 0.6s ease-out;
+}
+
+@keyframes checkmarkBounce {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.worriorworld-cart-confirmation-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 12px 0;
+}
+
+.worriorworld-cart-confirmation-message {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 30px 0;
+  line-height: 1.5;
+}
+
+.worriorworld-cart-confirmation-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.worriorworld-cart-confirmation-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 140px;
+}
+
+.worriorworld-cart-confirmation-continue {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.worriorworld-cart-confirmation-continue:hover {
+  background: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+.worriorworld-cart-confirmation-view-cart {
+  background: #1D3E70;
+  color: #fff;
+}
+
+.worriorworld-cart-confirmation-view-cart:hover {
+  background: #1a3560;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(29, 62, 112, 0.3);
+}
+
+@media screen and (max-width: 480px) {
+  .worriorworld-cart-confirmation-content {
+    padding: 30px 20px;
+  }
+
+  .worriorworld-cart-confirmation-title {
+    font-size: 20px;
+  }
+
+  .worriorworld-cart-confirmation-message {
+    font-size: 14px;
+  }
+
+  .worriorworld-cart-confirmation-actions {
+    flex-direction: column;
+  }
+
+  .worriorworld-cart-confirmation-btn {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .worriorworld-products-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .worriorworld-bundle-heading {
+    font-size: 20px;
+  }
+
+  .worriorworld-bundle-subtext {
+    font-size: 14px;
+  }
+}
+
+/* Quick View Modal Styles */
+.worriorworld-quick-view-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.worriorworld-quick-view-modal[hidden] {
+  display: none !important;
+}
+
+.worriorworld-quick-view-modal:not([hidden]),
+.worriorworld-quick-view-modal.active {
+  display: flex !important;
+  opacity: 1;
+  visibility: visible;
+}
+
+.worriorworld-quick-view-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+.worriorworld-quick-view-container {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (min-width: 769px) {
+  .worriorworld-quick-view-container {
+    max-width: 800px;
+    max-height: 80vh;
+  }
+}
+
+.worriorworld-quick-view-modal:not([hidden]) .worriorworld-quick-view-container {
+  transform: scale(1);
+}
+
+.worriorworld-quick-view-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  color: #333;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (min-width: 769px) {
+  .worriorworld-quick-view-close {
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.worriorworld-quick-view-close:hover {
+  background: #fff;
+  transform: rotate(90deg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.worriorworld-quick-view-content {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 85vh;
+}
+
+@media screen and (min-width: 769px) {
+  .worriorworld-quick-view-content {
+    flex-direction: row;
+    max-height: 80vh;
+  }
+}
+
+.worriorworld-quick-view-images {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.worriorworld-quick-view-main-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  background: #f8f8f8;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.worriorworld-quick-view-main-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.worriorworld-quick-view-main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.worriorworld-quick-view-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  color: #333;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.worriorworld-quick-view-nav:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.worriorworld-quick-view-prev {
+  left: 12px;
+}
+
+.worriorworld-quick-view-next {
+  right: 12px;
+}
+
+.worriorworld-quick-view-thumbnails {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.worriorworld-quick-view-thumbnail {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.worriorworld-quick-view-thumbnail:hover,
+.worriorworld-quick-view-thumbnail.active {
+  border-color:rgb(0, 0, 0);
+}
+
+.worriorworld-quick-view-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: #f8f8f8;
+}
+
+.worriorworld-quick-view-info {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.worriorworld-quick-view-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.worriorworld-quick-view-price-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.worriorworld-quick-view-price {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+}
+
+.worriorworld-quick-view-compare-price {
+  font-size: 20px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.worriorworld-quick-view-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.worriorworld-quick-view-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+/* Quick View Variant Selector Styles */
+.worriorworld-quick-view-variants {
+  margin: 6px 0;
+}
+
+.worriorworld-quick-view-variant-group {
+  margin-bottom: 16px;
+}
+
+.worriorworld-quick-view-variant-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.worriorworld-quick-view-variant-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.worriorworld-quick-view-variant-btn {
+  padding: 8px 16px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  min-width: 60px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.worriorworld-quick-view-variant-btn.with-image {
+  padding: 6px;
+  min-width: 60px;
+}
+
+.quick-view-variant-image {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  background: #f8f8f8;
+}
+
+.worriorworld-quick-view-variant-btn.selected .quick-view-variant-image {
+  border-color: rgb(0, 0, 0);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.worriorworld-quick-view-variant-btn.unavailable .quick-view-variant-image {
+  filter: blur(3px);
+  opacity: 0.5;
+}
+
+.quick-view-variant-text {
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.worriorworld-quick-view-variant-btn:hover:not(:disabled):not(.unavailable) {
+  background: #e8e8e8;
+  border-color: rgb(0, 0, 0);
+  transform: translateY(-1px);
+}
+
+.worriorworld-quick-view-variant-btn.selected {
+  background: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.worriorworld-quick-view-variant-btn:disabled,
+.worriorworld-quick-view-variant-btn.unavailable {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.worriorworld-quick-view-variant-values.color-options {
+  gap: 10px;
+}
+
+.worriorworld-quick-view-add-btn {
+  width: 100%;
+  padding: 14px;
+  background: rgb(0, 0, 0);
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: auto;
+}
+
+.worriorworld-quick-view-add-btn:hover {
+  background: rgb(0, 0, 0);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.worriorworld-quick-view-add-btn.selected {
+  background:rgb(0, 0, 0);
+  color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+  .worriorworld-quick-view-content {
+    flex-direction: column;
+  }
+
+  .worriorworld-quick-view-images {
+    padding: 5px;
+  }
+
+  .worriorworld-quick-view-info {
+    padding: 15px;
+  }
+
+  .worriorworld-quick-view-title {
+    font-size: 20px;
+  }
+
+  .worriorworld-quick-view-price {
+    font-size: 24px;
+  }
+}
+
+/* Variant Selector Drawer Styles */
+.worriorworld-variant-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.worriorworld-variant-drawer[hidden] {
+  display: none !important;
+}
+
+.worriorworld-variant-drawer.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.worriorworld-variant-drawer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.worriorworld-variant-drawer-content {
+  position: relative;
+  background: #fff;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  border-radius: 20px 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+.worriorworld-variant-drawer.active .worriorworld-variant-drawer-content {
+  transform: translateY(0);
+}
+
+.worriorworld-variant-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #e6e6e6;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+  border-radius: 20px 20px 0 0;
+}
+
+.worriorworld-variant-drawer-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.worriorworld-variant-drawer-close {
+  width: 36px;
+  height: 36px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.worriorworld-variant-drawer-close:hover {
+  background: #e0e0e0;
+  transform: rotate(90deg);
+}
+
+.worriorworld-variant-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  min-height: 200px;
+}
+
+.worriorworld-variant-loading,
+.worriorworld-variant-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.worriorworld-loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid rgb(0, 0, 0);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.worriorworld-variant-option-group {
+  margin-bottom: 24px;
+}
+
+.worriorworld-variant-option-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.worriorworld-variant-option-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.worriorworld-variant-option-btn {
+  padding: 12px 20px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  min-width: 80px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.worriorworld-variant-option-btn.with-image {
+  padding: 8px;
+  min-width: 70px;
+}
+
+.variant-option-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  background:rgb(255, 255, 255);
+}
+
+.worriorworld-variant-option-btn.selected .variant-option-image {
+  {% comment %} border-color: rgb(0, 0, 0); {% endcomment %}
+  {% comment %} box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2); {% endcomment %}
+}
+
+.worriorworld-variant-option-btn.unavailable .variant-option-image {
+  filter: blur(3px);
+  opacity: 0.5;
+}
+
+.variant-option-text {
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.worriorworld-variant-option-btn.with-image .variant-option-text {
+  font-size: 11px;
+}
+
+.worriorworld-variant-option-values.color-options {
+  gap: 12px;
+}
+
+.worriorworld-variant-option-btn:hover:not(:disabled) {
+  background: #e8e8e8;
+  border-color:rgb(0, 0, 0);
+  transform: translateY(-2px);
+}
+
+.worriorworld-variant-option-btn.selected {
+  background: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.worriorworld-variant-option-btn.selected .variant-option-text:hover{
+  color:black;
+}
+.worriorworld-variant-option-btn:disabled,
+.worriorworld-variant-option-btn.unavailable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.unavailable-badge {
+  display: block;
+  font-size: 10px;
+  color: #999;
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+.worriorworld-variant-drawer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-top: 1px solid #e6e6e6;
+  background: #fff;
+  position: sticky;
+  bottom: 0;
+  gap: 16px;
+}
+
+.worriorworld-variant-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  flex: 1;
+}
+
+.worriorworld-variant-add-btn {
+  padding: 14px 32px;
+  background:rgb(0, 0, 0);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.worriorworld-variant-add-btn:hover:not(:disabled) {
+  background:rgb(0, 0, 0);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.worriorworld-variant-add-btn:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.worriorworld-choose-variant-btn {
+  width: 100%;
+  padding: 8px;
+  background: #000;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.worriorworld-choose-variant-btn:hover:not(:disabled) {
+  background: #5568d3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.worriorworld-choose-variant-btn:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 768px) {
+  .worriorworld-variant-drawer-content {
+    max-height: 90vh;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .worriorworld-variant-drawer-header {
+    padding: 16px;
+  }
+
+  .worriorworld-variant-drawer-body {
+    padding: 16px;
+  }
+
+  .worriorworld-variant-drawer-footer {
+    padding: 16px;
+    flex-direction: column;
+  }
+
+  .worriorworld-variant-price {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .worriorworld-variant-add-btn {
+    width: 100%;
+  }
+
+  .worriorworld-variant-option-btn {
+    {% comment %} flex: 1; {% endcomment %}
+    min-width: max-content;
+  }
+}
+
+</style>
+
+<!-- Load JavaScript -->
+<script>
+// Worriorworld Bundle Builder JavaScript
+(function() {
+  'use strict';
+
+  // Initialize bundle builder when DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    const bundleSections = document.querySelectorAll('.worriorworld-bundle-section');
+    bundleSections.forEach(section => {
+      new WorriorworldBundle(section);
+    });
+  });
+
+  class WorriorworldBundle {
+    constructor(sectionElement) {
+      this.section = sectionElement;
+      this.sectionId = sectionElement.id.replace('worriorworld-bundle-', '');
+      this.selectedProducts = [];
+      this.maxProducts = parseInt(sectionElement.dataset.maxProducts) || 2;
+      this.offerProducts = parseInt(sectionElement.dataset.offerProducts) || 2; // Number of products for offer
+      this.bundlePrice = parseInt(sectionElement.dataset.bundlePrice) || 599; // Price in rupees
+      this.productsAddedToCart = false; // Track if products have been added to cart
+      
+      // Initialize
+      this.init();
+    }
+
+    init() {
+      this.bottomBar = this.section.querySelector(`#worriorworld-bottom-bar-${this.sectionId}`);
+      this.selectedItemsContainer = this.section.querySelector(`#worriorworld-selected-items-${this.sectionId}`);
+      this.emptySlotsContainer = this.section.querySelector(`#worriorworld-empty-slots-${this.sectionId}`);
+      this.originalTotal = this.section.querySelector(`#worriorworld-original-total-${this.sectionId}`);
+      this.offerTotal = this.section.querySelector(`#worriorworld-offer-total-${this.sectionId}`);
+      this.saveAmount = this.section.querySelector(`#worriorworld-save-${this.sectionId}`);
+      this.checkoutBtn = this.section.querySelector(`#bundle-checkout-btn-${this.sectionId}`);
+      this.gokwikCheckout = this.section.querySelector('.worriorworld-gokwik-checkout');
+      this.partyPopper = this.section.querySelector(`#worriorworld-party-popper-${this.sectionId}`);
+      this.offerInfo = this.section.querySelector(`#worriorworld-offer-info-${this.sectionId}`);
+      this.productsGrid = this.section.querySelector(`#worriorworld-products-${this.sectionId}`);
+      this.infiniteLoader = this.section.querySelector(`#worriorworld-infinite-loader-${this.sectionId}`);
+      this.addBoxToCartBtn = this.section.querySelector(`#worriorworld-add-box-to-cart-${this.sectionId}`);
+      
+      // Infinite scroll variables
+      this.currentPage = 2; // Start from page 2 since page 1 (first 20) are already loaded
+      this.productsPerPage = 20; // Load 20 products per scroll
+      this.isLoading = false;
+      this.loadedProductIds = new Set(); // Track loaded product IDs to avoid duplicates
+      this.useJSONAPI = true; // Use JSON API from start (more reliable than HTML pagination)
+      
+      // Get total products count
+      const totalProducts = parseInt(this.productsGrid.dataset.totalProducts) || 0;
+      const initialCount = parseInt(this.productsGrid.dataset.initialCount) || 20;
+      // Enable infinite scroll if there are more products than initially loaded
+      this.hasMoreProducts = totalProducts > initialCount;
+      
+      // Store IDs of initially loaded products
+      this.productsGrid.querySelectorAll('.worriorworld-product-card').forEach(card => {
+        const productId = card.getAttribute('data-product-id');
+        if (productId) {
+          this.loadedProductIds.add(productId);
+        }
+      });
+      
+      console.log('Initial products loaded:', this.loadedProductIds.size);
+      
+      // Get collection handle - try multiple methods (prioritize data attribute)
+      this.collectionHandle = '';
+      
+      // Method 1: From data attribute on section (most reliable)
+      if (this.section && this.section.dataset.collectionHandle) {
+        this.collectionHandle = this.section.dataset.collectionHandle;
+      }
+      
+      // Method 2: From global collection object
+      if (!this.collectionHandle && typeof collection !== 'undefined' && collection && collection.handle) {
+        this.collectionHandle = collection.handle;
+      }
+      
+      // Method 3: From URL
+      if (!this.collectionHandle) {
+        const collectionUrl = window.location.pathname;
+        const collectionMatch = collectionUrl.match(/\/collections\/([^\/\?]+)/);
+        if (collectionMatch) {
+          this.collectionHandle = collectionMatch[1];
+        }
+      }
+      
+      // Method 4: Try to extract from current page context
+      if (!this.collectionHandle) {
+        const metaCollection = document.querySelector('meta[property="product:collection"]');
+        if (metaCollection && metaCollection.content) {
+          this.collectionHandle = metaCollection.content;
+        }
+      }
+      
+      console.log('Infinite scroll setup:', {
+        collectionHandle: this.collectionHandle,
+        totalProducts: totalProducts,
+        hasMore: this.hasMoreProducts
+      });
+      
+      // Flag to track if cart has been cleared on this page load
+      this.cartClearedOnLoad = false;
+      
+      // Clear cart when page loads (only once)
+      this.clearCartOnLoad();
+      
+      // Quick view elements
+      this.quickViewModal = this.section.querySelector(`#worriorworld-quick-view-modal-${this.sectionId}`);
+      this.quickViewButtons = this.section.querySelectorAll('.worriorworld-quick-view-btn');
+      this.currentProduct = null;
+      this.currentVariant = null;
+      this.productImages = [];
+      this.currentImageIndex = 0;
+
+      // Variant drawer elements
+      this.variantDrawer = this.section.querySelector(`#worriorworld-variant-drawer-${this.sectionId}`);
+      this.variantDrawerBody = this.section.querySelector(`#variant-drawer-body-${this.sectionId}`);
+      this.variantDrawerTitle = this.section.querySelector(`#variant-drawer-title-${this.sectionId}`);
+      this.variantDrawerPrice = this.section.querySelector(`#variant-drawer-price-${this.sectionId}`);
+      this.variantDrawerAddBtn = this.section.querySelector(`#variant-drawer-add-btn-${this.sectionId}`);
+      this.currentProductForVariant = null;
+      this.selectedVariant = null;
+
+      // Event listeners for variant buttons (if any exist from old code)
+      this.chooseVariantButtons = this.section.querySelectorAll('.worriorworld-choose-variant-btn');
+      this.chooseVariantButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation(); // Prevent card click
+          this.handleChooseVariantClick(e);
+        });
+      });
+
+      // Variant drawer close listeners
+      if (this.variantDrawer) {
+        const closeBtn = this.variantDrawer.querySelector('.worriorworld-variant-drawer-close');
+        const overlay = this.variantDrawer.querySelector('.worriorworld-variant-drawer-overlay');
+        
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => this.closeVariantDrawer());
+        }
+        
+        if (overlay) {
+          overlay.addEventListener('click', () => this.closeVariantDrawer());
+        }
+        
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !this.variantDrawer.hasAttribute('hidden')) {
+            this.closeVariantDrawer();
+          }
+        });
+
+        // Add to box button in drawer
+        if (this.variantDrawerAddBtn) {
+          this.variantDrawerAddBtn.addEventListener('click', () => this.addSelectedVariantToCart());
+        }
+      }
+
+      // Keep old add buttons for backward compatibility (if any exist)
+      this.addButtons = this.section.querySelectorAll('.worriorworld-add-btn');
+      this.addButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => this.handleAddButtonClick(e));
+      });
+
+      // Add Box to Cart button listener
+      if (this.addBoxToCartBtn) {
+        this.addBoxToCartBtn.addEventListener('click', () => this.addBoxToCart());
+      }
+
+      if (this.checkoutBtn) {
+        this.checkoutBtn.addEventListener('click', (e) => this.handleGoKwikCheckoutClick(e));
+      }
+      this.updateGoKwikButtonState();
+      
+      // Quick view button listeners
+      this.quickViewButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const productHandle = btn.dataset.productHandle;
+          this.openQuickView(productHandle);
+        });
+      });
+      
+      // Make entire product card clickable to open quick view
+      this.setupProductCardClicks();
+      
+      // Quick view modal close listeners
+      if (this.quickViewModal) {
+        const closeBtn = this.quickViewModal.querySelector('.worriorworld-quick-view-close');
+        const overlay = this.quickViewModal.querySelector('.worriorworld-quick-view-overlay');
+        
+        if (closeBtn) {
+          closeBtn.addEventListener('click', () => this.closeQuickView());
+        }
+        
+        if (overlay) {
+          overlay.addEventListener('click', () => this.closeQuickView());
+        }
+        
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !this.quickViewModal.hasAttribute('hidden')) {
+            this.closeQuickView();
+          }
+        });
+      }
+
+      // Initial UI update
+      this.updateUI();
+      
+      // Start cart monitoring to keep cart in sync
+      this.startCartMonitoring();
+      
+      // Initialize infinite scroll - will load more products as user scrolls
+      this.initInfiniteScroll();
+    }
+
+    // Don't clear cart on load - let users keep their cart items
+    async clearCartOnLoad() {
+      // Cart clearing disabled - users can add products to box without clearing existing cart
+      this.cartClearedOnLoad = true;
+    }
+
+    // Cart monitoring disabled - products are added to box first, then manually added to cart
+    startCartMonitoring() {
+      // Cart monitoring is disabled since we're using a two-step process:
+      // 1. Add products to box (selectedProducts array)
+      // 2. User clicks "Add Box to Cart" to add all products to cart
+      // This prevents automatic cart syncing that could interfere with the workflow
+    }
+
+    handleAddButtonClick(e) {
+      e.preventDefault();
+      const btn = e.target.closest('.worriorworld-add-btn');
+      
+      // Check if button is disabled
+      if (btn.disabled) {
+        return;
+      }
+
+      const productCard = btn.closest('.worriorworld-product-card');
+      const productId = btn.dataset.productId;
+      const variantId = btn.dataset.variantId;
+      let price = parseInt(btn.dataset.price) || 0;
+      const title = btn.dataset.title;
+      const image = btn.dataset.image;
+      const productHandle = btn.dataset.productHandle;
+
+      // If variant ID is missing, open variant drawer instead
+      if (!variantId) {
+        console.warn('Variant ID missing, falling back to variant drawer');
+        if (productHandle) {
+          this.openVariantDrawer(productHandle, productId);
+        } else {
+          alert('Product information is missing. Please refresh the page.');
+        }
+        return;
+      }
+
+      // Validate remaining data
+      if (!productId) {
+        console.error('Missing product data:', { productId, variantId, btn });
+        alert('Product information is missing. Please refresh the page.');
+        return;
+      }
+
+      const displayPricePerProduct = price > 999 ? Math.round(price / 100) : price;
+
+
+
+      const productData = {
+        id: String(productId),
+        variantId: String(variantId),
+        price: displayPricePerProduct,
+        title: title || 'Product',
+        image: image || ''
+      };
+
+      // Check if product is already selected
+      const isAlreadySelected = this.selectedProducts.some(p => 
+        String(p.id) === String(productData.id) && 
+        String(p.variantId) === String(productData.variantId)
+      );
+
+      // If already selected, remove it
+      if (isAlreadySelected) {
+        this.removeProduct(productData);
+        return;
+      }
+
+      // Check maximum limit only if products haven't been added to cart yet
+      // After adding to cart, allow users to add more products
+      if (!this.productsAddedToCart && this.selectedProducts.length >= this.maxProducts) {
+        alert(`You can add up to ${this.maxProducts} products for the bundle offer. Add these to cart first, then you can add more products.`);
+        return;
+      }
+
+      // Add product to box (not cart yet)
+      this.addProductToBox(productData, btn, productCard);
+    }
+
+    async addProductToBox(productData, btn, productCard) {
+      try {
+        // Validate variant ID
+        if (!productData.variantId || productData.variantId === 'undefined' || productData.variantId === 'null') {
+          throw new Error('Invalid product variant ID');
+        }
+
+        console.log('Adding product to box:', {
+          variantId: productData.variantId,
+          productId: productData.id,
+          title: productData.title
+        });
+
+        // Disable button during add
+        btn.disabled = true;
+        const btnTextEl = btn.querySelector('.worriorworld-btn-text');
+        const originalText = btnTextEl ? btnTextEl.textContent : 'ADD TO BOX';
+        if (btnTextEl) {
+          btnTextEl.textContent = 'ADDING...';
+        }
+
+        // Add to selected products (box) - NOT to cart yet
+        this.selectedProducts.push(productData);
+        
+        // Update button state with animation
+        const btnText = btn.querySelector('.worriorworld-btn-text');
+        if (btnText) {
+          btnText.textContent = 'ADDED';
+        }
+        btn.classList.add('added');
+        if (productCard) {
+          productCard.classList.add('selected');
+          
+          // Add product card animation
+          productCard.style.animation = 'productCardAdded 0.6s ease-out';
+          setTimeout(() => {
+            productCard.style.animation = '';
+          }, 600);
+        }
+
+        // Update UI
+        this.updateUI();
+
+        // Trigger party popper when offer product count is reached
+        if (this.selectedProducts.length === this.offerProducts) {
+          this.triggerPartyPopper();
+        }
+        
+        // Close quick view if product was added from quick view modal
+        const isFromQuickView = btn && (
+          btn.closest('.worriorworld-quick-view-modal') || 
+          btn.dataset.fromQuickView === 'true' ||
+          btn.classList.contains('worriorworld-quick-view-add-btn')
+        );
+        
+        if (isFromQuickView) {
+          setTimeout(() => {
+            this.closeQuickView();
+          }, 300); // Small delay to show the success state
+        }
+
+      } catch (error) {
+        console.error('Error adding product to cart:', error);
+        console.error('Product data:', productData);
+        console.error('Error stack:', error.stack);
+        
+        // Show more specific error message
+        let errorMessage = 'Error adding product to cart. Please try again.';
+        if (error.message) {
+          errorMessage = error.message;
+          // Make error messages more user-friendly
+          if (errorMessage.toLowerCase().includes('sold out') || errorMessage.toLowerCase().includes('unavailable')) {
+            errorMessage = 'This product is currently unavailable.';
+          } else if (errorMessage.toLowerCase().includes('variant')) {
+            errorMessage = 'Product variant not available. Please try another product.';
+          }
+        }
+        
+        alert(errorMessage);
+        btn.disabled = false;
+        const btnText = btn.querySelector('.worriorworld-btn-text');
+        if (btnText) {
+          btnText.textContent = originalText;
+        }
+      }
+    }
+
+    async addBoxToCart(openCart = true) {
+      if (this.selectedProducts.length === 0) {
+        alert('Please add products to the box first.');
+        return;
+      }
+
+      try {
+        this.isAddingProduct = true;
+        const addBoxBtn = this.section.querySelector(`#worriorworld-add-box-to-cart-${this.sectionId}`);
+        if (addBoxBtn) {
+          addBoxBtn.disabled = true;
+          addBoxBtn.textContent = 'ADDING TO CART...';
+        }
+
+        // Validate all products before adding
+        const validProducts = this.selectedProducts.filter(product => {
+          if (!product.variantId || product.variantId === 'undefined' || product.variantId === 'null') {
+            console.warn('Invalid variant ID for product:', product.title);
+            return false;
+          }
+          return true;
+        });
+
+        if (validProducts.length === 0) {
+          throw new Error('No valid products to add to cart. Please check product selections.');
+        }
+
+        // Use Shopify's bulk add API - add all items in one request
+        const items = validProducts.map(product => ({
+          id: String(product.variantId),
+          quantity: 1
+        }));
+
+        console.log('Adding products to cart:', {
+          count: items.length,
+          items: items.map(item => ({ variantId: item.id }))
+        });
+
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: items
+          })
+        });
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          console.error('Failed to parse JSON response:', jsonError);
+          const text = await response.text();
+          console.error('Response text:', text);
+          throw new Error('Invalid response from server. Please try again.');
+        }
+
+        console.log('Cart add response:', data);
+
+        // Check for errors in response
+        if (!response.ok || data.status === 422 || data.error || data.message || data.description) {
+          const errorMessage = data.message || data.description || data.error || 'Failed to add products to cart';
+          console.error('Cart add error details:', {
+            status: response.status,
+            statusText: response.statusText,
+            data: data
+          });
+          
+          // If bulk add fails, try adding products one by one as fallback
+          console.log('Bulk add failed, trying individual adds...');
+          return await this.addProductsSequentially(validProducts, addBoxBtn, openCart);
+        }
+
+        // Verify items were added
+        if (data.items && data.items.length > 0) {
+          console.log(`Successfully added ${data.items.length} products to cart`);
+        } else {
+          console.warn('Cart add returned but no items in response');
+        }
+
+        // Show success message and change color permanently
+        if (addBoxBtn) {
+          addBoxBtn.textContent = `ADDED ${validProducts.length} PRODUCTS`;
+          addBoxBtn.style.background = '#4caf50';
+          addBoxBtn.classList.add('added-to-cart');
+          addBoxBtn.disabled = false;
+        }
+
+        // Mark that products have been added to cart
+        this.productsAddedToCart = true;
+
+        // Reset bundle box selections since items are now in cart
+        this.resetBundleSelection();
+
+        // Dispatch cart updated event
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+
+        // Click on cart icon to open cart drawer
+        if (openCart) {
+          setTimeout(() => {
+            this.clickCartIcon();
+          }, 500);
+        }
+
+      } catch (error) {
+        console.error('Error adding box to cart:', error);
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack,
+          selectedProducts: this.selectedProducts
+        });
+        
+        let errorMessage = 'Error adding products to cart. Please try again.';
+        if (error.message) {
+          errorMessage = error.message;
+        }
+        
+        alert(errorMessage);
+        const addBoxBtn = this.section.querySelector(`#worriorworld-add-box-to-cart-${this.sectionId}`);
+        if (addBoxBtn) {
+          addBoxBtn.disabled = false;
+          addBoxBtn.textContent = 'ADD BOX TO CART';
+        }
+      } finally {
+        this.isAddingProduct = false;
+      }
+    }
+
+    async addProductsSequentially(products, addBoxBtn, openCart = true) {
+      const addedProducts = [];
+      const failedProducts = [];
+
+      for (let i = 0; i < products.length; i++) {
+        const product = products[i];
+        
+        try {
+          if (addBoxBtn) {
+            addBoxBtn.textContent = `ADDING ${i + 1}/${products.length}...`;
+          }
+
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: String(product.variantId),
+              quantity: 1
+            })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok || data.status === 422 || data.error || data.message || data.description) {
+            const errorMsg = data.message || data.description || data.error || 'Failed to add product';
+            console.error(`Failed to add product ${product.title}:`, errorMsg);
+            failedProducts.push({ product, error: errorMsg });
+          } else {
+            addedProducts.push(product);
+            console.log(`Successfully added: ${product.title}`);
+          }
+
+          // Small delay between requests to avoid rate limiting
+          if (i < products.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+          }
+
+        } catch (error) {
+          console.error(`Error adding product ${product.title}:`, error);
+          failedProducts.push({ product, error: error.message });
+        }
+      }
+
+        // Show results
+        if (addBoxBtn) {
+          if (failedProducts.length === 0) {
+            addBoxBtn.textContent = `ADDED ${addedProducts.length} PRODUCTS`;
+            addBoxBtn.style.background = '#4caf50';
+            addBoxBtn.classList.add('added-to-cart');
+            addBoxBtn.disabled = false;
+          } else if (addedProducts.length > 0) {
+            addBoxBtn.textContent = `ADDED ${addedProducts.length}/${products.length}`;
+            addBoxBtn.style.background = '#ff9800';
+            alert(`Added ${addedProducts.length} products. ${failedProducts.length} failed. Please try adding failed products again.`);
+            addBoxBtn.disabled = false;
+          } else {
+            addBoxBtn.textContent = 'ADD BOX TO CART';
+            addBoxBtn.style.background = '';
+            addBoxBtn.disabled = false;
+            throw new Error(`Failed to add all products. ${failedProducts.length} products failed.`);
+          }
+        }
+
+        // Mark that products have been added to cart
+        this.productsAddedToCart = true;
+
+        // If at least one product was added, reset bundle box selections
+        if (addedProducts.length > 0) {
+          this.resetBundleSelection();
+        }
+
+        // Dispatch cart updated event
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+
+        // Click on cart icon if products were added successfully
+        if (addedProducts.length > 0 && openCart) {
+          setTimeout(() => {
+            this.clickCartIcon();
+          }, 500);
+        }
+
+      if (failedProducts.length > 0) {
+        console.warn('Failed products:', failedProducts);
+      }
+    }
+
+    removeProduct(productData) {
+      // Find and remove from selected products (box)
+      const index = this.selectedProducts.findIndex(p => 
+        String(p.id) === String(productData.id) && 
+        String(p.variantId) === String(productData.variantId)
+      );
+
+      if (index === -1) {
+        return;
+      }
+
+      // Remove from box (selectedProducts array)
+      this.selectedProducts.splice(index, 1);
+      
+      // Update button state
+      const btn = this.section.querySelector(`[data-variant-id="${productData.variantId}"]`);
+      if (btn) {
+        const btnText = btn.querySelector('.worriorworld-btn-text');
+        if (btnText) {
+          btnText.textContent = 'ADD TO BOX';
+        }
+        btn.classList.remove('added');
+        btn.disabled = false;
+      }
+
+      // Update product card
+      const productCard = this.section.querySelector(`[data-product-id="${productData.id}"]`);
+      if (productCard) {
+        productCard.classList.remove('selected');
+      }
+
+      // Update UI
+      this.updateUI();
+    }
+
+    updateUI() {
+      // Update bottom bar visibility
+      if (this.selectedProducts.length > 0) {
+        this.bottomBar.classList.add('visible');
+      } else {
+        this.bottomBar.classList.remove('visible');
+      }
+
+      // Update selected products display
+      this.updateSelectedProductsDisplay();
+
+      // Update totals
+      this.updateTotals();
+
+      // Update button states
+      this.updateButtonStates();
+
+      // Update GoKwik checkout button state
+      this.updateGoKwikButtonState();
+      
+      // Update offer info message
+      this.updateOfferInfo();
+
+      // Update Add Box to Cart button visibility
+      this.updateAddBoxToCartButton();
+    }
+
+    updateAddBoxToCartButton() {
+      if (!this.addBoxToCartBtn) return;
+      
+      if (this.selectedProducts.length > 0) {
+        this.addBoxToCartBtn.style.display = 'block';
+      } else {
+        this.addBoxToCartBtn.style.display = 'none';
+      }
+    }
+    
+    updateOfferInfo() {
+      if (!this.offerInfo) return;
+      
+      const selectedCount = this.selectedProducts.length;
+      const requiredCount = this.offerProducts;
+      const remaining = requiredCount - selectedCount;
+      
+      if (selectedCount === 0) {
+        this.offerInfo.textContent = `Add ${requiredCount} product${requiredCount > 1 ? 's' : ''} to avail the offer`;
+        this.offerInfo.style.display = 'block';
+      } else if (selectedCount < requiredCount) {
+        if (remaining === 1) {
+          this.offerInfo.textContent = 'Add 1 more product to avail the offer';
+        } else {
+          this.offerInfo.textContent = `Add ${remaining} more product${remaining > 1 ? 's' : ''} to avail the offer`;
+        }
+        this.offerInfo.style.display = 'block';
+      } else {
+        // Offer is available, hide the message
+        this.offerInfo.style.display = 'none';
+      }
+    }
+
+    updateSelectedProductsDisplay() {
+      // Clear existing items
+      this.selectedItemsContainer.innerHTML = '';
+
+      // Show selected products
+      this.selectedProducts.forEach((product, index) => {
+        const item = document.createElement('div');
+        item.className = 'worriorworld-selected-item';
+        // Use variant image if available (stored in product.image)
+        const displayImage = product.image || '';
+        item.innerHTML = `
+          <img src="${displayImage}" alt="${product.title}" loading="lazy">
+          <span class="worriorworld-selected-item-remove" data-index="${index}">×</span>
+        `;
+        this.selectedItemsContainer.appendChild(item);
+
+        // Add remove event listener
+        const removeBtn = item.querySelector('.worriorworld-selected-item-remove');
+        removeBtn.addEventListener('click', () => {
+          this.removeProduct(product);
+        });
+      });
+
+      // Update empty slots
+      const remainingSlots = this.maxProducts - this.selectedProducts.length;
+      this.emptySlotsContainer.innerHTML = '';
+      if (remainingSlots > 0) {
+        const messageSlot = document.createElement('div');
+        messageSlot.className = 'worriorworld-empty-slot-message';
+        messageSlot.textContent = remainingSlots === 1 ? 'Add 1 more' : `Add ${remainingSlots} more`;
+        this.emptySlotsContainer.appendChild(messageSlot);
+      }
+      for (let i = 0; i < remainingSlots; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'worriorworld-empty-slot';
+        slot.innerHTML = '<span class="worriorworld-plus-icon">+</span>';
+        this.emptySlotsContainer.appendChild(slot);
+      }
+    }
+
+    resetBundleSelection() {
+      // Clear selected products array
+      this.selectedProducts = [];
+
+      // Re-enable bundle limit for next selection
+      this.productsAddedToCart = false;
+
+      // Reset all product cards and buttons in this section
+      const productCards = this.section.querySelectorAll('.worriorworld-product-card');
+      productCards.forEach(card => {
+        card.classList.remove('selected');
+      });
+
+      const addButtons = this.section.querySelectorAll('.worriorworld-add-btn');
+      addButtons.forEach(btn => {
+        btn.classList.remove('added', 'disabled');
+        btn.disabled = false;
+        const textEl = btn.querySelector('.worriorworld-btn-text');
+        if (textEl) {
+          textEl.textContent = 'ADD TO BOX';
+        }
+      });
+
+      // Update UI (bottom bar, totals, empty slots, etc.)
+      this.updateUI();
+    }
+    updateTotals() {
+      // Subtotal uses the selected products' actual prices.
+      const originalTotal = this.selectedProducts.reduce((sum, product) => sum + product.price, 0);
+      
+      if (this.selectedProducts.length === this.offerProducts) {
+        const savings = originalTotal - this.bundlePrice;
+        this.originalTotal.textContent = this.formatPrice(originalTotal);
+        this.originalTotal.style.display = 'inline-block';
+        this.offerTotal.textContent = this.formatPrice(this.bundlePrice);
+        this.saveAmount.textContent = `Save: ${this.formatPrice(savings)}`;
+        this.saveAmount.style.display = 'block';
+      } else {
+        this.originalTotal.style.display = 'none';
+        this.offerTotal.textContent = this.formatPrice(originalTotal);
+        const potentialSavings = originalTotal - this.bundlePrice;
+        if (potentialSavings > 0) {
+          this.saveAmount.textContent = `Save: ${this.formatPrice(potentialSavings)} (at ${this.offerProducts} items)`;
+        } else {
+          this.saveAmount.textContent = 'Save: Rs. 0';
+        }
+      }
+    }
+
+    updateButtonStates() {
+      // Only enforce limit if products haven't been added to cart yet
+      const isLimitReached = !this.productsAddedToCart && this.selectedProducts.length >= this.maxProducts;
+
+      this.addButtons.forEach(btn => {
+        const productId = btn.dataset.productId;
+        const variantId = btn.dataset.variantId;
+        
+        // Check if this product is already selected
+        const isSelected = this.selectedProducts.some(p => 
+          String(p.id) === String(productId) && 
+          String(p.variantId) === String(variantId)
+        );
+
+        if (isLimitReached && !isSelected) {
+          // Disable button if limit reached and product not selected (only before cart add)
+          btn.disabled = true;
+          btn.classList.add('disabled');
+        } else if (!isSelected) {
+          // Enable button if product not selected
+          btn.disabled = false;
+          btn.classList.remove('disabled');
+        }
+      });
+    }
+
+    triggerPartyPopper() {
+      // Create party popper animation
+      const popper = this.partyPopper;
+      popper.classList.add('active');
+
+      // Create confetti particles
+      const colors = ['#ff6b35', '#ffd700', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7'];
+      const particleCount = 50;
+
+      for (let i = 0; i < particleCount; i++) {
+        setTimeout(() => {
+          const particle = document.createElement('div');
+          particle.className = 'worriorworld-confetti-particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          particle.style.animationDelay = Math.random() * 0.5 + 's';
+          particle.style.animationDuration = (Math.random() * 1 + 1.5) + 's';
+          popper.appendChild(particle);
+
+          // Remove particle after animation
+          setTimeout(() => {
+            if (particle.parentNode) {
+              particle.parentNode.removeChild(particle);
+            }
+          }, 3000);
+        }, i * 20);
+      }
+
+      // Remove active class after animation
+      setTimeout(() => {
+        popper.classList.remove('active');
+        popper.innerHTML = '';
+      }, 3000);
+    }
+
+    formatPrice(rupees) {
+      return '₹' + rupees.toFixed(0);
+    }
+
+    async handleGoKwikCheckoutClick(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      if (!this.checkoutBtn || this.checkoutBtn.disabled) {
+        alert('GoKwik checkout is not available right now. Please complete your bundle first.');
+        return;
+      }
+
+      if (this.selectedProducts.length !== this.offerProducts) {
+        alert(`Please select ${this.offerProducts} products to proceed.`);
+        return;
+      }
+
+      if (!this.productsAddedToCart) {
+        try {
+          await this.addBoxToCart(false);
+          await new Promise(resolve => setTimeout(resolve, 500));
+          this.enableGoKwikButton();
+        } catch (error) {
+          console.error('Error adding products to cart before GoKwik checkout:', error);
+          alert('Please add products to cart first.');
+          return;
+        }
+      }
+
+      if (typeof onCheckoutClick === 'function') {
+        onCheckoutClick(this.checkoutBtn);
+      } else {
+        window.location.href = '/checkout';
+      }
+    }
+
+    // Quick View Methods
+    openQuickView(productHandle) {
+      if (!this.quickViewModal || !productHandle) {
+        console.error('Modal or product handle missing');
+        return;
+      }
+
+      // Show modal
+      this.quickViewModal.removeAttribute('hidden');
+      this.quickViewModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      // Fetch product data
+      const productUrl = '/products/' + encodeURIComponent(productHandle) + '.js';
+      
+      fetch(productUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Product not found');
+          }
+          return response.json();
+        })
+        .then(product => {
+          this.currentProduct = product;
+          this.currentVariant = product.variants && product.variants.length > 0 
+            ? product.variants[0] 
+            : null;
+          this.displayQuickViewProduct(product);
+        })
+        .catch(error => {
+          console.error('Error loading product:', error);
+          alert('Error loading product. Please try again.');
+          this.closeQuickView();
+        });
+    }
+
+    displayQuickViewProduct(product) {
+      if (!this.currentVariant) {
+        alert('Product variant not available.');
+        this.closeQuickView();
+        return;
+      }
+
+      // Get product images
+      this.productImages = [];
+      if (product.images && product.images.length > 0) {
+        this.productImages = product.images.map(img => 
+          typeof img === 'string' ? img : (img.src || img)
+        );
+      } else if (product.featured_image) {
+        const featImg = typeof product.featured_image === 'string' 
+          ? product.featured_image 
+          : (product.featured_image.src || product.featured_image);
+        this.productImages = [featImg];
+      }
+      this.currentImageIndex = 0;
+
+      // Update title
+      const titleEl = this.quickViewModal.querySelector(`#quick-view-title-${this.sectionId}`);
+      if (titleEl) {
+        titleEl.textContent = product.title;
+      }
+
+      // Update price
+      const priceWrapper = this.quickViewModal.querySelector(`#quick-view-price-${this.sectionId}`);
+      if (priceWrapper) {
+        const price = this.currentVariant.price / 100;
+        const comparePrice = this.currentVariant.compare_at_price 
+          ? this.currentVariant.compare_at_price / 100 
+          : null;
+        
+        let priceHtml = `<span class="worriorworld-quick-view-price">₹${price.toFixed(0)}</span>`;
+        if (comparePrice && comparePrice > price) {
+          priceHtml = `<span class="worriorworld-quick-view-compare-price">₹${comparePrice.toFixed(0)}</span> ${priceHtml}`;
+        }
+        priceWrapper.innerHTML = priceHtml;
+      }
+
+      // Update description
+      const descEl = this.quickViewModal.querySelector(`#quick-view-description-${this.sectionId}`);
+      if (descEl) {
+        if (product.description) {
+          // Strip HTML and limit length
+          const text = product.description.replace(/<[^>]*>/g, '').substring(0, 200);
+          descEl.textContent = text + (product.description.length > 200 ? '...' : '');
+        } else {
+          descEl.textContent = 'No description available.';
+        }
+      }
+
+      // Update images
+      this.updateQuickViewImages();
+
+      // Render variant options
+      this.renderQuickViewVariants(product);
+
+      // Update add button (will be updated after variants are rendered)
+      this.updateQuickViewAddButton();
+    }
+
+    updateQuickViewImages() {
+      const mainImg = this.quickViewModal.querySelector(`#quick-view-main-img-${this.sectionId}`);
+      const thumbnails = this.quickViewModal.querySelector(`#quick-view-thumbnails-${this.sectionId}`);
+      const prevBtn = this.quickViewModal.querySelector('.worriorworld-quick-view-prev');
+      const nextBtn = this.quickViewModal.querySelector('.worriorworld-quick-view-next');
+
+      if (!mainImg || !thumbnails) return;
+
+      // Update main image
+      if (this.productImages.length > 0) {
+        mainImg.src = this.productImages[this.currentImageIndex];
+        mainImg.alt = this.currentProduct.title;
+      }
+
+      // Update thumbnails
+      thumbnails.innerHTML = '';
+      this.productImages.forEach((img, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'worriorworld-quick-view-thumbnail' + 
+          (index === this.currentImageIndex ? ' active' : '');
+        thumb.innerHTML = `<img src="${img}" alt="Thumbnail ${index + 1}" loading="lazy">`;
+        thumb.addEventListener('click', () => {
+          this.currentImageIndex = index;
+          this.updateQuickViewImages();
+        });
+        thumbnails.appendChild(thumb);
+      });
+
+      // Update navigation buttons
+      if (prevBtn) {
+        prevBtn.style.display = this.productImages.length > 1 ? 'flex' : 'none';
+        prevBtn.onclick = () => {
+          this.currentImageIndex = (this.currentImageIndex - 1 + this.productImages.length) % this.productImages.length;
+          this.updateQuickViewImages();
+        };
+      }
+
+      if (nextBtn) {
+        nextBtn.style.display = this.productImages.length > 1 ? 'flex' : 'none';
+        nextBtn.onclick = () => {
+          this.currentImageIndex = (this.currentImageIndex + 1) % this.productImages.length;
+          this.updateQuickViewImages();
+        };
+      }
+    }
+
+    updateQuickViewAddButton() {
+      if (!this.currentProduct || !this.currentVariant) return;
+      
+      const addBtn = this.quickViewModal.querySelector(`#quick-view-add-btn-${this.sectionId}`);
+      if (addBtn) {
+        addBtn.dataset.productId = this.currentProduct.id;
+        addBtn.dataset.variantId = this.currentVariant.id;
+        addBtn.dataset.price = this.currentVariant.price; // Keep in cents for data attribute
+        addBtn.dataset.title = this.currentProduct.title;
+        
+        // Get variant image
+        let variantImage = '';
+        if (this.currentVariant.featured_image) {
+          variantImage = typeof this.currentVariant.featured_image === 'string' 
+            ? this.currentVariant.featured_image 
+            : (this.currentVariant.featured_image.src || this.currentVariant.featured_image);
+        } else if (this.currentVariant.image) {
+          variantImage = typeof this.currentVariant.image === 'string'
+            ? this.currentVariant.image
+            : (this.currentVariant.image.src || this.currentVariant.image);
+        }
+        
+        if (!variantImage && this.productImages.length > 0) {
+          variantImage = this.productImages[0];
+        }
+        
+        addBtn.dataset.image = variantImage || '';
+        
+        // Check if already selected
+        const isSelected = this.selectedProducts.some(p => 
+          String(p.id) === String(this.currentProduct.id) && 
+          String(p.variantId) === String(this.currentVariant.id)
+        );
+        
+        addBtn.textContent = isSelected ? 'REMOVE FROM BOX' : 'ADD TO BOX';
+        addBtn.classList.toggle('selected', isSelected);
+        
+        // Add click listener if not already added
+        addBtn.onclick = (e) => {
+          e.preventDefault();
+          // Mark that this is from quick view
+          addBtn.dataset.fromQuickView = 'true';
+          // Use handleAddButtonClick which will call addProductToBox
+          this.handleAddButtonClick(e);
+          // Update button state after add/remove
+          setTimeout(() => {
+            this.updateQuickViewAddButton();
+          }, 100);
+        };
+      }
+    }
+
+    renderQuickViewVariants(product) {
+      const variantsContainer = this.quickViewModal.querySelector(`#quick-view-variants-${this.sectionId}`);
+      if (!variantsContainer) return;
+
+      // Hide if no variants or only default variant
+      if (!product.variants || product.variants.length <= 1 || !product.options || product.options.length === 0) {
+        variantsContainer.style.display = 'none';
+        return;
+      }
+
+      variantsContainer.style.display = 'block';
+      const options = product.options || [];
+      let html = '';
+
+      options.forEach((option, optionIndex) => {
+        const optionName = option.name || `Option ${optionIndex + 1}`;
+        const optionValues = option.values || [];
+        const isColorOption = optionName.toLowerCase().includes('color') || optionName.toLowerCase().includes('colour');
+        
+        html += `
+          <div class="worriorworld-quick-view-variant-group">
+            <label class="worriorworld-quick-view-variant-label">${optionName}</label>
+            <div class="worriorworld-quick-view-variant-values ${isColorOption ? 'color-options' : ''}" data-option-index="${optionIndex}">
+        `;
+
+        optionValues.forEach((value) => {
+          const isAvailable = this.isVariantAvailable(product.variants, optionIndex, value);
+          
+          // Skip out of stock variants
+          if (!isAvailable) return;
+          
+          // Find variant image for this option value
+          let variantImage = '';
+          if (isColorOption) {
+            const matchingVariant = product.variants.find(v => {
+              if (!v.available) return false;
+              return v.options && v.options[optionIndex] === value;
+            });
+            
+            if (matchingVariant) {
+              if (matchingVariant.featured_image) {
+                variantImage = typeof matchingVariant.featured_image === 'string' 
+                  ? matchingVariant.featured_image 
+                  : (matchingVariant.featured_image.src || matchingVariant.featured_image);
+              } else if (matchingVariant.image) {
+                variantImage = typeof matchingVariant.image === 'string'
+                  ? matchingVariant.image
+                  : (matchingVariant.image.src || matchingVariant.image);
+              }
+            }
+          }
+          
+          const isSelected = this.currentVariant && 
+            this.currentVariant.options && 
+            this.currentVariant.options[optionIndex] === value;
+          
+          const imageHtml = variantImage ? `<img src="${variantImage}" alt="${value}" class="quick-view-variant-image">` : '';
+          
+          html += `
+            <button 
+              type="button" 
+              class="worriorworld-quick-view-variant-btn ${isColorOption && variantImage ? 'with-image' : ''} ${isSelected ? 'selected' : ''}" 
+              data-option-index="${optionIndex}"
+              data-option-value="${value}"
+            >
+              ${imageHtml}
+              <span class="quick-view-variant-text">${value}</span>
+            </button>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+
+      variantsContainer.innerHTML = html;
+
+      // Add event listeners
+      const variantButtons = variantsContainer.querySelectorAll('.worriorworld-quick-view-variant-btn');
+      variantButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => this.handleQuickViewVariantClick(e, product));
+      });
+    }
+
+    handleQuickViewVariantClick(e, product) {
+      const btn = e.target.closest('.worriorworld-quick-view-variant-btn');
+      const optionIndex = parseInt(btn.dataset.optionIndex);
+      const optionValue = btn.dataset.optionValue;
+
+      // Update selected state
+      const optionGroup = btn.closest('.worriorworld-quick-view-variant-values');
+      optionGroup.querySelectorAll('.worriorworld-quick-view-variant-btn').forEach(b => {
+        b.classList.remove('selected');
+      });
+      btn.classList.add('selected');
+
+      // Find matching variant
+      const selectedOptions = [];
+      const optionGroups = this.quickViewModal.querySelectorAll('.worriorworld-quick-view-variant-values');
+      
+      optionGroups.forEach((group, index) => {
+        const selectedBtn = group.querySelector('.worriorworld-quick-view-variant-btn.selected');
+        if (selectedBtn) {
+          selectedOptions[index] = selectedBtn.dataset.optionValue;
+        }
+      });
+
+      // Find variant matching all selected options
+      const matchingVariant = product.variants.find(variant => {
+        if (!variant.available) return false;
+        if (!variant.options || variant.options.length !== selectedOptions.length) return false;
+        
+        return variant.options.every((opt, idx) => opt === selectedOptions[idx]);
+      });
+
+      if (matchingVariant) {
+        this.currentVariant = matchingVariant;
+        
+        // Update price
+        const priceWrapper = this.quickViewModal.querySelector(`#quick-view-price-${this.sectionId}`);
+        if (priceWrapper) {
+          const price = matchingVariant.price / 100;
+          const comparePrice = matchingVariant.compare_at_price 
+            ? matchingVariant.compare_at_price / 100 
+            : null;
+          
+          let priceHtml = `<span class="worriorworld-quick-view-price">₹${price.toFixed(0)}</span>`;
+          if (comparePrice && comparePrice > price) {
+            priceHtml = `<span class="worriorworld-quick-view-compare-price">₹${comparePrice.toFixed(0)}</span> ${priceHtml}`;
+          }
+          priceWrapper.innerHTML = priceHtml;
+        }
+
+        // Update images if variant has specific images
+        if (matchingVariant.featured_image) {
+          const variantImg = typeof matchingVariant.featured_image === 'string' 
+            ? matchingVariant.featured_image 
+            : (matchingVariant.featured_image.src || matchingVariant.featured_image);
+          
+          // Update main image
+          const mainImg = this.quickViewModal.querySelector(`#quick-view-main-img-${this.sectionId}`);
+          if (mainImg) {
+            mainImg.src = variantImg;
+            this.currentImageIndex = 0;
+            this.productImages = [variantImg];
+            this.updateQuickViewImages();
+          }
+        }
+
+        // Update add button
+        this.updateQuickViewAddButton();
+      }
+    }
+
+    closeQuickView() {
+      if (this.quickViewModal) {
+        this.quickViewModal.setAttribute('hidden', '');
+        this.quickViewModal.classList.remove('active');
+        document.body.style.overflow = '';
+        this.currentProduct = null;
+        this.currentVariant = null;
+        this.productImages = [];
+        this.currentImageIndex = 0;
+      }
+    }
+
+    enableGoKwikButton() {
+      if (!this.checkoutBtn) return;
+
+      this.checkoutBtn.disabled = false;
+      this.checkoutBtn.style.pointerEvents = 'auto';
+      this.checkoutBtn.style.opacity = '1';
+      this.checkoutBtn.classList.add('ready');
+      this.checkoutBtn.setAttribute('aria-disabled', 'false');
+    }
+
+    disableGoKwikButton() {
+      if (!this.checkoutBtn) return;
+
+      this.checkoutBtn.disabled = true;
+      this.checkoutBtn.style.pointerEvents = 'none';
+      this.checkoutBtn.style.opacity = '0.65';
+      this.checkoutBtn.classList.remove('ready');
+      this.checkoutBtn.setAttribute('aria-disabled', 'true');
+    }
+
+    updateGoKwikButtonState() {
+      if (this.selectedProducts.length === this.offerProducts) {
+        this.enableGoKwikButton();
+      } else {
+        this.disableGoKwikButton();
+      }
+    }
+
+    clickCartIcon() {
+      // Try to find and click the cart icon
+      try {
+        // Method 1: Try the specific cart icon ID from user's HTML
+        const cartIcon = document.querySelector('#cart-icon-bubble');
+        if (cartIcon) {
+          cartIcon.click();
+          console.log('Cart icon clicked via ID');
+          return;
+        }
+
+        // Method 2: Try class selector
+        const cartIconByClass = document.querySelector('.header__icon--cart, .header__icon.header__icon--cart');
+        if (cartIconByClass) {
+          cartIconByClass.click();
+          console.log('Cart icon clicked via class');
+          return;
+        }
+
+        // Method 3: Try Fastrr cart drawer methods
+        this.openCartDrawer();
+
+      } catch (error) {
+        console.error('Error clicking cart icon:', error);
+        // Fallback to cart drawer methods
+        this.openCartDrawer();
+      }
+    }
+
+    openCartDrawer() {
+      // Try multiple methods to open Fastrr cart drawer
+      try {
+        // Method 1: Trigger Fastrr cart drawer via custom event
+        const cartDrawerEvent = new CustomEvent('fastrr:open-cart', { bubbles: true });
+        document.dispatchEvent(cartDrawerEvent);
+        
+        // Method 2: Try to find and click Fastrr cart icon/button
+        const fastrrCartBtn = document.querySelector('[data-fastrr-cart], .fastrr-cart-toggle, [aria-label*="cart" i], .cart-drawer-toggle');
+        if (fastrrCartBtn) {
+          fastrrCartBtn.click();
+          return;
+        }
+
+        // Method 3: Try Shiprocket/Fastrr specific selectors
+        const shiprocketCartBtn = document.querySelector('.shiprocket-cart-toggle, [data-shiprocket-cart], .sr-cart-toggle');
+        if (shiprocketCartBtn) {
+          shiprocketCartBtn.click();
+          return;
+        }
+
+        // Method 4: Trigger via window events (common pattern for cart drawers)
+        if (typeof window.fastrr !== 'undefined' && window.fastrr.openCart) {
+          window.fastrr.openCart();
+          return;
+        }
+
+        // Method 5: Try Shopify cart drawer if available
+        const shopifyCartBtn = document.querySelector('[aria-controls*="cart"], [data-cart-drawer-toggle]');
+        if (shopifyCartBtn) {
+          shopifyCartBtn.click();
+          return;
+        }
+
+        // Method 6: Dispatch generic cart open event
+        window.dispatchEvent(new CustomEvent('cart:open'));
+        document.dispatchEvent(new CustomEvent('cart:open'));
+
+        console.log('Cart drawer opened via event');
+      } catch (error) {
+        console.error('Error opening cart drawer:', error);
+      }
+    }
+
+    // Variant Selector Methods
+    handleChooseVariantClick(e) {
+      e.preventDefault();
+      const btn = e.target.closest('.worriorworld-choose-variant-btn');
+      const productHandle = btn.dataset.productHandle;
+      const productId = btn.dataset.productId;
+      
+      if (!productHandle) {
+        console.error('Product handle missing');
+        return;
+      }
+
+      this.openVariantDrawer(productHandle, productId);
+    }
+
+    async openVariantDrawer(productHandle, productId) {
+      if (!this.variantDrawer) return;
+
+      // Show drawer
+      this.variantDrawer.removeAttribute('hidden');
+      this.variantDrawer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      // Show loading state
+      this.variantDrawerBody.innerHTML = `
+        <div class="worriorworld-variant-loading">
+          <div class="worriorworld-loader"></div>
+          <p>Loading variants...</p>
+        </div>
+      `;
+
+      try {
+        // Fetch product data
+        const response = await fetch(`/products/${encodeURIComponent(productHandle)}.js`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to load product');
+        }
+
+        const product = await response.json();
+        this.currentProductForVariant = product;
+        this.selectedVariant = null;
+
+        // Update title
+        if (this.variantDrawerTitle) {
+          this.variantDrawerTitle.textContent = product.title;
+        }
+
+        // Render variant options
+        this.renderVariantOptions(product);
+
+      } catch (error) {
+        console.error('Error loading product:', error);
+        this.variantDrawerBody.innerHTML = `
+          <div class="worriorworld-variant-error">
+            <p>Error loading product. Please try again.</p>
+          </div>
+        `;
+      }
+    }
+
+    renderVariantOptions(product) {
+      if (!product.variants || product.variants.length === 0) {
+        this.variantDrawerBody.innerHTML = `
+          <div class="worriorworld-variant-error">
+            <p>No variants available for this product.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Group variants by options
+      const options = product.options || [];
+      let html = '';
+
+      options.forEach((option, optionIndex) => {
+        const optionName = option.name || `Option ${optionIndex + 1}`;
+        const optionValues = option.values || [];
+        const isColorOption = optionName.toLowerCase().includes('color') || optionName.toLowerCase().includes('colour');
+        
+        html += `
+          <div class="worriorworld-variant-option-group">
+            <label class="worriorworld-variant-option-label">${optionName}</label>
+            <div class="worriorworld-variant-option-values ${isColorOption ? 'color-options' : ''}" data-option-index="${optionIndex}">
+        `;
+
+        optionValues.forEach((value, valueIndex) => {
+          const isAvailable = this.isVariantAvailable(product.variants, optionIndex, value);
+          
+          // Skip out of stock variants
+          if (!isAvailable) return;
+          
+          // Find variant image for this option value
+          let variantImage = '';
+          if (isColorOption) {
+            const matchingVariant = product.variants.find(v => {
+              if (!v.available) return false;
+              return v.options && v.options[optionIndex] === value;
+            });
+            
+            if (matchingVariant) {
+              // Get variant image
+              if (matchingVariant.featured_image) {
+                variantImage = typeof matchingVariant.featured_image === 'string' 
+                  ? matchingVariant.featured_image 
+                  : (matchingVariant.featured_image.src || matchingVariant.featured_image);
+              } else if (matchingVariant.image) {
+                variantImage = typeof matchingVariant.image === 'string'
+                  ? matchingVariant.image
+                  : (matchingVariant.image.src || matchingVariant.image);
+              }
+              
+              // If no variant image, try to get from product images
+              if (!variantImage && product.images && product.images.length > 0) {
+                // Try to find image by variant ID or position
+                const variantImageObj = product.images.find(img => {
+                  if (typeof img === 'object' && img.variant_ids) {
+                    return img.variant_ids.includes(matchingVariant.id);
+                  }
+                  return false;
+                });
+                if (variantImageObj) {
+                  variantImage = typeof variantImageObj === 'string' 
+                    ? variantImageObj 
+                    : (variantImageObj.src || variantImageObj);
+                }
+              }
+            }
+          }
+          
+          const imageHtml = variantImage ? `<img src="${variantImage}" alt="${value}" class="variant-option-image">` : '';
+          
+          html += `
+            <button 
+              type="button" 
+              class="worriorworld-variant-option-btn ${isColorOption && variantImage ? 'with-image' : ''}" 
+              data-option-index="${optionIndex}"
+              data-option-value="${value}"
+            >
+              ${imageHtml}
+              <span class="variant-option-text">${value}</span>
+            </button>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+
+      this.variantDrawerBody.innerHTML = html;
+
+      // Add event listeners to variant option buttons
+      const optionButtons = this.variantDrawerBody.querySelectorAll('.worriorworld-variant-option-btn');
+      optionButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => this.handleVariantOptionClick(e));
+      });
+
+      // Select first available variant by default
+      this.selectFirstAvailableVariant(product);
+    }
+
+    isVariantAvailable(variants, optionIndex, optionValue) {
+      return variants.some(variant => {
+        if (!variant.available) return false;
+        const variantOptionValue = variant.options && variant.options[optionIndex];
+        return variantOptionValue === optionValue;
+      });
+    }
+
+    handleVariantOptionClick(e) {
+      const btn = e.target.closest('.worriorworld-variant-option-btn');
+      const optionIndex = parseInt(btn.dataset.optionIndex);
+      const optionValue = btn.dataset.optionValue;
+
+      // Update selected state
+      const optionGroup = btn.closest('.worriorworld-variant-option-values');
+      optionGroup.querySelectorAll('.worriorworld-variant-option-btn').forEach(b => {
+        b.classList.remove('selected');
+      });
+      btn.classList.add('selected');
+
+      // Find matching variant
+      this.updateSelectedVariant(optionIndex, optionValue);
+    }
+
+    updateSelectedVariant(optionIndex, optionValue) {
+      if (!this.currentProductForVariant || !this.currentProductForVariant.variants) return;
+
+      // Get all selected option values
+      const selectedOptions = [];
+      const optionGroups = this.variantDrawerBody.querySelectorAll('.worriorworld-variant-option-values');
+      
+      optionGroups.forEach((group, index) => {
+        const selectedBtn = group.querySelector('.worriorworld-variant-option-btn.selected');
+        if (selectedBtn) {
+          selectedOptions[index] = selectedBtn.dataset.optionValue;
+        }
+      });
+
+      // Find variant matching all selected options
+      const matchingVariant = this.currentProductForVariant.variants.find(variant => {
+        if (!variant.available) return false;
+        if (!variant.options || variant.options.length !== selectedOptions.length) return false;
+        
+        return variant.options.every((opt, idx) => opt === selectedOptions[idx]);
+      });
+
+      if (matchingVariant) {
+        this.selectedVariant = matchingVariant;
+        this.updateVariantPrice(matchingVariant);
+        if (this.variantDrawerAddBtn) {
+          this.variantDrawerAddBtn.disabled = false;
+        }
+      } else {
+        this.selectedVariant = null;
+        if (this.variantDrawerPrice) {
+          this.variantDrawerPrice.textContent = 'Select options';
+        }
+        if (this.variantDrawerAddBtn) {
+          this.variantDrawerAddBtn.disabled = true;
+        }
+      }
+    }
+
+    selectFirstAvailableVariant(product) {
+      if (!product.variants) return;
+
+      const firstAvailable = product.variants.find(v => v.available);
+      if (firstAvailable && firstAvailable.options) {
+        // Select first available variant's options
+        firstAvailable.options.forEach((value, index) => {
+          const optionGroup = this.variantDrawerBody.querySelector(`[data-option-index="${index}"]`);
+          if (optionGroup) {
+            const matchingBtn = Array.from(optionGroup.querySelectorAll('.worriorworld-variant-option-btn')).find(
+              btn => btn.dataset.optionValue === value && !btn.disabled
+            );
+            if (matchingBtn) {
+              matchingBtn.click();
+            }
+          }
+        });
+      }
+    }
+
+    updateVariantPrice(variant) {
+      if (this.variantDrawerPrice) {
+        const price = variant.price / 100;
+        const comparePrice = variant.compare_at_price ? variant.compare_at_price / 100 : null;
+        
+        let priceHtml = `₹${price.toFixed(0)}`;
+        if (comparePrice && comparePrice > price) {
+          priceHtml = `<span style="text-decoration: line-through; color: #999; margin-right: 8px;">₹${comparePrice.toFixed(0)}</span>${priceHtml}`;
+        }
+        this.variantDrawerPrice.innerHTML = priceHtml;
+      }
+    }
+
+    async addSelectedVariantToCart() {
+      if (!this.selectedVariant || !this.currentProductForVariant) {
+        alert('Please select a variant');
+        return;
+      }
+
+      // Check maximum limit only if products haven't been added to cart yet
+      if (!this.productsAddedToCart && this.selectedProducts.length >= this.maxProducts) {
+        alert(`You can add up to ${this.maxProducts} products for the bundle offer. Add these to cart first, then you can add more products.`);
+        return;
+      }
+
+      // Get variant image
+      let variantImage = '';
+      if (this.selectedVariant.featured_image) {
+        variantImage = typeof this.selectedVariant.featured_image === 'string' 
+          ? this.selectedVariant.featured_image 
+          : (this.selectedVariant.featured_image.src || this.selectedVariant.featured_image);
+      } else if (this.selectedVariant.image) {
+        variantImage = typeof this.selectedVariant.image === 'string'
+          ? this.selectedVariant.image
+          : (this.selectedVariant.image.src || this.selectedVariant.image);
+      }
+      
+      // Fallback to product image if no variant image
+      if (!variantImage) {
+        if (this.currentProductForVariant.featured_image) {
+          variantImage = typeof this.currentProductForVariant.featured_image === 'string'
+            ? this.currentProductForVariant.featured_image
+            : (this.currentProductForVariant.featured_image.src || this.currentProductForVariant.featured_image);
+        } else if (this.currentProductForVariant.images && this.currentProductForVariant.images.length > 0) {
+          const firstImage = this.currentProductForVariant.images[0];
+          variantImage = typeof firstImage === 'string' ? firstImage : (firstImage.src || firstImage);
+        }
+      }
+
+      const variantDisplayPrice = this.selectedVariant.price > 999 ? Math.round(this.selectedVariant.price / 100) : this.selectedVariant.price;
+      const productData = {
+        id: String(this.currentProductForVariant.id),
+        variantId: String(this.selectedVariant.id),
+        price: variantDisplayPrice,
+        title: this.currentProductForVariant.title,
+        image: variantImage || ''
+      };
+
+      // Close drawer
+      this.closeVariantDrawer();
+
+      // Add to box (not cart yet)
+      const btn = document.querySelector(`[data-product-id="${productData.id}"]`);
+      const productCard = btn ? btn.closest('.worriorworld-product-card') : null;
+      
+      await this.addProductToBox(productData, btn, productCard);
+    }
+
+    closeVariantDrawer() {
+      if (this.variantDrawer) {
+        this.variantDrawer.setAttribute('hidden', '');
+        this.variantDrawer.classList.remove('active');
+        document.body.style.overflow = '';
+        this.currentProductForVariant = null;
+        this.selectedVariant = null;
+      }
+    }
+    
+    // Load all remaining products on page load
+    async loadAllRemainingProducts() {
+      if (!this.collectionHandle) {
+        console.log('Cannot load all products: No collection handle');
+        return;
+      }
+      
+      const totalProducts = parseInt(this.productsGrid.dataset.totalProducts) || 0;
+      const currentlyLoaded = this.loadedProductIds.size;
+      
+      if (currentlyLoaded >= totalProducts) {
+        console.log('All products already loaded');
+        return;
+      }
+      
+      console.log(`Loading all remaining products: ${currentlyLoaded}/${totalProducts} loaded`);
+      
+      // Show loading indicator
+      if (this.infiniteLoader) {
+        this.infiniteLoader.style.display = 'block';
+        this.infiniteLoader.style.opacity = '1';
+        this.infiniteLoader.style.height = 'auto';
+      }
+      
+      // Load products in batches using JSON API
+      // Start from page 2 since page 1 (first 50) are already loaded via Liquid
+      const limit = 250; // Shopify allows up to 250 products per request
+      let pageNumber = 2; // Always start from page 2 since Liquid loads page 1
+      
+      while (this.loadedProductIds.size < totalProducts) {
+        try {
+          const url = `/collections/${this.collectionHandle}/products.json?page=${pageNumber}&limit=${limit}`;
+          console.log(`Fetching batch ${pageNumber}: ${url}`);
+          
+          const response = await fetch(url, {
+            cache: 'no-cache',
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+          
+          if (!response.ok) {
+            console.error(`Failed to load products batch ${pageNumber}: ${response.status}`);
+            break;
+          }
+          
+          const data = await response.json();
+          const products = data.products || [];
+          
+          if (products.length === 0) {
+            console.log('No more products to load');
+            break;
+          }
+          
+          // Filter out already loaded products and render new ones
+          const newProducts = products.filter(product => {
+            const productId = String(product.id);
+            if (this.loadedProductIds.has(productId)) {
+              console.log(`Skipping duplicate product ID: ${productId} on page ${pageNumber}`);
+              return false;
+            }
+            this.loadedProductIds.add(productId);
+            return true;
+          });
+          
+          console.log(`Rendering ${newProducts.length} new products from batch ${pageNumber} (${products.length} total in response)`);
+          
+          if (newProducts.length === 0 && products.length > 0) {
+            // All products in this batch are duplicates - might be pagination issue
+            console.warn(`All products on page ${pageNumber} are duplicates. This might indicate pagination issue.`);
+            // If we've tried multiple pages with duplicates, stop to avoid infinite loop
+            if (pageNumber > 10) {
+              console.error('Too many duplicate pages detected. Stopping to avoid infinite loop.');
+              break;
+            }
+            // Try next page anyway
+            pageNumber++;
+            await new Promise(resolve => setTimeout(resolve, 200));
+            continue;
+          }
+          
+          // Render each new product
+          newProducts.forEach(product => {
+            this.renderProductCard(product);
+          });
+          
+          // Re-initialize event listeners for new products
+          this.initializeNewProducts();
+          
+          // Update UI after each batch
+          this.updateUI();
+          
+          // If we got fewer products than the limit, we've reached the end
+          if (products.length < limit) {
+            console.log(`Reached end of products (got ${products.length} products, limit was ${limit})`);
+            break;
+          }
+          
+          // If we've loaded all products, stop
+          if (this.loadedProductIds.size >= totalProducts) {
+            console.log('All products loaded!');
+            break;
+          }
+          
+          pageNumber++;
+          
+          // Small delay to avoid overwhelming the server and allow UI to update
+          await new Promise(resolve => setTimeout(resolve, 200));
+          
+        } catch (error) {
+          console.error(`Error loading products batch ${pageNumber}:`, error);
+          break;
+        }
+      }
+      
+      console.log(`Finished loading products. Total loaded: ${this.loadedProductIds.size}/${totalProducts}`);
+      
+      // Hide loading indicator
+      if (this.infiniteLoader) {
+        this.infiniteLoader.style.display = 'none';
+      }
+      
+      // Update hasMoreProducts flag
+      this.hasMoreProducts = this.loadedProductIds.size < totalProducts;
+      
+      // Final UI update
+      this.updateUI();
+    }
+    
+    // Infinite Scroll Methods
+    initInfiniteScroll() {
+      if (!this.productsGrid || !this.infiniteLoader) {
+        console.log('Infinite scroll: Missing elements', { productsGrid: !!this.productsGrid, infiniteLoader: !!this.infiniteLoader });
+        return;
+      }
+      
+      // If all products are already loaded, disable infinite scroll
+      if (!this.hasMoreProducts) {
+        console.log('Infinite scroll: All products already loaded, disabling infinite scroll');
+        this.infiniteLoader.style.display = 'none';
+        return;
+      }
+      
+      if (!this.collectionHandle) {
+        console.log('Infinite scroll: No collection handle found');
+        console.log('Available collection handle methods:', {
+          sectionData: this.section?.dataset?.collectionHandle,
+          globalCollection: typeof collection !== 'undefined' ? collection?.handle : 'undefined',
+          url: window.location.pathname
+        });
+        return;
+      }
+      
+      const totalProducts = parseInt(this.productsGrid.dataset.totalProducts) || 0;
+      const loadedCount = this.loadedProductIds.size;
+      
+      console.log('Infinite scroll initialized:', {
+        collection: this.collectionHandle,
+        totalProducts: totalProducts,
+        loadedCount: loadedCount,
+        hasMore: this.hasMoreProducts,
+        productsPerPage: this.productsPerPage
+      });
+      
+      // Make loader visible and properly positioned for intersection observer
+      this.infiniteLoader.style.display = 'block';
+      this.infiniteLoader.style.visibility = 'visible';
+      this.infiniteLoader.style.opacity = '0.3'; // Slightly visible for debugging
+      this.infiniteLoader.style.minHeight = '100px';
+      this.infiniteLoader.style.height = '100px';
+      this.infiniteLoader.style.position = 'relative';
+      this.infiniteLoader.style.zIndex = '1';
+      
+      // Ensure loader is after products grid in DOM
+      if (this.infiniteLoader.parentNode !== this.productsGrid.parentNode) {
+        // Move loader to be sibling of products grid
+        const container = this.productsGrid.parentNode;
+        if (container && container.contains(this.infiniteLoader)) {
+          // Already in correct parent, just ensure it's after products grid
+          container.insertBefore(this.infiniteLoader, this.productsGrid.nextSibling);
+        }
+      }
+      
+      // Create intersection observer with better settings
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          console.log('Intersection observer triggered:', {
+            isIntersecting: entry.isIntersecting,
+            isLoading: this.isLoading,
+            hasMore: this.hasMoreProducts,
+            intersectionRatio: entry.intersectionRatio
+          });
+          
+          if (entry.isIntersecting && !this.isLoading && this.hasMoreProducts) {
+            console.log('✅ User scrolled to bottom - Loading more products via JSON API...');
+            // Use JSON API directly since it's more reliable than HTML pagination
+            this.loadMoreProductsFromJSON();
+          }
+        });
+      }, {
+        root: null, // Use viewport as root
+        rootMargin: '400px', // Start loading 400px before reaching the bottom
+        threshold: [0, 0.1, 0.5, 1.0] // Multiple thresholds for better detection
+      });
+      
+      // Observe the loader element
+      this.observer.observe(this.infiniteLoader);
+      console.log('✅ IntersectionObserver is now watching the loader element');
+    }
+    
+    async loadMoreProducts() {
+      if (this.isLoading || !this.hasMoreProducts || !this.collectionHandle) {
+        console.log('Load more blocked:', { isLoading: this.isLoading, hasMore: this.hasMoreProducts, handle: this.collectionHandle });
+        return;
+      }
+      
+      // If JSON API mode is enabled, use that instead
+      if (this.useJSONAPI) {
+        return this.loadMoreProductsFromJSON();
+      }
+      
+      this.isLoading = true;
+      this.infiniteLoader.style.display = 'block';
+      this.infiniteLoader.style.opacity = '1';
+      this.infiniteLoader.style.height = 'auto';
+      
+      const pageToLoad = this.currentPage;
+      this.currentPage++; // Increment for next load
+      
+      console.log(`Loading page ${pageToLoad} for collection ${this.collectionHandle}`);
+      
+      try {
+        // Try multiple URL formats for Shopify pagination
+        const timestamp = new Date().getTime();
+        let url = `/collections/${this.collectionHandle}?page=${pageToLoad}&_=${timestamp}`;
+        
+        console.log(`Fetching: ${url}`);
+        let response = await fetch(url, {
+          cache: 'no-cache',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'text/html'
+          }
+        });
+        
+        // If first attempt fails, try with view parameter
+        if (!response.ok || response.status === 404) {
+          url = `/collections/${this.collectionHandle}?page=${pageToLoad}&view=ajax&_=${timestamp}`;
+          console.log(`Retrying with view parameter: ${url}`);
+          response = await fetch(url, {
+            cache: 'no-cache',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Accept': 'text/html'
+            }
+          });
+        }
+        
+        if (!response.ok) {
+          throw new Error(`Failed to load products: ${response.status}`);
+        }
+        
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Try multiple selectors to find products (in case structure differs)
+        let allProducts = doc.querySelectorAll('.worriorworld-product-card');
+        
+        // If no products found with main selector, try finding the products grid container first
+        if (allProducts.length === 0) {
+          const productsGrid = doc.querySelector('.worriorworld-products-grid') || 
+                              doc.querySelector('#worriorworld-products-' + this.sectionId);
+          if (productsGrid) {
+            allProducts = productsGrid.querySelectorAll('.worriorworld-product-card');
+          }
+        }
+        
+        // Also try searching in the entire document as fallback
+        if (allProducts.length === 0) {
+          allProducts = doc.querySelectorAll('[data-product-id]');
+        }
+        
+        console.log(`Found ${allProducts.length} total products in response for page ${pageToLoad}`);
+        
+        // Filter out products we've already loaded
+        const newProducts = Array.from(allProducts).filter(productCard => {
+          const productId = productCard.getAttribute('data-product-id');
+          if (!productId) {
+            console.warn('Product card missing data-product-id');
+            return false;
+          }
+          
+          // Skip if we already have this product
+          if (this.loadedProductIds.has(productId)) {
+            console.log(`Skipping duplicate product ID: ${productId}`);
+            return false;
+          }
+          
+          // Add to loaded set
+          this.loadedProductIds.add(productId);
+          return true;
+        });
+        
+        console.log(`Found ${newProducts.length} NEW products (out of ${allProducts.length} total) on page ${pageToLoad}`);
+        console.log(`Total unique products loaded so far: ${this.loadedProductIds.size}`);
+        
+        // If all products are duplicates, Shopify HTML pagination isn't working - switch to JSON API
+        if (allProducts.length > 0 && newProducts.length === 0) {
+          console.warn('All products on page are duplicates. Shopify HTML pagination not working. Switching to JSON API permanently...');
+          this.useJSONAPI = true;
+          this.isLoading = false;
+          // Retry immediately with JSON API
+          setTimeout(() => {
+            this.loadMoreProductsFromJSON();
+          }, 100);
+          return;
+        }
+        
+        if (newProducts.length === 0) {
+          console.log('No new products available');
+          this.hasMoreProducts = false;
+          this.infiniteLoader.style.display = 'none';
+          if (this.observer) {
+            this.observer.unobserve(this.infiniteLoader);
+          }
+        } else {
+          // Append only new products to grid
+          newProducts.forEach(productCard => {
+            const clonedCard = productCard.cloneNode(true);
+            this.productsGrid.appendChild(clonedCard);
+          });
+          
+          // Re-initialize event listeners for new products
+          this.initializeNewProducts();
+          
+          // Check if we've loaded all products
+          const currentProductCount = this.productsGrid.querySelectorAll('.worriorworld-product-card').length;
+          const totalProducts = parseInt(this.productsGrid.dataset.totalProducts) || 0;
+          
+          if (totalProducts > 0 && currentProductCount >= totalProducts) {
+            console.log('All products loaded');
+            this.hasMoreProducts = false;
+            setTimeout(() => {
+              this.infiniteLoader.style.display = 'none';
+              if (this.observer) {
+                this.observer.unobserve(this.infiniteLoader);
+              }
+            }, 500);
+          } else if (newProducts.length < this.productsPerPage) {
+            // If we got fewer products than expected, likely no more pages
+            console.log(`Got ${newProducts.length} products, likely last page`);
+            this.hasMoreProducts = false;
+            setTimeout(() => {
+              this.infiniteLoader.style.display = 'none';
+              if (this.observer) {
+                this.observer.unobserve(this.infiniteLoader);
+              }
+            }, 500);
+          } else {
+            // Hide loader after a short delay, keep it ready for next load
+            setTimeout(() => {
+              this.infiniteLoader.style.opacity = '0.3'; // Keep slightly visible for IntersectionObserver
+              this.infiniteLoader.style.minHeight = '100px';
+              this.infiniteLoader.style.height = '100px';
+              console.log('✅ Products loaded, loader ready for next scroll');
+            }, 500);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading more products:', error);
+        this.hasMoreProducts = false;
+        this.infiniteLoader.style.display = 'none';
+        if (this.observer) {
+          this.observer.unobserve(this.infiniteLoader);
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    }
+    
+    // Alternative method using Shopify Collection JSON API for proper pagination
+    async loadMoreProductsFromJSON() {
+      if (this.isLoading || !this.hasMoreProducts || !this.collectionHandle) {
+        console.log('❌ Load blocked:', { 
+          isLoading: this.isLoading, 
+          hasMore: this.hasMoreProducts, 
+          handle: this.collectionHandle 
+        });
+        return;
+      }
+      
+      this.isLoading = true;
+      this.infiniteLoader.style.display = 'block';
+      this.infiniteLoader.style.opacity = '1';
+      this.infiniteLoader.style.height = 'auto';
+      
+      // Calculate page number based on how many products we've loaded
+      const loadedCount = this.loadedProductIds.size;
+      const pageNumber = Math.floor(loadedCount / this.productsPerPage) + 1;
+      const limit = this.productsPerPage;
+      
+      console.log(`Loading products from JSON API: page=${pageNumber}, already loaded=${loadedCount}, limit=${limit}`);
+      
+      try {
+        // Use Shopify's collection products JSON endpoint with page parameter
+        // Note: Shopify JSON API uses page numbers, not offset
+        const url = `/collections/${this.collectionHandle}/products.json?page=${pageNumber}&limit=${limit}`;
+        
+        console.log(`Fetching JSON: ${url}`);
+        const response = await fetch(url, {
+          cache: 'no-cache',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to load products: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const products = data.products || [];
+        
+        console.log(`✅ Found ${products.length} products from JSON API on page ${pageNumber}`);
+        console.log('Products data sample:', products.length > 0 ? {
+          id: products[0].id,
+          title: products[0].title,
+          available: products[0].available
+        } : 'No products');
+        
+        if (products.length === 0) {
+          console.log('No more products available');
+          this.hasMoreProducts = false;
+          this.infiniteLoader.style.display = 'none';
+          if (this.observer) {
+            this.observer.unobserve(this.infiniteLoader);
+          }
+        } else {
+          // Filter out already loaded products (shouldn't happen with offset, but just in case)
+          const newProducts = products.filter(product => {
+            const productId = String(product.id);
+            if (this.loadedProductIds.has(productId)) {
+              console.log(`⚠️ Skipping duplicate product ID: ${productId}`);
+              return false;
+            }
+            this.loadedProductIds.add(productId);
+            return true;
+          });
+          
+          console.log(`🎨 Rendering ${newProducts.length} new products (out of ${products.length} total)`);
+          
+          if (newProducts.length === 0) {
+            console.warn('⚠️ All products in this batch are duplicates!');
+            this.hasMoreProducts = false;
+            this.infiniteLoader.style.display = 'none';
+            if (this.observer) {
+              this.observer.unobserve(this.infiniteLoader);
+            }
+            return;
+          }
+          
+          // Verify productsGrid exists before rendering
+          if (!this.productsGrid) {
+            console.error('❌ productsGrid element not found! Cannot render products.');
+            this.isLoading = false;
+            return;
+          }
+          
+          console.log('✅ productsGrid found, starting to render products...');
+          
+          // Render each product card
+          let renderedCount = 0;
+          let skippedCount = 0;
+          newProducts.forEach((product, index) => {
+            try {
+              const beforeCount = this.productsGrid.querySelectorAll('.worriorworld-product-card').length;
+              this.renderProductCard(product);
+              const afterCount = this.productsGrid.querySelectorAll('.worriorworld-product-card').length;
+              
+              if (afterCount > beforeCount) {
+                renderedCount++;
+                if (index === 0) {
+                  console.log('✅ First product card rendered and appended successfully');
+                }
+              } else {
+                skippedCount++;
+                console.warn(`⚠️ Product ${product.id} was not rendered (likely filtered out)`);
+              }
+            } catch (error) {
+              console.error(`❌ Error rendering product ${product.id}:`, error);
+              console.error('Error stack:', error.stack);
+            }
+          });
+          
+          console.log(`✅ Successfully rendered ${renderedCount} product cards, skipped ${skippedCount}`);
+          console.log(`📊 Total products in grid now: ${this.productsGrid.querySelectorAll('.worriorworld-product-card').length}`);
+          
+          // Re-initialize event listeners for new products
+          this.initializeNewProducts();
+          
+          // Update UI after rendering
+          this.updateUI();
+          
+          // Check if we've loaded all products
+          const currentProductCount = this.productsGrid.querySelectorAll('.worriorworld-product-card').length;
+          const totalProducts = parseInt(this.productsGrid.dataset.totalProducts) || 0;
+          
+          if (totalProducts > 0 && currentProductCount >= totalProducts) {
+            console.log('All products loaded');
+            this.hasMoreProducts = false;
+            setTimeout(() => {
+              this.infiniteLoader.style.display = 'none';
+              if (this.observer) {
+                this.observer.unobserve(this.infiniteLoader);
+              }
+            }, 500);
+          } else if (newProducts.length < this.productsPerPage) {
+            // If we got fewer products than expected, likely no more pages
+            console.log(`Got ${newProducts.length} products, likely last page`);
+            this.hasMoreProducts = false;
+            setTimeout(() => {
+              this.infiniteLoader.style.display = 'none';
+              if (this.observer) {
+                this.observer.unobserve(this.infiniteLoader);
+              }
+            }, 500);
+          } else {
+            // Hide loader after a short delay, keep it ready for next load
+            setTimeout(() => {
+              this.infiniteLoader.style.opacity = '0.3'; // Keep slightly visible for IntersectionObserver
+              this.infiniteLoader.style.minHeight = '100px';
+              this.infiniteLoader.style.height = '100px';
+              console.log('✅ Products loaded, loader ready for next scroll');
+            }, 500);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading products from JSON API:', error);
+        this.hasMoreProducts = false;
+        this.infiniteLoader.style.display = 'none';
+        if (this.observer) {
+          this.observer.unobserve(this.infiniteLoader);
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    }
+    
+    renderProductCard(product) {
+      if (!product) {
+        console.warn('⚠️ renderProductCard: Product is null or undefined');
+        return;
+      }
+      
+      if (!this.productsGrid) {
+        console.error('❌ renderProductCard: productsGrid element not found!');
+        return;
+      }
+      
+      // Check if product has any available variants (don't rely on product.available flag)
+      // Shopify JSON API might not always set available correctly, so be lenient
+      const availableVariants = product.variants && product.variants.length > 0 
+        ? product.variants.filter(v => v.available !== false) // Include variants where available is not explicitly false
+        : [];
+      
+      // Always try to use a variant - prefer available ones, but use any variant if needed
+      let selectedVariant = null;
+      if (availableVariants.length > 0) {
+        selectedVariant = availableVariants[0];
+      } else if (product.variants && product.variants.length > 0) {
+        // Use first variant even if marked unavailable (might be a data issue)
+        selectedVariant = product.variants[0];
+        console.log(`⚠️ Using variant marked unavailable for product: ${product.id} - ${product.title} (no available variants, using first variant)`);
+      }
+      
+      if (!selectedVariant) {
+        console.warn(`⚠️ No variant found for product: ${product.id} - ${product.title}`);
+        return;
+      }
+      
+      const productCard = document.createElement('div');
+      productCard.className = 'worriorworld-product-card';
+      productCard.setAttribute('data-product-id', product.id);
+      productCard.setAttribute('data-variant-id', selectedVariant.id);
+      productCard.setAttribute('data-product-handle', product.handle);
+      
+      // Build variant chips HTML
+      let variantChipsHtml = '';
+      if (product.options && product.options.length > 0 && product.options[0].values) {
+        const optionValues = product.options[0].values.slice(0, 4);
+        variantChipsHtml = '<div class="worriorworld-product-variants"><div class="worriorworld-product-variant-options">';
+        optionValues.forEach(value => {
+          const variantAvailable = product.variants.some(v => v.available && v.options && v.options[0] === value);
+          if (variantAvailable) {
+            variantChipsHtml += `<span class="worriorworld-variant-chip" data-option-value="${value}">${value}</span>`;
+          }
+        });
+        if (product.options[0].values.length > 4) {
+          variantChipsHtml += `<span class="worriorworld-variant-more">+${product.options[0].values.length - 4} more</span>`;
+        }
+        variantChipsHtml += '</div></div>';
+      }
+      
+      // Build price HTML
+      let priceHtml = '';
+      const variantPrice = selectedVariant.price || 0;
+      const comparePrice = selectedVariant.compare_at_price || 0;
+      
+      // Store original price in cents for data attribute (Shopify JSON API returns prices in cents)
+      const originalPriceInCents = typeof variantPrice === 'string' ? parseFloat(variantPrice) : variantPrice;
+      
+      // Ensure prices are numbers for display
+      let priceValue = typeof variantPrice === 'string' ? parseFloat(variantPrice) : variantPrice;
+      let comparePriceValue = typeof comparePrice === 'string' ? parseFloat(comparePrice) : comparePrice;
+      
+      // Shopify JSON API typically returns prices in cents (e.g., 40000 for ₹400)
+      // Convert to rupees for display
+      if (priceValue > 0) {
+        if (priceValue >= 1000) {
+          // Price is in cents, convert to rupees for display
+          priceValue = priceValue / 100;
+        }
+        // If price < 1000, assume it's already in rupees, don't divide
+      }
+      
+      if (comparePriceValue > 0) {
+        if (comparePriceValue >= 1000) {
+          // Compare price is in cents, convert to rupees for display
+          comparePriceValue = comparePriceValue / 100;
+        }
+        // If compare price < 1000, assume it's already in rupees, don't divide
+      }
+      
+      priceHtml = `<div class="worriorworld-product-price-wrapper">`;
+      if (comparePriceValue > priceValue) {
+        priceHtml += `<span class="worriorworld-product-original-price">&#8377;${comparePriceValue.toFixed(0)}</span>`;
+      }
+      priceHtml += `<span class="worriorworld-product-price">&#8377;${priceValue.toFixed(0)}</span></div>`;
+      
+      const imageUrl = product.featured_image || (product.images && product.images[0]) || '';
+      const imageSrc = typeof imageUrl === 'string' ? imageUrl : (imageUrl.src || '');
+      
+      productCard.innerHTML = `
+        <div class="worriorworld-product-image-wrapper">
+          <img 
+            src="${imageSrc}"
+            alt="${product.title}"
+            loading="lazy"
+            class="worriorworld-product-image"
+          >
+          <button 
+            type="button" 
+            class="worriorworld-quick-view-btn" 
+            data-product-handle="${product.handle}"
+            aria-label="Quick view ${product.title}"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+        <div class="worriorworld-product-info">
+          <h3 class="worriorworld-product-title">${product.title}</h3>
+          ${variantChipsHtml}
+          ${priceHtml}
+          <button 
+            class="worriorworld-add-btn" 
+            data-product-id="${product.id}" 
+            data-product-handle="${product.handle}"
+            data-variant-id="${selectedVariant.id}" 
+            data-price="${originalPriceInCents}" 
+            data-title="${product.title}" 
+            data-image="${imageSrc}"
+          >
+            <span class="worriorworld-btn-text">ADD TO BOX</span>
+          </button>
+        </div>
+      `;
+      
+      try {
+        this.productsGrid.appendChild(productCard);
+        console.log(`✅ Product card appended to grid: ${product.title} (ID: ${product.id})`);
+      } catch (error) {
+        console.error(`❌ Error appending product card to grid:`, error);
+        console.error('Product data:', { id: product.id, title: product.title });
+        console.error('productsGrid element:', this.productsGrid);
+      }
+    }
+    
+    formatMoney(rupees) {
+      if (!rupees || rupees === 0) {
+        return '₹0';
+      }
+      // Ensure rupees is a number (price should already be converted to rupees before calling this)
+      const price = typeof rupees === 'string' ? parseFloat(rupees) : rupees;
+      // Format rupees with Indian locale
+      return '₹' + Math.round(price).toLocaleString('en-IN');
+    }
+    
+    initializeNewProducts() {
+      // Re-query all buttons to include new products
+      const newQuickViewButtons = this.productsGrid.querySelectorAll('.worriorworld-quick-view-btn');
+      newQuickViewButtons.forEach(btn => {
+        if (!btn.dataset.initialized) {
+          btn.dataset.initialized = 'true';
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const productHandle = btn.dataset.productHandle;
+            this.openQuickView(productHandle);
+          });
+        }
+      });
+      
+      // Update addButtons reference to include new products
+      const newAddButtons = this.productsGrid.querySelectorAll('.worriorworld-add-btn');
+      newAddButtons.forEach(btn => {
+        if (!btn.dataset.initialized) {
+          btn.dataset.initialized = 'true';
+          btn.addEventListener('click', (e) => this.handleAddButtonClick(e));
+        }
+      });
+      
+      // Setup click handlers for new product cards
+      this.setupProductCardClicks();
+      
+      // Update addButtons reference
+      this.addButtons = this.section.querySelectorAll('.worriorworld-add-btn');
+    }
+    
+    setupProductCardClicks() {
+      // Add click handler to all product cards that don't have one yet
+      const productCards = this.productsGrid.querySelectorAll('.worriorworld-product-card');
+      productCards.forEach(card => {
+        if (!card.dataset.clickHandlerAdded) {
+          card.dataset.clickHandlerAdded = 'true';
+          card.style.cursor = 'pointer';
+          
+          card.addEventListener('click', (e) => {
+            // Don't open quick view if clicking on buttons or links inside the card
+            if (e.target.closest('button') || e.target.closest('a')) {
+              return;
+            }
+            
+            const productHandle = card.dataset.productHandle;
+            if (productHandle) {
+              this.openQuickView(productHandle);
+            }
+          });
+        }
+      });
+    }
+  }
+})();
+
+</script>
+
+{% schema %}
+{
+  "name": "Collection Bundle",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build Your Bundle"
+    },
+    {
+      "type": "header",
+      "content": "Default Bundle Settings"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Default Subheading",
+      "default": "Buy any 2 products for ₹599",
+      "info": "Used when no collection-specific settings match"
+    },
+    {
+      "type": "number",
+      "id": "max_products",
+      "label": "Default Maximum Products",
+      "default": 2,
+      "info": "Maximum number of products that can be selected (default)"
+    },
+    {
+      "type": "number",
+      "id": "offer_products",
+      "label": "Default Offer Product Count",
+      "default": 2,
+      "info": "Number of products required to activate the bundle offer (default)"
+    },
+    {
+      "type": "number",
+      "id": "bundle_price",
+      "label": "Default Bundle Price (₹)",
+      "default": 599,
+      "info": "Bundle offer price in rupees (default)"
+    },
+    {
+      "type": "header",
+      "content": "Collection 1 Settings"
+    },
+    {
+      "type": "collection",
+      "id": "collection_1",
+      "label": "Collection 1"
+    },
+    {
+      "type": "text",
+      "id": "collection_1_subheading",
+      "label": "Collection 1 Subheading",
+      "default": "Buy any 2 products for ₹599"
+    },
+    {
+      "type": "number",
+      "id": "collection_1_max_products",
+      "label": "Collection 1 Maximum Products",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_1_offer_products",
+      "label": "Collection 1 Offer Product Count",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_1_bundle_price",
+      "label": "Collection 1 Bundle Price (₹)",
+      "default": 599
+    },
+    {
+      "type": "header",
+      "content": "Collection 2 Settings"
+    },
+    {
+      "type": "collection",
+      "id": "collection_2",
+      "label": "Collection 2"
+    },
+    {
+      "type": "text",
+      "id": "collection_2_subheading",
+      "label": "Collection 2 Subheading",
+      "default": "Buy any 2 products for ₹599"
+    },
+    {
+      "type": "number",
+      "id": "collection_2_max_products",
+      "label": "Collection 2 Maximum Products",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_2_offer_products",
+      "label": "Collection 2 Offer Product Count",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_2_bundle_price",
+      "label": "Collection 2 Bundle Price (₹)",
+      "default": 599
+    },
+    {
+      "type": "header",
+      "content": "Collection 3 Settings"
+    },
+    {
+      "type": "collection",
+      "id": "collection_3",
+      "label": "Collection 3"
+    },
+    {
+      "type": "text",
+      "id": "collection_3_subheading",
+      "label": "Collection 3 Subheading",
+      "default": "Buy any 2 products for ₹599"
+    },
+    {
+      "type": "number",
+      "id": "collection_3_max_products",
+      "label": "Collection 3 Maximum Products",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_3_offer_products",
+      "label": "Collection 3 Offer Product Count",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_3_bundle_price",
+      "label": "Collection 3 Bundle Price (₹)",
+      "default": 599
+    },
+    {
+      "type": "header",
+      "content": "Collection 4 Settings"
+    },
+    {
+      "type": "collection",
+      "id": "collection_4",
+      "label": "Collection 4"
+    },
+    {
+      "type": "text",
+      "id": "collection_4_subheading",
+      "label": "Collection 4 Subheading",
+      "default": "Buy any 2 products for ₹599"
+    },
+    {
+      "type": "number",
+      "id": "collection_4_max_products",
+      "label": "Collection 4 Maximum Products",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_4_offer_products",
+      "label": "Collection 4 Offer Product Count",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_4_bundle_price",
+      "label": "Collection 4 Bundle Price (₹)",
+      "default": 599
+    },
+    {
+      "type": "header",
+      "content": "Collection 5 Settings"
+    },
+    {
+      "type": "collection",
+      "id": "collection_5",
+      "label": "Collection 5"
+    },
+    {
+      "type": "text",
+      "id": "collection_5_subheading",
+      "label": "Collection 5 Subheading",
+      "default": "Buy any 2 products for ₹599"
+    },
+    {
+      "type": "number",
+      "id": "collection_5_max_products",
+      "label": "Collection 5 Maximum Products",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_5_offer_products",
+      "label": "Collection 5 Offer Product Count",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "collection_5_bundle_price",
+      "label": "Collection 5 Bundle Price (₹)",
+      "default": 599
+    },
+    {
+      "type": "header",
+      "content": "GoKwik Checkout Settings"
+    },
+    {
+      "type": "text",
+      "id": "gokwik_main_title",
+      "label": "Checkout Button Main Title",
+      "default": "CHECKOUT",
+      "info": "Main text displayed on the checkout button"
+    },
+    {
+      "type": "text",
+      "id": "gokwik_sub_title",
+      "label": "Checkout Button Sub Title",
+      "default": "Secure Payment",
+      "info": "Sub text displayed below the main title"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Bundle (2 @ 599)",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
+
+
+
+
+
+
+
+
+
+
+<style>
+  .announcement-bar-div {
+    width: 100%;
+    overflow: hidden;
+    color: #fff !important;
+    background-color:#1D3E70;
+    {% comment %} background: #061D3A url('https://cdn.shopify.com/s/files/1/0734/0366/2650/files/all_website_marquee_background_23_sep.png?v=1758700904'); {% endcomment %}
+    padding: 10px 0;
+    font-weight: 700;
+    background-size:105% 94%;
+    background-position:center;
+    position: relative;
+    
+  }
+
+  .announcement-content-div {
+    white-space: nowrap;
+    animation: scroll 40s linear infinite;
+    font-weight: 400;
+  }
+  .announcement-content-div span {
+      margin-right: 20px;
+  }
+  .announcement-bar-div:hover .announcement-content-div {
+    animation-play-state: paused;
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-200%);
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    .announcement-content-div {
+      animation: scroll 14s linear infinite;
+    }
+  }
+
+  .announcement-bar-div:before {
+      content: '';
+      position: absolute;
+      /* background: url(https://cdn.shopify.com/s/files/1/0734/0366/2650/files/Group.svg?v=1758792933); */
+      background-size: 11px;
+      width: 100%;
+      height: 100%;
+      background-repeat: repeat-x;
+      top: -2px;
+  }
+.announcement-bar-div:after {
+    content: '';
+    position: absolute;
+    /* background: url(https://cdn.shopify.com/s/files/1/0734/0366/2650/files/Group.svg?v=1758792933); */
+    background-size: 11px;
+    width: 100%;
+    height: 100%;
+    background-repeat: repeat-x;
+    bottom: -2px;
+    background-position: bottom;
+}
+@media(max-width: 768px){
+.announcement-bar-div:after,
+.announcement-bar-div:before{
+    background-size: 12px;
+}
+}
+</style>
+
+

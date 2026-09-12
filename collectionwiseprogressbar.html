@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestone Progress</title>
+    <style>
+        .cw-progress-shell {
+
+            margin: 0;
+            padding: 32px 16px;
+            background: transparent;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            color: #222;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .cw-progress-card {
+            background: transparent;
+        }
+
+        .cw-progress-text {
+            font-size: 0.95rem;
+            color: #333;
+            text-align: center;
+            margin: 0 0 5px;
+            line-height: 1.2;
+        }
+
+        .cw-progress-text strong {
+            color: #000000;
+        }
+
+        .cw-progress-rail-wrap {
+            position: relative;
+            padding: 0 2px;
+        }
+
+        .cw-progress-rail {
+            position: absolute;
+            top: 15px;
+            left: calc(16px + 22px);
+            right: calc(16px + 22px);
+            height: 5px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .cw-progress-rail-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #000000, #020101);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .cw-progress-points {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cw-progress-points.cw-progress-points--single {
+            justify-content: flex-end;
+            width: 170px;
+            margin-left: auto;
+        }
+
+        .cw-progress-point {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .cw-progress-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            border: 2.5px solid #d0d0d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+            position: relative;
+        }
+
+        .cw-progress-badge svg {
+            width: 20px;
+            height: 20px;
+            color: #999;
+            transition: color 0.4s;
+        }
+
+        .cw-progress-point.cw-progress-point--active .cw-progress-badge {
+            background: #fff;
+            border-color: #000000;
+            /* box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12); */
+        }
+
+        .cw-progress-point.cw-progress-point--active .cw-progress-badge svg {
+            color: #000000;
+        }
+
+        .cw-progress-point.cw-progress-point--done .cw-progress-badge {
+            background: linear-gradient(135deg, #000000, #000000);
+            border-color: #000000;
+            box-shadow: 0 4px 14px rgb(0 0 0 / 30%);
+        }
+
+        .cw-progress-point.cw-progress-point--done .cw-progress-badge svg {
+            color: #fff;
+            display: none;
+        }
+
+        .cw-progress-point.cw-progress-point--done .cw-progress-badge::after {
+            content: "\2713";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .cw-progress-caption {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #999;
+            text-align: center;
+            line-height: 1.4;
+            transition: color 0.3s;
+        }
+
+        .cw-progress-caption small {
+            font-size: 0.7rem;
+            font-weight: 400;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .cw-progress-point.cw-progress-point--active .cw-progress-caption,
+        .cw-progress-point.cw-progress-point--done .cw-progress-caption {
+            color: #000000;
+        }
+
+        .email-card {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff6f7;
+            border: 1px solid #ffd7dc;
+            border-radius: 14px;
+        }
+
+        .email-card h2 {
+            margin: 0 0 8px;
+            font-size: 1.05rem;
+            color: #b42330;
+        }
+
+        .email-card p {
+            margin: 0 0 14px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #4b4b4b;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .email-input {
+            flex: 1 1 220px;
+            min-width: 0;
+            padding: 12px 14px;
+            border: 1px solid #d7c3c7;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: #000000;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.12);
+        }
+
+        .email-button {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 18px;
+            background: #000000;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .email-note {
+            margin-top: 10px;
+            font-size: 0.82rem;
+            color: #6b6b6b;
+        }
+
+        @media (max-width: 560px) {
+
+            .cw-progress-rail {
+                left: calc(8px + 22px);
+                right: calc(8px + 22px);
+            }
+
+            .cw-progress-points.cw-progress-points--single {
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cw-progress-shell">
+        <div class="cw-progress-card">
+            <p class="cw-progress-text" id="cwProgressMessage">
+                Spend <strong>Rs. 2,000</strong> to unlock <strong>Free Gift product</strong>.
+            </p>
+
+            <div class="cw-progress-rail-wrap">
+                <div class="cw-progress-rail">
+                    <div class="cw-progress-rail-fill" id="cwProgressFill"></div>
+                </div>
+
+                <div class="cw-progress-points" id="cwProgressPoints"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let progressConfig = {
+            mode: "price",
+            currentPrice: 1000,
+            currentQuantity: 3,
+            milestones: {
+                price: [
+                    {
+                        value: 2000,
+                        text: "Free Gift product"
+                    },
+                    {
+                        value: 5000,
+                        text: "Exclusive Discount"
+                    },
+                    {
+                        value: 10000,
+                        text: "VIP Support Access"
+                    }
+                ],
+                quantity: [
+                    {
+                        value: 2,
+                        text: "Free Gift product"
+                    },
+                    {
+                        value: 5,
+                        text: "Exclusive Discount"
+                    },
+                    {
+                        value: 10,
+                        text: "VIP Support Access"
+                    }
+                ]
+            }
+        };
+
+        const MILESTONE_ICONS = [
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>',
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>',
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"></path></svg>'
+        ];
+
+        function formatPrice(price) {
+            return "Rs. " + Number(price || 0).toLocaleString("en-IN");
+        }
+
+        function formatQuantity(quantity) {
+            const safeQuantity = Number(quantity || 0);
+            return safeQuantity + " item" + (safeQuantity === 1 ? "" : "s");
+        }
+
+        function getProgressSettings(config) {
+            const mode = config && config.mode === "quantity" ? "quantity" : "price";
+            const allMilestones = (config && config.milestones) || {};
+            const milestones = Array.isArray(allMilestones[mode]) ? allMilestones[mode] : [];
+            const currentPrice = 8000;
+            const currentQuantity = 5;
+            return {
+                mode: mode,
+                currentPrice: currentPrice,
+                currentQuantity: currentQuantity,
+                currentValue: mode === "quantity" ? currentQuantity : currentPrice,
+                milestones: milestones
+            };
+        }
+
+        function formatMilestoneValue(value, mode) {
+            return mode === "quantity" ? formatQuantity(value) : formatPrice(value);
+        }
+
+        function buildProgressMessage(remainingValue, milestoneText, mode) {
+            if (mode === "quantity") {
+                return "Add <strong>" + formatQuantity(remainingValue) + " more</strong> to unlock <strong>" + milestoneText + "</strong>.";
+            }
+
+            return "Spend <strong>" + formatPrice(remainingValue) + " more</strong> to unlock <strong>" + milestoneText + "</strong>.";
+        }
+
+        function renderMilestones(config) {
+            const stepsContainer = document.getElementById("cwProgressPoints");
+            const progressSettings = getProgressSettings(config);
+            const milestones = progressSettings.milestones;
+
+            if (!stepsContainer || !milestones.length) {
+                return;
+            }
+
+            stepsContainer.classList.toggle("cw-progress-points--single", milestones.length === 1);
+
+            stepsContainer.innerHTML = milestones.map(function (milestone, index) {
+                return (
+                    '<div class="cw-progress-point" id="cwProgressPoint' + index + '">' +
+                    '<div class="cw-progress-badge">' +
+                    (MILESTONE_ICONS[index] || MILESTONE_ICONS[MILESTONE_ICONS.length - 1]) +
+                    '</div>' +
+                    '<span class="cw-progress-caption">' +
+                    formatMilestoneValue(milestone.value, progressSettings.mode) +
+                    "<small>" + milestone.text + "</small>" +
+                    "</span>" +
+                    "</div>"
+                );
+            }).join("");
+        }
+
+        function updateMilestoneProgress(config) {
+            const fill = document.getElementById("cwProgressFill");
+            const message = document.getElementById("cwProgressMessage");
+            const progressSettings = getProgressSettings(config);
+            const milestones = progressSettings.milestones;
+            const currentValue = progressSettings.currentValue;
+
+            if (!fill || !message || !milestones.length) {
+                return;
+            }
+
+            const maxValue = milestones[milestones.length - 1].value;
+            const pct = maxValue > 0 ? Math.min((currentValue / maxValue) * 100, 100) : 0;
+            fill.style.width = pct + "%";
+
+            milestones.forEach(function (milestone, index) {
+                const stepNode = document.getElementById("cwProgressPoint" + index);
+                if (!stepNode) {
+                    return;
+                }
+
+                stepNode.classList.remove("cw-progress-point--active", "cw-progress-point--done");
+
+                if (currentValue >= milestone.value) {
+                    stepNode.classList.add("cw-progress-point--done");
+                } else if (index === 0 || currentValue >= milestones[index - 1].value) {
+                    stepNode.classList.add("cw-progress-point--active");
+                }
+            });
+
+            const nextMilestone = milestones.find(function (milestone) {
+                return currentValue < milestone.value;
+            });
+
+            if (!nextMilestone) {
+                message.innerHTML = "You have unlocked <strong>all milestone rewards</strong> for this order.";
+                return;
+            }
+
+            const remaining = nextMilestone.value - currentValue;
+            message.innerHTML = buildProgressMessage(remaining, nextMilestone.text, progressSettings.mode);
+        }
+
+        function refreshProgressBar() {
+            renderMilestones(progressConfig);
+            updateMilestoneProgress(progressConfig);
+        }
+
+        function setProgressMode(mode) {
+            progressConfig.mode = mode === "quantity" ? "quantity" : "price";
+            refreshProgressBar();
+        }
+
+        function updateProgressValues(cartTotalPrice, cartItemCount) {
+            progressConfig.currentPrice = Number(cartTotalPrice) || 0;
+            progressConfig.currentQuantity = Number(cartItemCount) || 0;
+            updateMilestoneProgress(progressConfig);
+        }
+
+        function updateProgressConfig(nextConfig) {
+            if (!nextConfig || typeof nextConfig !== "object") {
+                return;
+            }
+
+            progressConfig = {
+                ...progressConfig,
+                ...nextConfig,
+                milestones: nextConfig.milestones || progressConfig.milestones
+            };
+
+            refreshProgressBar();
+        }
+
+        window.CartDrawerProgressBar = {
+            getConfig: function () {
+                return progressConfig;
+            },
+            refresh: refreshProgressBar,
+            setMode: setProgressMode,
+            updateValues: updateProgressValues,
+            updateConfig: updateProgressConfig
+        };
+
+        document.addEventListener("DOMContentLoaded", function () {
+            refreshProgressBar();
+        });
+    </script>
+</body>
+
+</html>

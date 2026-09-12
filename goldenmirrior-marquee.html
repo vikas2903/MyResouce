@@ -1,0 +1,68 @@
+<style>
+  .scroll-offer-bar {
+    overflow: hidden;
+    padding: 8px 0;
+    background: #fffaf0;
+    border-block: 1px solid #f0e1b8;
+    white-space: nowrap;
+  }
+
+  .scroll-track {
+    display: inline-flex;
+    align-items: center;
+    width: max-content;
+    animation: scrollText 45s linear infinite;
+  }
+
+  .scroll-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 32px;
+  }
+
+  .scroll-text {
+    color: #4a3b16;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+
+  .discount-highlight {
+    display: inline-block;
+    margin-left: 3px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    color: #4a3b16;
+    background: #d4ac38;
+    font-weight: 700;
+  }
+
+  @keyframes scrollText {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .scroll-offer-bar:hover .scroll-track {
+    animation-play-state: paused;
+  }
+
+  @media (max-width: 767px) {
+    .scroll-offer-bar { padding: 7px 0; }
+    .scroll-content { gap: 6px; margin: 0 20px; }
+    .scroll-text { font-size: 11px; }
+    .discount-highlight { padding: 2px 5px; }
+  }
+</style>
+
+<div class="scroll-offer-bar" aria-label="Current offers">
+  <div class="scroll-track">
+    {% for i in (1..6) %}
+      <div class="scroll-content"><span class="scroll-text">✨ Buy 2 &amp; save <span class="discount-highlight">5% OFF</span></span></div>
+      <div class="scroll-content"><span class="scroll-text">⭐ Buy 3 &amp; save <span class="discount-highlight">7% OFF</span></span></div>
+      <div class="scroll-content"><span class="scroll-text">💫 Buy 4 &amp; save <span class="discount-highlight">10% OFF</span></span></div>
+    {% endfor %}
+  </div>
+</div>

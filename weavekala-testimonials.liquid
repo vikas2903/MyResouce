@@ -1,0 +1,618 @@
+{% liquid
+  assign section_id = 'weavekala-testimonials-' | append: section.id
+%}
+
+<section
+  id="{{ section_id }}"
+  class="weavekala-testimonials"
+  style="
+    --wk-bg: {{ section.settings.background_color }};
+    --wk-card-bg: {{ section.settings.card_background }};
+    --wk-heading: {{ section.settings.heading_color }};
+    --wk-text: {{ section.settings.text_color }};
+    --wk-muted: {{ section.settings.muted_color }};
+    --wk-accent: {{ section.settings.accent_color }};
+    --wk-star: {{ section.settings.star_color }};
+    --wk-shadow: {{ section.settings.shadow_color | color_modify: 'alpha', 0.18 }};
+  "
+>
+  <div class="weavekala-testimonials__glow weavekala-testimonials__glow--left"></div>
+  <div class="weavekala-testimonials__glow weavekala-testimonials__glow--right"></div>
+
+  <div class="weavekala-testimonials__inner page-width">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="weavekala-testimonials__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="weavekala-testimonials__title">
+            {{ section.settings.heading }}
+            <span class="weavekala-testimonials__heart" aria-hidden="true">&#10084;</span>
+          </h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <p class="weavekala-testimonials__subtitle">{{ section.settings.subheading }}</p>
+        {% endif %}
+
+        <span class="weavekala-testimonials__divider" aria-hidden="true"></span>
+      </div>
+    {% endif %}
+
+    <div class="weavekala-testimonials__slider" data-slider>
+      <button class="weavekala-testimonials__nav weavekala-testimonials__nav--prev" type="button" aria-label="Previous testimonials" data-prev>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 0 1 0 1.4L10.41 12l4.29 4.3a1 1 0 1 1-1.41 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.41 0Z" fill="currentColor"></path>
+        </svg>
+      </button>
+
+      <div class="weavekala-testimonials__viewport" data-viewport>
+        <div class="weavekala-testimonials__track" data-track>
+          {% for block in section.blocks %}
+            <article class="weavekala-testimonials__slide" {{ block.shopify_attributes }}>
+              <div class="weavekala-testimonials__card">
+                <div class="weavekala-testimonials__image-wrap">
+                  {% if block.settings.image != blank %}
+                    {{ block.settings.image | image_url: width: 800 | image_tag:
+                      class: 'weavekala-testimonials__image',
+                      loading: 'lazy',
+                      widths: '320, 480, 640, 800',
+                      sizes: '(min-width: 1200px) 22vw, (min-width: 750px) 40vw, 84vw',
+                      alt: block.settings.title | escape
+                    }}
+                  {% else %}
+                    <div class="weavekala-testimonials__placeholder">
+                      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                  {% endif %}
+                </div>
+
+                <div class="weavekala-testimonials__quote-badge" aria-hidden="true">&#10077;</div>
+
+                <div class="weavekala-testimonials__content">
+                  <div class="weavekala-testimonials__stars" aria-label="5 star review">
+                    {% for i in (1..5) %}
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2.75l2.84 5.75 6.35.92-4.59 4.47 1.08 6.33L12 17.24l-5.68 2.98 1.08-6.33L2.81 9.42l6.35-.92L12 2.75Z" fill="currentColor"></path>
+                      </svg>
+                    {% endfor %}
+                  </div>
+
+                  {% if block.settings.title != blank %}
+                    <h3 class="weavekala-testimonials__card-title">{{ block.settings.title }}</h3>
+                  {% endif %}
+
+                  {% if block.settings.text != blank %}
+                    <div class="weavekala-testimonials__review rte">
+                      {{ block.settings.text }}
+                    </div>
+                  {% endif %}
+
+                  {% if block.settings.author != blank %}
+                    <p class="weavekala-testimonials__author">- {{ block.settings.author }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button class="weavekala-testimonials__nav weavekala-testimonials__nav--next" type="button" aria-label="Next testimonials" data-next>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9.3 17.7a1 1 0 0 1 0-1.4L13.59 12 9.3 7.7a1 1 0 1 1 1.41-1.4l5 5a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.41 0Z" fill="currentColor"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <style>
+    #{{ section_id }} {
+      position: relative;
+      overflow: hidden;
+      padding: 64px 0 56px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 214, 221, 0.42), transparent 30%),
+        radial-gradient(circle at top right, rgba(255, 226, 207, 0.38), transparent 26%),
+        linear-gradient(180deg, #fffaf8 0%, var(--wk-bg) 100%);
+    }
+
+    #{{ section_id }} .page-width {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__glow {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 999px;
+      filter: blur(24px);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__glow--left {
+      top: -90px;
+      left: -130px;
+      background: rgba(255, 218, 227, 0.8);
+    }
+
+    #{{ section_id }} .weavekala-testimonials__glow--right {
+      top: -120px;
+      right: -110px;
+      background: rgba(255, 233, 214, 0.85);
+    }
+
+    #{{ section_id }} .weavekala-testimonials__header {
+      text-align: center;
+      margin-bottom: 34px;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__title {
+      margin: 0;
+      color: var(--wk-heading);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 4vw, 4.35rem);
+      line-height: 1.02;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__heart {
+      display: inline-block;
+      margin-left: 8px;
+      font-size: 0.82em;
+      color: #ff5d8f;
+      transform: translateY(-3px) rotate(-7deg);
+      text-shadow: 0 8px 20px rgba(255, 93, 143, 0.24);
+    }
+
+    #{{ section_id }} .weavekala-testimonials__subtitle {
+      margin: 12px 0 0;
+      color: var(--wk-muted);
+      font-size: 1.5rem;
+      line-height: 1.45;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__divider {
+      display: inline-block;
+      width: 58px;
+      height: 3px;
+      margin-top: 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255, 112, 145, 0.15), var(--wk-accent), rgba(255, 112, 145, 0.15));
+    }
+
+    #{{ section_id }} .weavekala-testimonials__slider {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__viewport {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__track {
+      display: flex;
+      align-items: stretch;
+      gap: 24px;
+      transition: transform 0.4s ease;
+      will-change: transform;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__slide {
+      flex: 0 0 auto;
+      min-width: 0;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__card {
+      position: relative;
+      height: 100%;
+      background: var(--wk-card-bg);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 18px 40px var(--wk-shadow);
+    }
+
+    #{{ section_id }} .weavekala-testimonials__image-wrap {
+      position: relative;
+      aspect-ratio: 0.8;
+      background: #efe7e3;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__image,
+    #{{ section_id }} .weavekala-testimonials__placeholder svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__placeholder {
+      width: 100%;
+      height: 100%;
+      color: rgba(0, 0, 0, 0.12);
+    }
+
+    #{{ section_id }} .weavekala-testimonials__quote-badge {
+      position: absolute;
+      left: 50%;
+      top: calc(100% - 188px);
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-left: -24px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ff7d99 0%, #ff5f87 100%);
+      color: #fff;
+      font-size: 2.6rem;
+      line-height: 1;
+      box-shadow: 0 12px 24px rgba(255, 95, 135, 0.28);
+    }
+
+    #{{ section_id }} .weavekala-testimonials__content {
+      padding: 32px 22px 26px;
+      text-align: center;
+      color: var(--wk-text);
+    }
+
+    #{{ section_id }} .weavekala-testimonials__stars {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 16px;
+      color: var(--wk-star);
+    }
+
+    #{{ section_id }} .weavekala-testimonials__stars svg {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 14px;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__card-title {
+      margin: 0 0 10px;
+      color: var(--wk-heading);
+      font-size: 2rem;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__review {
+      margin: 0;
+      color: var(--wk-muted);
+      font-size: 1.35rem;
+      line-height: 1.7;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__review p {
+      margin: 0;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__author {
+      margin: 18px 0 0;
+      color: var(--wk-accent);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__nav {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      flex: 0 0 46px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.96);
+      color: #ef7a95;
+      box-shadow: 0 12px 26px rgba(40, 28, 23, 0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__nav:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 28px rgba(40, 28, 23, 0.14);
+      background: #fff;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__nav:focus-visible {
+      outline: 2px solid var(--wk-accent);
+      outline-offset: 3px;
+    }
+
+    #{{ section_id }} .weavekala-testimonials__nav svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media screen and (max-width: 989px) {
+      #{{ section_id }} {
+        padding: 56px 0 48px;
+      }
+
+      #{{ section_id }} .page-width {
+        padding: 0 20px;
+      }
+
+      #{{ section_id }} .weavekala-testimonials__slider {
+        gap: 12px;
+      }
+
+      #{{ section_id }} .weavekala-testimonials__track {
+        gap: 18px;
+      }
+
+      #{{ section_id }} .weavekala-testimonials__content {
+        padding: 30px 18px 24px;
+      }
+    }
+
+    @media screen and (max-width: 749px) {
+      #{{ section_id }} {
+        padding: 48px 0 42px;
+      }
+
+      #{{ section_id }} .page-width {
+        padding: 0 14px;
+      }
+
+      #{{ section_id }} .weavekala-testimonials__title {
+        font-size: clamp(2.6rem, 10vw, 4rem);
+      }
+
+      #{{ section_id }} .weavekala-testimonials__subtitle {
+        font-size: 1.3rem;
+      }
+
+      #{{ section_id }} .weavekala-testimonials__slider {
+        gap: 10px;
+      }
+
+      #{{ section_id }} .weavekala-testimonials__track {
+        gap: 14px;
+      }
+
+      #{{ section_id }} .weavekala-testimonials__nav {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+      }
+
+      #{{ section_id }} .weavekala-testimonials__quote-badge {
+        top: calc(100% - 178px);
+      }
+
+      #{{ section_id }} .weavekala-testimonials__card-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      const section = document.getElementById('{{ section_id }}');
+      if (!section || section.dataset.sliderReady === 'true') return;
+      section.dataset.sliderReady = 'true';
+
+      const slider = section.querySelector('[data-slider]');
+      const viewport = section.querySelector('[data-viewport]');
+      const track = section.querySelector('[data-track]');
+      const prevButton = section.querySelector('[data-prev]');
+      const nextButton = section.querySelector('[data-next]');
+      let slides = Array.from(track.children);
+      let currentIndex = 0;
+      let perView = 4;
+      let gap = 24;
+      let slideWidth = 0;
+
+      if (!slider || !viewport || slides.length === 0) return;
+
+      function getPerView() {
+        if (window.innerWidth < 750) return 1;
+        if (window.innerWidth < 990) return 2;
+        return 4;
+      }
+
+      function getGap() {
+        if (window.innerWidth < 750) return 14;
+        if (window.innerWidth < 990) return 18;
+        return 24;
+      }
+
+      function updateSizes() {
+        slides = Array.from(track.children);
+        perView = Math.min(getPerView(), Math.max(slides.length, 1));
+        gap = getGap();
+        slideWidth = (viewport.clientWidth - gap * (perView - 1)) / perView;
+
+        slides.forEach(function (slide) {
+          slide.style.width = slideWidth + 'px';
+        });
+
+        const maxIndex = Math.max(slides.length - perView, 0);
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updatePosition();
+      }
+
+      function updatePosition() {
+        track.style.transform = 'translate3d(' + ((slideWidth + gap) * currentIndex * -1) + 'px, 0, 0)';
+      }
+
+      function goTo(index) {
+        const maxIndex = Math.max(slides.length - perView, 0);
+        if (index < 0) {
+          currentIndex = maxIndex;
+        } else if (index > maxIndex) {
+          currentIndex = 0;
+        } else {
+          currentIndex = index;
+        }
+        updatePosition();
+      }
+
+      prevButton.addEventListener('click', function () {
+        goTo(currentIndex - 1);
+      });
+
+      nextButton.addEventListener('click', function () {
+        goTo(currentIndex + 1);
+      });
+
+      window.addEventListener('resize', updateSizes);
+      document.addEventListener('shopify:section:load', updateSizes);
+      document.addEventListener('shopify:block:select', updateSizes);
+
+      updateSizes();
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Weavekala Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Love"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Real stories from our happy customers"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#fff8f6"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1b2340"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Body color",
+      "default": "#242424"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted text color",
+      "default": "#75707a"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#ff6d92"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#ffbe1a"
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Shadow color",
+      "default": "#d8c7c0"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Customer image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "This saree is such a vibe"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Review",
+          "default": "<p>Absolutely in love with this saree! The fabric, the fit, the vibe - everything is just perfect.</p>"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Priya S."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Weavekala Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "title": "This Saree such a vibe",
+            "text": "<p>Absolutely in love with this saree! The fabric, the fit, the vibe - everything is just perfect.</p>",
+            "author": "Priya S."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "title": "Hi I loved this dupatta from Weavekala",
+            "text": "<p>So vibrant and beautifully made. It added the perfect touch to my simple kurta!</p>",
+            "author": "Neha R."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "title": "Fitting everything looks good",
+            "text": "<p>Loved how elegant and comfortable the outfit is. Got so many compliments!</p>",
+            "author": "Anjali M."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "title": "Thank you for beautiful outfit",
+            "text": "<p>The colors, the fabric, the fit - everything was just perfect. Thank you!</p>",
+            "author": "Simran K."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
