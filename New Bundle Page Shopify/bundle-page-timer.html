@@ -1,0 +1,322 @@
+<!-- Preview metadata: omit these two tags when pasting into a Shopify section. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  Place this entire block immediately above the product filters / product list.
+  Counts down continuously to the next midnight in India (IST, UTC+05:30).
+  Restarts automatically every day; refreshing the page keeps the same schedule.
+  No external libraries are required. All styles are scoped to this component.
+-->
+<style>
+  .bundle-timer,
+  .bundle-timer * { box-sizing: border-box; }
+
+  .bundle-timer {
+    --bt-gold: #ffb43b;
+    --bt-cream: #fff6e5;
+    --bt-digit-height: 38px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: calc(100% - 32px);
+    max-width: 1314px;
+    margin: 16px auto;
+    padding: 16px 28px;
+    overflow: hidden;
+    border: 1px solid #303745;
+    border-radius: 14px;
+    background: radial-gradient(ellipse at 93% 110%, #42321f 0%, transparent 47%),
+      linear-gradient(115deg, #111827, #192131 58%, #111722);
+    color: var(--bt-cream);
+    box-shadow: 0 14px 36px -24px #10182799;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .bundle-timer::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -160px;
+    right: -80px;
+    width: 470px;
+    height: 470px;
+    border: 1px solid #ffb43b12;
+    border-radius: 50%;
+    box-shadow: 0 0 0 38px #ffb43b06, 0 0 0 76px #ffb43b04;
+    pointer-events: none;
+  }
+
+  .bundle-timer__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 7px;
+    color: var(--bt-gold);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+  }
+
+  .bundle-timer__spark {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--bt-gold);
+    box-shadow: 0 0 0 4px #ffb43b16;
+    animation: bt-breathe 3s ease-in-out infinite;
+  }
+
+  .bundle-timer .bundle-timer__title {
+    margin: 0;
+    color: var(--bt-cream);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(23px, 2.2vw, 30px);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -.7px;
+  }
+
+  .bundle-timer__title span { color: var(--bt-gold); white-space: nowrap; }
+
+  .bundle-timer .bundle-timer__description {
+    margin: 6px 0 0;
+    color: #afb6c3;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .bundle-timer__clock-wrap { flex-shrink: 0; text-align: center; }
+
+  .bundle-timer__caption {
+    margin: 0 0 5px;
+    color: #b8beca;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .bundle-timer__clock { display: flex; align-items: center; gap: 8px; }
+
+  .bundle-timer__unit {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+  }
+
+  .bundle-timer__digits {
+    display: flex;
+    justify-content: center;
+    height: var(--bt-digit-height);
+    overflow: hidden;
+    font-size: 36px;
+    font-weight: 500;
+    line-height: var(--bt-digit-height);
+    letter-spacing: -1.5px;
+    font-variant-numeric: tabular-nums;
+    mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .bundle-timer__digit { position: relative; display: block; width: .62em; height: var(--bt-digit-height); }
+  .bundle-timer__number { display: block; height: var(--bt-digit-height); }
+  .bundle-timer__number--old { position: absolute; inset: 0; animation: bt-roll-out .48s cubic-bezier(.22,.7,.25,1) both; }
+  .bundle-timer__number--new { animation: bt-roll-in .48s cubic-bezier(.22,.7,.25,1) both; }
+
+  .bundle-timer__label {
+    margin-top: 2px;
+    color: #929cad;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .bundle-timer__colon {
+    margin-top: -17px;
+    color: #7c715f;
+    font-size: 23px;
+    font-weight: 400;
+  }
+
+  .bundle-timer__unit--seconds { color: var(--bt-gold); }
+  .bundle-timer__unit--seconds .bundle-timer__label { color: #d2ad76; }
+  .bundle-timer__ring { position: absolute; inset: -3px; width: 74px; height: 74px; transform: rotate(-90deg); }
+  .bundle-timer__ring-track { fill: none; stroke: #ffb43b16; stroke-width: 1; }
+  .bundle-timer__ring-progress {
+    fill: none;
+    stroke: var(--bt-gold);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset .65s ease;
+  }
+
+  .bundle-timer__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin: 6px 0 0;
+    color: #8993a4;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+  .bundle-timer__footer svg { width: 12px; height: 12px; }
+
+  @keyframes bt-roll-in {
+    from { transform: translateY(100%); opacity: 0; filter: blur(3px); }
+    to { transform: translateY(0); opacity: 1; filter: blur(0); }
+  }
+  @keyframes bt-roll-out {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-100%); opacity: 0; filter: blur(3px); }
+  }
+  @keyframes bt-breathe {
+    50% { box-shadow: 0 0 0 7px #ffb43b06; }
+  }
+
+  @media (max-width: 600px) {
+    .bundle-timer { --bt-digit-height: 34px; flex-direction: column; gap: 12px; padding: 16px; width: calc(100% - 24px); margin: 12px auto; border-radius: 12px; }
+    .bundle-timer__copy { text-align: center; }
+    .bundle-timer__eyebrow { justify-content: center; font-size: 9px; margin-bottom: 6px; }
+    .bundle-timer .bundle-timer__title { font-size: 22px; letter-spacing: -.5px; }
+    .bundle-timer .bundle-timer__description { font-size: 12px; }
+    .bundle-timer__clock-wrap { padding-top: 10px; border-top: 1px solid #ffffff10; width: 100%; }
+    .bundle-timer__clock { justify-content: center; gap: 8px; }
+    .bundle-timer__unit { width: 62px; height: 62px; }
+    .bundle-timer__ring { width: 68px; height: 68px; }
+    .bundle-timer__digits { font-size: 32px; }
+    .bundle-timer__caption { margin-bottom: 4px; letter-spacing: 2px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bundle-timer *, .bundle-timer *::before, .bundle-timer *::after { animation: none !important; transition: none !important; }
+    .bundle-timer__number--old { display: none; }
+  }
+</style>
+
+<section class="bundle-timer" aria-label="Polo bundle daily countdown">
+  <div class="bundle-timer__copy">
+    <p class="bundle-timer__eyebrow"><span class="bundle-timer__spark" aria-hidden="true"></span>The polo edit</p>
+    <h2 class="bundle-timer__title">Two polos. One great deal. <span>₹999.</span></h2>
+    <p class="bundle-timer__description">Pick any 2 styles. Make them yours.</p>
+  </div>
+
+  <div class="bundle-timer__clock-wrap">
+    <p class="bundle-timer__caption" data-caption>Next reset in</p>
+    <div class="bundle-timer__clock" role="timer" aria-live="off" aria-label="Countdown loading">
+      <div class="bundle-timer__unit" aria-hidden="true">
+        <div class="bundle-timer__digits" data-unit="hours">--</div>
+        <span class="bundle-timer__label">Hours</span>
+      </div>
+      <span class="bundle-timer__colon" aria-hidden="true">:</span>
+      <div class="bundle-timer__unit" aria-hidden="true">
+        <div class="bundle-timer__digits" data-unit="minutes">--</div>
+        <span class="bundle-timer__label">Minutes</span>
+      </div>
+      <span class="bundle-timer__colon" aria-hidden="true">:</span>
+      <div class="bundle-timer__unit bundle-timer__unit--seconds" aria-hidden="true">
+        <svg class="bundle-timer__ring" viewBox="0 0 100 100">
+          <circle class="bundle-timer__ring-track" cx="50" cy="50" r="46" />
+          <circle class="bundle-timer__ring-progress" cx="50" cy="50" r="46" pathLength="100" />
+        </svg>
+        <div class="bundle-timer__digits" data-unit="seconds">--</div>
+        <span class="bundle-timer__label">Seconds</span>
+      </div>
+    </div>
+    <p class="bundle-timer__footer">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 1.5"/></svg>
+      <span data-status role="status">Resets daily at midnight IST</span>
+    </p>
+    <noscript><p class="bundle-timer__footer">Enable JavaScript to view the countdown.</p></noscript>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const root = document.currentScript.previousElementSibling;
+    if (!root || !root.matches('.bundle-timer')) return;
+
+    const clock = root.querySelector('[role="timer"]');
+    const ring = root.querySelector('.bundle-timer__ring-progress');
+    const units = ['hours', 'minutes', 'seconds'].map(name => root.querySelector(`[data-unit="${name}"]`));
+    const dayMs = 24 * 60 * 60 * 1000;
+    const indiaOffsetMs = 330 * 60 * 1000;
+    let tickTimeout;
+
+    function renderDigits(container, value, animate) {
+      const next = String(value).padStart(2, '0');
+      if (container.dataset.value === next) return;
+      if (container.children.length !== next.length) {
+        container.replaceChildren(...Array.from(next, digit => {
+          const slot = document.createElement('span');
+          slot.className = 'bundle-timer__digit';
+          const number = document.createElement('span');
+          number.className = 'bundle-timer__number';
+          number.textContent = digit;
+          slot.append(number);
+          return slot;
+        }));
+      } else {
+        Array.from(container.children).forEach((slot, index) => {
+          const previous = slot.lastElementChild.textContent;
+          if (previous === next[index]) return;
+          const number = document.createElement('span');
+          number.className = 'bundle-timer__number' + (animate ? ' bundle-timer__number--new' : '');
+          number.textContent = next[index];
+          slot.replaceChildren(number);
+          if (animate) {
+            const outgoing = document.createElement('span');
+            outgoing.className = 'bundle-timer__number bundle-timer__number--old';
+            outgoing.textContent = previous;
+            slot.prepend(outgoing);
+            // Also remove it when reduced-motion disables the animation event.
+            setTimeout(() => outgoing.remove(), 500);
+          }
+        });
+      }
+      container.dataset.value = next;
+    }
+
+    let firstRender = true;
+    function tick() {
+      clearTimeout(tickTimeout);
+      if (!root.isConnected) {
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        return;
+      }
+      // IST has a fixed UTC offset. Recalculate the next midnight on every tick
+      // so reloads, sleeping tabs, and visitors in other time zones stay in sync.
+      const now = Date.now();
+      const nextMidnight = (Math.floor((now + indiaOffsetMs) / dayMs) + 1) * dayMs - indiaOffsetMs;
+      const remaining = Math.ceil((nextMidnight - now) / 1000);
+      const values = [Math.floor(remaining / 3600), Math.floor(remaining / 60) % 60, remaining % 60];
+      units.forEach((unit, index) => renderDigits(unit, values[index], !firstRender));
+      ring.style.strokeDashoffset = String(100 - (values[2] / 60) * 100);
+      clock.setAttribute('aria-label', `${values[0]} hours, ${values[1]} minutes, ${values[2]} seconds until the next midnight in India`);
+      firstRender = false;
+
+      if (!document.hidden) tickTimeout = setTimeout(tick, 1000 - (now % 1000));
+    }
+
+    function onVisibilityChange() {
+      if (document.hidden) clearTimeout(tickTimeout);
+      else tick();
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    tick();
+  })();
+</script>

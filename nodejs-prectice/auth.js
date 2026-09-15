@@ -2,10 +2,13 @@ import express from "express";
 const PORT = 3000;
 const AuthApp = express();
 import AuthRoute from "./route/authroute.js";
+import connectDB from "./config/db.js";
+
 
 AuthApp.use(express.json());
-function runauthServer() {
+async function runauthServer() {
     try {
+        await connectDB();
         AuthApp.get("/", (req, res) => {
             res.json({
                 message: "Auth Server is running",
