@@ -225,21 +225,25 @@ export const loginUser = async (req, res) => {
 
 }
 
-export const getMyProfile  = async(req, res) =>{
-    try{
-        const userId = req.user._id;
-        console.log(userId);
-        const user = await User.findById(userId).select("-password -otp -refreshToken",)
+export const getMyProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select("-password -otp -refreshToken");
 
-        return res.status(200).json({
-            message:"Profile Fatched successfully",
-            user
-        })
-
-
-    }catch(error){
-        return res.status(500).json({
-            message:"Internal Server error"
-        })
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
     }
-}
+
+    return res.status(200).json({
+      message: "Profile fetched successfully",
+      user
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error"
+    });
+  }
+};

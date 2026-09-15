@@ -2,14 +2,14 @@ import jwt from 'jsonwebtoken';
 
 export const authenticate = (req, res, next) => {
     try {
-        const atuhHeader = req.headers.authorization;
+        const authHeader = req.headers.authorization; 
 
-        if (!atuhHeader) {
+        if (!authHeader) {
             return res.status(401).json({
                 message: "Access Token is required"
             })
         }
-        const token = atuhHeader.split(" ")[1];
+        const token = authHeader.split(" ")[1];
 
         if (!token) {
             return res.status(401).json({
@@ -27,8 +27,7 @@ export const authenticate = (req, res, next) => {
 
     } catch (error) {
         return res.status(401).json({
-            mesage: "Access token is invalid and expired"
-        })
-
+            message: "Access token is invalid or expired" // message, not mesage
+        });
     }
 }
