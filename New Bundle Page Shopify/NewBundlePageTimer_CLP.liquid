@@ -1,0 +1,436 @@
+{% comment %} <link href="https://pbutcher.uk/flipdown/css/flipdown/flipdown.css" rel="stylesheet" /> {% endcomment %}
+
+<style>
+/* THEMES */
+
+/********** Theme: dark **********/
+/* Font styles */
+.flipdown.flipdown__theme-dark {
+  font-family: sans-serif;
+  font-weight: bold;
+}
+/* Rotor group headings */
+.flipdown.flipdown__theme-dark .rotor-group-heading:before {
+  color: #000000;
+}
+/* Delimeters */
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+  background-color: #6a050c;
+}
+/* Rotor tops */
+.flipdown.flipdown__theme-dark .rotor,
+.flipdown.flipdown__theme-dark .rotor-top,
+.flipdown.flipdown__theme-dark .rotor-leaf-front {
+  color: #FFFFFF;
+  background-color: #6a050c;
+}
+/* Rotor bottoms */
+.flipdown.flipdown__theme-dark .rotor-bottom,
+.flipdown.flipdown__theme-dark .rotor-leaf-rear {
+  color: #EFEFEF;
+  background-color: #6a050c;
+}
+/* Hinge */
+.flipdown.flipdown__theme-dark .rotor:after {
+  border-top: solid 1px #6a050c;
+}
+
+/********** Theme: light **********/
+/* Font styles */
+.flipdown.flipdown__theme-light {
+  font-family: sans-serif;
+  font-weight: bold;
+}
+/* Rotor group headings */
+.flipdown.flipdown__theme-light .rotor-group-heading:before {
+  color: #EEEEEE;
+}
+/* Delimeters */
+.flipdown.flipdown__theme-light .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+.flipdown.flipdown__theme-light .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+  background-color: #DDDDDD;
+}
+/* Rotor tops */
+.flipdown.flipdown__theme-light .rotor,
+.flipdown.flipdown__theme-light .rotor-top,
+.flipdown.flipdown__theme-light .rotor-leaf-front {
+  color: #222222;
+  background-color: #DDDDDD;
+}
+/* Rotor bottoms */
+.flipdown.flipdown__theme-light .rotor-bottom,
+.flipdown.flipdown__theme-light .rotor-leaf-rear {
+  color: #333333;
+  background-color: #EEEEEE;
+}
+/* Hinge */
+.flipdown.flipdown__theme-light .rotor:after {
+  border-top: solid 1px #222222;
+}
+
+/* END OF THEMES */
+
+.flipdown {
+  overflow: visible;
+  width: 510px;
+  height: 110px;
+}
+
+.flipdown .rotor-group {
+  position: relative;
+  float: left;
+  padding-right: 30px;
+}
+
+.flipdown .rotor-group:last-child {
+  padding-right: 0;
+}
+
+.flipdown .rotor-group-heading:before {
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.flipdown .rotor-group:nth-child(1) .rotor-group-heading:before {
+  content: attr(data-before);
+}
+
+.flipdown .rotor-group:nth-child(2) .rotor-group-heading:before {
+  content: attr(data-before);
+}
+
+.flipdown .rotor-group:nth-child(3) .rotor-group-heading:before {
+  content: attr(data-before);
+}
+
+.flipdown .rotor-group:nth-child(4) .rotor-group-heading:before {
+  content: attr(data-before);
+}
+
+.flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before {
+  content: '';
+  position: absolute;
+  bottom: 20px;
+  left: 115px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+  content: '';
+  position: absolute;
+  bottom: 50px;
+  left: 115px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.flipdown .rotor {
+  position: relative;
+  float: left;
+  width: 50px;
+  height: 80px;
+  margin: 0px 5px 0px 0px;
+  border-radius: 4px;
+  font-size: 4rem;
+  text-align: center;
+  perspective: 200px;
+}
+
+.flipdown .rotor:last-child {
+  margin-right: 0;
+}
+
+.flipdown .rotor-top,
+.flipdown .rotor-bottom {
+  overflow: hidden;
+  position: absolute;
+  width: 50px;
+  height: 40px;
+}
+
+.flipdown .rotor-leaf {
+  z-index: 1;
+  position: absolute;
+  width: 50px;
+  height: 80px;
+  transform-style: preserve-3d;
+  transition: transform 0s;
+}
+
+.flipdown .rotor-leaf.flipped {
+  transform: rotateX(-180deg);
+  transition: all 0.5s ease-in-out;
+}
+
+.flipdown .rotor-leaf-front,
+.flipdown .rotor-leaf-rear {
+  overflow: hidden;
+  position: absolute;
+  width: 50px;
+  height: 40px;
+  margin: 0;
+  transform: rotateX(0deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flipdown .rotor-leaf-front {
+  line-height: 80px;
+  border-radius: 4px 4px 0px 0px;
+}
+
+.flipdown .rotor-leaf-rear {
+  line-height: 0px;
+  border-radius: 0px 0px 4px 4px;
+  transform: rotateX(-180deg);
+}
+
+.flipdown .rotor-top {
+  line-height: 80px;
+  border-radius: 4px 4px 0px 0px;
+}
+
+.flipdown .rotor-bottom {
+  bottom: 0;
+  line-height: 0px;
+  border-radius: 0px 0px 4px 4px;
+}
+
+.flipdown .rotor:after {
+  content: '';
+  z-index: 2;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 50px;
+  height: 40px;
+  border-radius: 0px 0px 4px 4px;
+}
+
+@media (max-width: 1950px) {
+
+  .flipdown {
+    /* width: 312px; */
+    width: 232px;
+    height: 70px;
+  }
+
+  .flipdown .rotor {
+    font-size: 4rem;
+    margin-right: 3px;
+  }
+
+  .flipdown .rotor,
+  .flipdown .rotor-leaf,
+  .flipdown .rotor-leaf-front,
+  .flipdown .rotor-leaf-rear,
+  .flipdown .rotor-top,
+  .flipdown .rotor-bottom,
+  .flipdown .rotor:after {
+    width: 30px;
+  }
+
+  .flipdown .rotor-group {
+    padding-right: 20px;
+  }
+
+  .flipdown .rotor-group:last-child {
+    padding-right: 0px;
+  }
+
+  .flipdown .rotor-group-heading:before {
+    font-size: 1rem;
+    height: 20px;
+    line-height: 20px;
+  }
+
+  .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+  .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+    left: 69px;
+  }
+
+  .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before {
+    bottom: 13px;
+    height: 8px;
+    width: 8px;
+  }
+
+  .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+    bottom: 29px;
+    height: 8px;
+    width: 8px;
+  }
+
+  .flipdown .rotor-leaf-front,
+  .flipdown .rotor-top {
+    line-height: 50px;
+  }
+
+  .flipdown .rotor-leaf,
+  .flipdown .rotor {
+    height: 50px;
+  }
+
+  .flipdown .rotor-leaf-front,
+  .flipdown .rotor-leaf-rear,
+  .flipdown .rotor-top,
+  .flipdown .rotor-bottom,
+  .flipdown .rotor:after {
+    height: 25px;
+  }
+}
+
+.count-down {
+    max-width: 550px;
+    margin: auto;
+}
+.count-down .flipdown {
+    margin: auto;
+    /* margin-top: 30px; */
+}
+.flipdown h2{
+    font-size:15px;
+}
+
+
+
+.flipdown.flipdown_theme-dark .rotor, .flipdown.flipdowntheme-dark .rotor-top, .flipdown.flipdown_theme-dark .rotor-leaf-front {
+    color: #FFFFFF;
+    background-color: #6a050c !important;
+}
+
+.flipdown.flipdown_theme-dark .rotor-bottom, .flipdown.flipdown_theme-dark .rotor-leaf-rear {
+    color: #EFEFEF;
+    background-color: #6a050c !important;
+}
+.flipdown.flipdown_theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):before, .flipdown.flipdown_theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after{
+    background-color: #6a050c !important;
+}
+
+@media (max-width: 550px) {
+    .timer-wrapper{
+      max-height: fit-content;
+    }
+    .count-down {
+        width: 100%;
+    }
+    .flipdown.flipdown_theme-dark .rotor, .flipdown.flipdowntheme-dark .rotor-top, .flipdown.flipdown_theme-dark .rotor-leaf-front {
+        color: #FFFFFF;
+        background-color: #da576c  !important;
+    }
+}
+
+/* ====  republicday ====== */
+.timer-wrapper {
+    position: relative;
+    padding: 0px 0 0;
+    overflow: hidden;
+}
+.template--product .timer-wrapper{
+    padding: 0px 0;
+    margin-bottom: 10px;
+    /* border-radius: 20px; */
+}
+
+
+
+#flipdown .rotor-group:first-child {
+    display: none;
+}
+.rotor-group-heading{
+  display: block !important;
+}
+.timer-wrapper > h4 {
+    font-size: 32px;
+    margin: 0 0 5px;
+    padding: 0;
+    color: #000;
+}
+.wrapper-timer {
+    {% comment %} border: 1px solid #000; {% endcomment %}
+    {% comment %} border-bottom: 0; {% endcomment %}
+     margin-bottom: 0 !important;
+    {% comment %} padding: 20px 0 30px; {% endcomment %}
+}
+
+img.timer-cupon {
+    display: block !important;
+    {% comment %} border: 2px solid #000; {% endcomment %}
+      border-top: 0;
+      margin-top:0;
+  
+}
+.timer-wrapper p {
+    margin: 0;
+    text-align: center;
+    margin-bottom: 4px;
+    font-size: 1.6rem;
+}
+@media(max-width: 768px){
+  .timer-wrapper > h4{
+      font-size: 22px;
+  }
+  .wrapper-timer {
+      {% comment %} border: 1px solid #000; {% endcomment %}
+      {% comment %} border-bottom: 0; {% endcomment %}
+      {% comment %} padding: 0px 0 20px; {% endcomment %}
+      margin-top: -10px !important;
+  }
+} 
+.wrapper-timer.timer-collection {
+    padding: 10px;
+}
+  
+</style>
+<div class="wrapper-timer timer-{{ template }}"> 
+  <div class="timer-wrapper">
+    <h4 style="text-align: center;"> Sale Ends In</h4>
+    
+      <div class="count-down">
+          <div class="flipdown" id="flipdown"></div>
+      </div>   
+  </div>
+</div>
+{% comment %} {% if template contains 'product' %}
+<img class="timer-cupon" style="width: 100%; display: block;"src="https://cdn.shopify.com/s/files/1/0868/6272/5430/files/004-diwali-special-offer-banner-website-26-sept-new-sizee-birch-posh.png?v=1759339146" />
+{% comment %} <img class="timer-cupon" style="width: 100%; display: block;"src="https://cdn.shopify.com/s/files/1/0796/1814/6613/files/Prisachi_3.png?v=1753439839" /> {% endcomment %}
+
+  {% endif %} {% endcomment %}
+  <!-- Scripts -->
+<script src="https://pbutcher.uk/flipdown/js/flipdown/flipdown.js"></script>
+<script>
+
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+    function setCountdown() {
+      const timer = document.querySelector('#flipdown');
+      if (!timer) return;
+
+      // Count down to the next local midnight. The offer timer therefore renews
+      // every day without changing dates in this file.
+      const now = new Date();
+      const nextMidnight = new Date(now);
+      nextMidnight.setHours(24, 0, 0, 0);
+      const targetTimestamp = Math.floor(nextMidnight.getTime() / 1000);
+
+      timer.innerHTML = '';
+      new FlipDown(targetTimestamp)
+        .start()
+        .ifEnded(() => {
+          timer.innerHTML = '';
+          setTimeout(setCountdown, 1000);
+        });
+    }
+
+    setCountdown();
+  });
+
+
+</script>

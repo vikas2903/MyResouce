@@ -458,9 +458,6 @@ button[aria-label="Remove Special Gift Box"]{
       }, true)
     );
     checkout.addEventListener('click', async (event) => {
-      // Ignore repeat clicks while the GoKwik handoff is in progress.
-      if (checkout.dataset.bundleReady === 'true') return;
-
       // This section owns its checkout action. Prevent theme/cart-drawer handlers
       // from treating this first click as a regular cart button.
       event.preventDefault();
@@ -492,8 +489,12 @@ button[aria-label="Remove Special Gift Box"]{
           }),
         });
         if (!response.ok) throw new Error('Could not add items to cart');
-        checkout.dataset.bundleReady = 'true';
         setTimeout(() => {
+          // The submitted products are now in Shopify's cart. Reset only the
+          // temporary bundle selection so the customer can create another box.
+          items = [];
+          checkout.dataset.loading = '';
+          render();
           if (checkoutLoader) checkoutLoader.style.display = 'none';
           if (typeof onCheckoutClick === 'function') {
             onCheckoutClick(checkout);

@@ -1,0 +1,54 @@
+<style>
+  .announcement-bar-div {
+      width: 100%;
+      overflow: hidden;
+      background: #6710a0;
+      color: #fff;
+      padding: 10px 0;
+  }
+
+  .announcement-content-div {
+      white-space: nowrap;
+      animation: scroll 20s linear infinite;
+      display: flex;
+      gap: 26px;
+      line-height: 1;
+  }
+
+  .announcement-bar-div:hover .announcement-content-div {
+      animation-play-state: paused;
+  }
+
+  @keyframes scroll {
+      0% {
+          transform: translateX(0%);
+      }
+
+      100% {
+          transform: translateX(-100%);
+      }
+  }
+
+  @media only screen and (max-width: 400px) {
+      .announcement-content-div {
+          animation: scroll 12s linear infinite;
+      }
+  }
+</style>
+
+<div class="announcement-bar-div">
+  <div class="announcement-content-div">
+      {% for i in (1..5) %}
+      
+        <span>BUY 2 AT 999</span>   
+      <span>✦</span>      
+      
+      <span>BUY 2 AT 999</span>   
+      <span>✦</span>      
+      
+         <span>BUY 2 AT 999</span>  
+      <span>✦</span>      
+
+      {% endfor %}
+  </div>
+</div>
